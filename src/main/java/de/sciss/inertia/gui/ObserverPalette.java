@@ -30,58 +30,29 @@
 
 package de.sciss.inertia.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import de.sciss.app.AbstractApplication;
+import de.sciss.app.DynamicAncestorAdapter;
+import de.sciss.app.DynamicListening;
+import de.sciss.app.UndoManager;
+import de.sciss.gui.*;
+import de.sciss.inertia.Main;
+import de.sciss.inertia.edit.BasicSyncCompoundEdit;
+import de.sciss.inertia.edit.EditSetSessionObjectName;
+import de.sciss.inertia.session.*;
+import de.sciss.inertia.timeline.TimelineEvent;
+import de.sciss.inertia.timeline.TimelineListener;
+import de.sciss.io.Span;
+import de.sciss.util.LockManager;
+import de.sciss.util.NumberSpace;
+
+import javax.swing.*;
+import javax.swing.undo.CompoundEdit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-import javax.swing.undo.CompoundEdit;
-
-import de.sciss.inertia.Main;
-import de.sciss.inertia.edit.BasicSyncCompoundEdit;
-import de.sciss.inertia.edit.EditSetSessionObjectName;
-import de.sciss.inertia.session.Atom;
-import de.sciss.inertia.session.FlagsPanel;
-import de.sciss.inertia.session.Molecule;
-import de.sciss.inertia.session.Probability;
-import de.sciss.inertia.session.Session;
-import de.sciss.inertia.session.SessionCollection;
-import de.sciss.inertia.session.SessionObject;
-import de.sciss.inertia.session.SessionObjectTable;
-import de.sciss.inertia.session.Track;
-import de.sciss.inertia.timeline.Timeline;
-import de.sciss.inertia.timeline.TimelineEvent;
-import de.sciss.inertia.timeline.TimelineListener;
-import de.sciss.util.LockManager;
-
-import de.sciss.app.AbstractApplication;
-import de.sciss.app.Application;
-import de.sciss.app.DynamicAncestorAdapter;
-import de.sciss.app.DynamicListening;
-import de.sciss.app.UndoManager;
-
-import de.sciss.gui.GUIUtil;
-import de.sciss.gui.HelpGlassPane;
-import de.sciss.gui.NumberEvent;
-import de.sciss.gui.NumberField;
-import de.sciss.gui.NumberListener;
-
-import de.sciss.io.Span;
-
-import de.sciss.util.NumberSpace;
 
 /**
  *  The <code>ObserverPalette</code> is a
