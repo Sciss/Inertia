@@ -87,7 +87,6 @@ extends BasicEvent
 	 *			depening of the <code>NumberField</code>'s
 	 *			<code>NumberSpace</code>.
 	 *
-	 *  @see	de.sciss.meloncillo.math.NumberSpace#isInteger()
 	 */
 	public Number getNumber()
 	{

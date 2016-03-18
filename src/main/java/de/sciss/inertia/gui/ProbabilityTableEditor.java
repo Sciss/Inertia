@@ -128,7 +128,6 @@ implements VectorDisplay.Listener, TopPainter
 	 *  structure by generting an <code>EditTableLookupRcvSense</code>
 	 *  object.
 	 *
-	 *  @see	de.sciss.meloncillo.edit.EditTableLookupRcvSense
 	 */
 	public void vectorChanged( VectorDisplay.Event e )
 	{

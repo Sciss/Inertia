@@ -231,9 +231,6 @@ implements EventManager.Processor
 	 *  @param  source  the source of the <code>TimelineEvent</code>
 	 *  @param  length  the new timeline length in frames
 	 *
-	 *  @see	de.sciss.meloncillo.edit.EditInsertTimeSpan
-	 *  @see	de.sciss.meloncillo.edit.EditRemoveTimeSpan
-	 *  @see	de.sciss.meloncillo.edit.EditSetTimelineLength
 	 *  @see	TimelineEvent#CHANGED
 	 */
     public void setLength( Object source, long length )
@@ -253,7 +250,6 @@ implements EventManager.Processor
 	 *						of the vertical bar in the timeline frame)
 	 *						in frames
 	 *
-	 *  @see	de.sciss.meloncillo.edit.EditSetTimelinePosition
 	 *  @see	TimelineEvent#POSITIONED
 	 */
     public void setPosition( Object source, long position )
@@ -273,7 +269,6 @@ implements EventManager.Processor
 	 *					displayed in the timeline frame. start and
 	 *					stop are measured in frames
 	 *
-	 *  @see	de.sciss.meloncillo.edit.EditSetTimelineScroll
 	 *  @see	TimelineEvent#SCROLLED
 	 */
      public void setVisibleSpan( Object source, Span span )
@@ -292,7 +287,6 @@ implements EventManager.Processor
 	 *					selected (highlighted blue). start and
 	 *					stop are measured in frames
 	 *
-	 *  @see	de.sciss.meloncillo.edit.EditSetTimelineSelection
 	 *  @see	TimelineEvent#SELECTED
 	 */
     public void setSelectionSpan( Object source, Span span )
@@ -309,7 +303,6 @@ implements EventManager.Processor
 	 *  of timeline portions by the user).
 	 *
 	 *  @param  listener	the <code>TimelineListener</code> to register
-	 *  @see	de.sciss.meloncillo.util.EventManager#addListener( Object )
 	 */
 	public void addTimelineListener( TimelineListener listener )
 	{
@@ -321,7 +314,6 @@ implements EventManager.Processor
 	 *  from receiving timeline events.
 	 *
 	 *  @param  listener	the <code>TimelineListener</code> to unregister
-	 *  @see	de.sciss.meloncillo.util.EventManager#removeListener( Object )
 	 */
 	public void removeTimelineListener( TimelineListener listener )
 	{

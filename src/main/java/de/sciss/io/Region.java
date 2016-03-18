@@ -40,7 +40,6 @@ import java.util.ArrayList;
  *  @author		Hanns Holger Rutz
  *  @version	0.22, 15-Sep-05
  *
- *  @see	de.sciss.meloncillo.io.AudioFileDescr#KEY_REGIONS
  */
 public class Region
 implements Serializable, Cloneable

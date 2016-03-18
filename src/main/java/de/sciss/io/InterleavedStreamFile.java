@@ -48,7 +48,6 @@ import java.io.IOException;
  *  @author		Hanns Holger Rutz
  *  @version	0.11, 13-Jul-05
  *
- *  @see		NondestructiveTrackEditor
  */
 public interface InterleavedStreamFile
 {

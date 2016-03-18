@@ -58,8 +58,6 @@ import java.util.*;
  *  @author		Hanns Holger Rutz
  *  @version	0.3, 15-Jul-05
  *
- *  @see	de.sciss.meloncillo.Session#bird
- *  @see	de.sciss.meloncillo.Session#DOOR_RCV
  */
 public class LockManager
 {

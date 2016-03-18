@@ -130,7 +130,6 @@ extends AbstractSessionObject
 	 *  deduced from the receiver's logical name and special
 	 *  suffix.
 	 *
-	 *  @see	de.sciss.meloncillo.io.InterleavedStreamFile
 	 */
 	public void toXML( Document domDoc, Element node, Map options )
 	throws IOException
@@ -169,7 +168,6 @@ extends AbstractSessionObject
 	 *  deduced from the receiver's logical name and special
 	 *  suffix.
 	 *
-	 *  @see	de.sciss.meloncillo.io.InterleavedStreamFile
 	 */
 	public void fromXML( Document domDoc, Element node, Map options )
 	throws IOException

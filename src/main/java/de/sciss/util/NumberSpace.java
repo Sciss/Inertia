@@ -100,7 +100,6 @@ public class NumberSpace
 	 *					no quantization is used. If quant is integer, the number space is
 	 *					marked integer and calling isInteger returns true.
 	 *  @param  reset   central value for initializations of unknown values. Usually zero.
-	 *  @param  inc		default increment in GUI elements.
 	 */
 	public NumberSpace( double min, double max, double quant, int minFracDigits, int maxFracDigits, double reset )
 	{

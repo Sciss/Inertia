@@ -97,7 +97,6 @@ extends BasicPalette // BasicFrame
 	 *  Creates a new i/o setup frame
 	 *
 	 *  @param  root	application root
-	 *  @param  doc		session document
 	 */
     public IOSetupFrame( final Main root )
     {

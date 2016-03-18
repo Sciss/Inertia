@@ -63,12 +63,6 @@ extends BasicUndoableEdit
 	 *  thus dispatching a <code>SessionCollection.Event</code>.
 	 *
 	 *  @param  source			who initiated the action
-	 *  @param  doc				session object to which the
-	 *							receivers are added
-	 *  @param  collSessionObjects   collection of receivers to
-	 *							add to the session.
-	 *  @see	de.sciss.meloncillo.session.SessionCollection
-	 *  @see	de.sciss.meloncillo.session.SessionCollection.Event
 	 *  @synchronization		waitExclusive on doors
 	 */
 	public EditAddSessionObject( Object source, SessionCollection quoi,

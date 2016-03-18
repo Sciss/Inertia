@@ -238,7 +238,6 @@ g2.translate( 0.5f + in.left, 0.5f + in.top );	// tricky disco to blur the outli
 	 *  the gadgets content.
 	 *
 	 *  @param  listener	the <code>NumberListener</code> to register
-	 *  @see	de.sciss.meloncillo.util.EventManager#addListener( Object )
 	 */
 	public void addListener( NumberListener listener )
 	{
@@ -255,7 +254,6 @@ g2.translate( 0.5f + in.left, 0.5f + in.top );	// tricky disco to blur the outli
 	 *  from receiving number change events.
 	 *
 	 *  @param  listener	the <code>NumberListener</code> to unregister
-	 *  @see	de.sciss.meloncillo.util.EventManager#removeListener( Object )
 	 */
 	public void removeListener( NumberListener listener )
 	{

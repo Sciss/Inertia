@@ -41,7 +41,6 @@ public interface SessionObject
 	 *	Code for <code>MapManager.Event.getOwnerModType()</code>:
 	 *	the object has been renamed
 	 *
-	 *	@see	de.sciss.meloncillo.util.MapManager.Event#getOwnerModType()
 	 */
 	public static final int OWNER_RENAMED		=	0x1000;
 
@@ -49,7 +48,6 @@ public interface SessionObject
 	 *	Code for <code>MapManager.Event.getOwnerModType()</code>:
 	 *	the object has been visually changed
 	 *
-	 *	@see	de.sciss.meloncillo.util.MapManager.Event#getOwnerModType()
 	 */
 	public static final int OWNER_VISUAL		=	MapManager.OWNER_VISUAL;
 
@@ -77,7 +75,6 @@ public interface SessionObject
 	 *  @param  newName		new object's name.
 	 *
 	 *  @see	SessionCollection#findByName( String )
-	 *  @see	SessionCollection#createUniqueName( MessageFormat, Object[], java.util.List )
 	 *
 	 *  @warning	callers should check that the session's
 	 *				collection doesn't contain objects

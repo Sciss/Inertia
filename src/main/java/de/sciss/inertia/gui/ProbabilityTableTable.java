@@ -29,24 +29,18 @@
 
 package de.sciss.inertia.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-
-import de.sciss.inertia.session.*;
-
-import de.sciss.app.AbstractApplication;
-import de.sciss.app.WindowHandler;
-
-import de.sciss.gui.GUIUtil;
 import de.sciss.gui.ModificationButton;
+import de.sciss.inertia.session.ProbabilityTable;
+import de.sciss.inertia.session.Session;
+import de.sciss.inertia.session.SessionCollection;
+import de.sciss.inertia.session.SessionObject;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ProbabilityTableTable
-extends SessionCollectionTable
+extends de.sciss.inertia.gui.SessionCollectionTable
 {
 	public ProbabilityTableTable( final Session doc )
 	{

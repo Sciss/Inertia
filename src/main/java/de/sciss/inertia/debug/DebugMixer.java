@@ -77,7 +77,7 @@ extends JFrame
 			}
 		});
 
-		cSetNResp = new OSCResponderNode( server.getAddr(), "/c_setn", new OSCListener() {
+		cSetNResp = new OSCResponderNode( server /* .getAddr() */, "/c_setn", new OSCListener() {
 			public void messageReceived( OSCMessage msg, SocketAddress sender, long time )
 			{
 				final int	busIndex = ((Number) msg.getArg( 0 )).intValue();
@@ -171,12 +171,12 @@ extends JFrame
 	
 		setVisible( false );
 		meterTimer.stop();
-		try {
+//		try {
 			cSetNResp.remove();
-		}
-		catch( IOException e1 ) {
-			printError( "disposeMixer", e1 );
-		}
+//		}
+//		catch( IOException e1 ) {
+//			printError( "disposeMixer", e1 );
+//		}
 		for( int i = 0; i < strips.length; i++ ) {
 			strip		= strips[ i ];
 			strips[ i ]	= null;

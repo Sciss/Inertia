@@ -41,6 +41,7 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.undo.CompoundEdit;
 
+import de.sciss.gui.TimeFormat;
 import de.sciss.inertia.edit.*;
 import de.sciss.inertia.math.*;
 import de.sciss.inertia.session.*;
@@ -54,11 +55,12 @@ import de.sciss.io.AudioFileDescr;
 import de.sciss.io.Span;
 
 import de.sciss.util.*;
+import de.sciss.util.NumberSpace;
 
 public class CompactAudioDialog
 extends JDialog
 {
-	private static final TimeFormat		timeFormat		= new TimeFormat( 0, null, null, 3 , Locale.US );	// mm:ss.millis
+	private static final TimeFormat		timeFormat		= new TimeFormat ( 0, null, null, 3 , Locale.US );	// mm:ss.millis
 	private static final NumberFormat	percentFormat	= NumberFormat.getPercentInstance( Locale.US );
 
 	private final java.util.List	collInfos	= new ArrayList();
@@ -140,7 +142,7 @@ extends JDialog
 //			}
 //		});
 		ggPadding	= new NumberField();
-		ggPadding.setSpace( new NumberSpace( 0.0, 3600.0, 0.1 ));
+		ggPadding.setSpace( new NumberSpace ( 0.0, 3600.0, 0.1 ));
 		ggPadding.setNumber( new Double( 1.0 ));
 		ggPadding.addListener( new NumberListener() {
 			public void numberChanged( NumberEvent e )

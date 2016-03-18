@@ -82,7 +82,6 @@ extends BasicPalette // BasicFrame
 	 *  Creates a new preferences frame
 	 *
 	 *  @param  root	application root
-	 *  @param  doc		session document
 	 */
     public PrefsFrame( final Main root )
     {

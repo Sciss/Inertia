@@ -29,15 +29,6 @@
 
 package de.sciss.inertia.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.util.*;
-import java.util.prefs.*;
-import javax.swing.*;
-
-import net.roydesign.mac.MRJAdapter;
-
 // INERTIA
 //import de.sciss.eisenkraut.*;
 //import de.sciss.eisenkraut.util.*;
@@ -66,6 +57,6 @@ extends BasicFrame
 	
 	protected boolean hasMenuBar()
 	{
-		return MRJAdapter.isSwingUsingScreenMenuBar();  // false on non-mac systems
+		return true; /* MRJAdapter.isSwingUsingScreenMenuBar(); */ // false on non-mac systems
 	}
 }

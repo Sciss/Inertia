@@ -50,10 +50,6 @@ import java.util.Comparator;
  *  @author		Hanns Holger Rutz
  *  @version	0.22, 15-Sep-05
  *
- *  @see	de.sciss.meloncillo.io.MultirateTrackEditor#insert( Span, float[][] )
- *  @see	de.sciss.meloncillo.io.MultirateTrackEditor#remove( Span )
- *  @see	de.sciss.meloncillo.io.TrackSpan
- *  @see	de.sciss.meloncillo.timeline.Timeline#setVisibleSpan( Object, Span )
  */
 public class Span
 implements Serializable, Cloneable

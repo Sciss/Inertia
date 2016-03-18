@@ -61,10 +61,6 @@ public class RealtimeContext
 	/**
 	 *  Constructs a new RealtimeContext.
 	 *
-	 *  @param  host				the object responsible for hosting
-	 *								the realtime process
-	 *  @param  collReceivers		the receivers involved in the realtime performance
-	 *  @param  collTransmitters	the transmitters involved in the realtime performance
 	 *	@param	time				the realtime time span which is usually
 	 *								(0 ... timeline-length)
 	 *  @param  sourceRate			the source sense data rate

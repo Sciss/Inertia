@@ -115,16 +115,6 @@ implements EventManager.Processor //, PropertyChangeListener
 	 *  space's <code>min</code> and <code>max</code> and
 	 *  quantisized to its <code>quant</code> field
 	 *
-	 *  @param  flags		<code>0</code> for a normal field,
-	 *						<code>FLAG_MINSEC</code> to
-	 *						use minutes:seconds formatting.
-	 *  @param  space		the space describing
-	 *						the boundaries of the
-	 *						allowed numbers.
-	 *  @param  unitLabel   optional Label which will
-	 *						be displayed to the right of
-	 *						of the text box. use <code>null</code>
-	 *						if you don't want a label.
 	 */
 	public NumberField()
 	{
@@ -287,7 +277,6 @@ implements EventManager.Processor //, PropertyChangeListener
 	 *				integer, a <code>Long</code> is returned,
 	 *				otherwise a <code>Double</code>.
 	 *
-	 *  @see		de.sciss.meloncillo.math.NumberSpace#isInteger()
 	 *  @warning	if the number was set using the <code>setNumber</code>
 	 *				method, it is possible that the returned object
 	 *				is neither <code>Long</code> nor <code>Double</code>.
@@ -336,7 +325,6 @@ implements EventManager.Processor //, PropertyChangeListener
 	 *  the gadgets content.
 	 *
 	 *  @param  listener	the <code>NumberListener</code> to register
-	 *  @see	de.sciss.meloncillo.util.EventManager#addListener( Object )
 	 */
 	public void addListener( NumberListener listener )
 	{
@@ -353,7 +341,6 @@ implements EventManager.Processor //, PropertyChangeListener
 	 *  from receiving number change events.
 	 *
 	 *  @param  listener	the <code>NumberListener</code> to unregister
-	 *  @see	de.sciss.meloncillo.util.EventManager#removeListener( Object )
 	 */
 	public void removeListener( NumberListener listener )
 	{

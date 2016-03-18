@@ -69,7 +69,6 @@ import de.sciss.app.PreferenceEntrySync;
  *  @version	0.27, 25-Sep-05
  *
  *  @see		java.util.prefs.PreferenceChangeListener
- *  @see		de.sciss.meloncillo.util.StringItem
  */
 public class PrefComboBox
 extends JComboBox
@@ -120,7 +119,6 @@ implements  DynamicListening, PreferenceChangeListener,
 	 *  StringItem !
 	 *
 	 *  @param  item	the <code>StringItem</code> to add
-	 *  @see	de.sciss.meloncillo.util.StringItem
 	 */
 	public void addItem( Object item )
 	{

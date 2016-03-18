@@ -48,9 +48,7 @@ import javax.swing.*;
  *  @author		Hanns Holger Rutz
  *  @version	0.6, 31-Jul-04
  *
- *  @see	de.sciss.meloncillo.plugin.AbstractPlugInFrame#hibernation( boolean )
  *  @see	javax.swing.JFrame#setGlassPane( Component )
- *  @see	NoFocusTraversalPolicy
  *
  *	@todo		keyboard focus is 'lost' when the pane is disabled
  */

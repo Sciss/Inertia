@@ -47,7 +47,6 @@ package de.sciss.inertia.realtime;
  *  @author		Hanns Holger Rutz
  *  @version	0.67, 01-Sep-04
  *
- *	@see	Transport#addRealtimeConsumer( RealtimeConsumer )
  */
 public interface RealtimeConsumer
 {
@@ -90,12 +89,6 @@ public interface RealtimeConsumer
 	 *
 	 *  @param  context		the context (which is the same as in the
 	 *						createInfo() call).
-	 *  @param  source		the object containing all the stream data.
-	 *						the consumer should take care to check if
-	 *						the currentPos is contained either in
-	 *						firstHalf or secondHalf, which is not guaranteed.
-	 *						Any required data should be immediately processed
-	 *						or copied because it's volatile.
 	 *  @param  currentPos  abs time in senserate frames
 	 *
 	 *	@synchronization	This is called from the RealtimeHost's thread, e.g. the transport

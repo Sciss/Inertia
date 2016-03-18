@@ -29,21 +29,14 @@
 
 package de.sciss.inertia.realtime;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.prefs.*;
-import javax.swing.*;
-import javax.swing.undo.*;
-
-import de.sciss.inertia.timeline.*;
-import de.sciss.util.LockManager;
 import de.sciss.app.Document;
-import de.sciss.inertia.util.PrefsUtil;
-
-import de.sciss.app.AbstractApplication;
-
+import de.sciss.inertia.timeline.Timeline;
+import de.sciss.inertia.timeline.TimelineEvent;
+import de.sciss.inertia.timeline.TimelineListener;
 import de.sciss.io.Span;
+import de.sciss.util.LockManager;
+
+import java.util.ArrayList;
 
 /**
  *	The realtime "motor" or "clock". The transport
@@ -243,7 +236,6 @@ implements Runnable, TimelineListener	// RealtimeHost
 	 *	@synchronization	to be called from event thread
 	 *
 	 *	@see	RealtimeConsumer#createRequest( RealtimeContext )
-	 *	@see	RealtimeProducer#requestAddConsumerRequest( RealtimeConsumerRequest )
 	 */
 	public void addRealtimeConsumer( RealtimeConsumer consumer )
 	{
@@ -330,7 +322,6 @@ activateConsumers( requests );
 	 *
 	 *	@synchronization	to be called from event thread
 	 *
-	 *	@see	RealtimeProducer#requestRemoveConsumerRequest( RealtimeConsumerRequest )
 	 */
 	public void removeRealtimeConsumer( RealtimeConsumer consumer )
 	{

@@ -42,8 +42,6 @@ package de.sciss.gui;
  *  @author		Hanns Holger Rutz
  *  @version	0.13, 04-Aug-05
  *
- *  @see	de.sciss.meloncillo.gui.PrefComboBox#addItem( Object )
- *  @see	de.sciss.meloncillo.io.AudioFileDescr#getFormatItems()
  */
 public class StringItem
 {

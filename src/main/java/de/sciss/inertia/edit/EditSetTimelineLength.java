@@ -50,7 +50,6 @@ import de.sciss.app.AbstractApplication;
  *  @author		Hanns Holger Rutz
  *  @version	0.6, 29-Jul-04
  *  @see		UndoManager
- *  @see		EditInsertTimeSpan
  *  @see		EditRemoveTimeSpan
  */
 public class EditSetTimelineLength

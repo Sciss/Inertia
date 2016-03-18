@@ -8,25 +8,33 @@
 
 package de.sciss.inertia.net;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.prefs.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
-import de.sciss.inertia.*;
-import de.sciss.inertia.gui.*;
-import de.sciss.inertia.io.*;
-import de.sciss.inertia.util.*;
-
 import de.sciss.app.*;
 import de.sciss.gui.*;
-import de.sciss.io.*;
+import de.sciss.inertia.Main;
+import de.sciss.inertia.gui.AudioFileFormatPane;
+import de.sciss.inertia.gui.BasicPalette;
+import de.sciss.inertia.gui.GraphicsUtil;
+import de.sciss.inertia.gui.LevelMeter;
+import de.sciss.inertia.io.RoutingConfig;
+import de.sciss.inertia.util.PrefsUtil;
 import de.sciss.jcollider.*;
-import de.sciss.net.*;
+import de.sciss.net.OSCBundle;
+import de.sciss.net.OSCListener;
+import de.sciss.net.OSCMessage;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 /**
  *	@version	0.26	08-Oct-05
@@ -79,7 +87,7 @@ implements ServerListener, NodeListener, Constants, JitterClient.Listener
 		
 		afPane		= new SpringPanel();
 		ggAudioFile = new PrefPathField( PathField.TYPE_OUTPUTFILE, "Choose Record Output Audio File" );
-		affp		= new AudioFileFormatPane( AudioFileFormatPane.FORMAT | AudioFileFormatPane.ENCODING );
+		affp		= new AudioFileFormatPane ( AudioFileFormatPane.FORMAT | AudioFileFormatPane.ENCODING );
 		affp.automaticFileSuffix( ggAudioFile );
 		afPane.gridAdd( new JLabel( "Audio File", JLabel.RIGHT ), 0, 0 );
 		afPane.gridAdd( ggAudioFile, 1, 0 );
@@ -475,7 +483,7 @@ actionStoreJitterCmd.actionPerformed( null );
 				meterBangMsg			= new OSCMessage( "/c_getn", new Object[] {
 					new Integer( busMeter.getIndex() ), new Integer( busMeter.getNumChannels() )});
 
-				cSetNResp				= new OSCResponderNode( server.getAddr(), "/c_setn", cSetNRespBody );
+				cSetNResp				= new OSCResponderNode( server /* .getAddr() */, "/c_setn", cSetNRespBody );
 				grpRoot					= new Group( server.getDefaultGroup(), kAddToTail );
 				grpRoot.setName( "Recorder" );
 				nw.register( grpRoot );
@@ -492,13 +500,13 @@ actionStoreJitterCmd.actionPerformed( null );
 			IOException e11 = null;
 		
 			if( cSetNResp != null ) {
-				try {
+//				try {
 					cSetNResp.remove();
 					cSetNResp = null;
-				}
-				catch( IOException e1 ) {
-					e11 = e1;
-				}
+//				}
+//				catch( IOException e1 ) {
+//					e11 = e1;
+//				}
 			}
 			if( bufDisk != null ) {
 				try {

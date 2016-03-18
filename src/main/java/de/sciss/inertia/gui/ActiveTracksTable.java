@@ -46,7 +46,7 @@ import de.sciss.gui.GUIUtil;
 import de.sciss.gui.ModificationButton;
 
 public class ActiveTracksTable
-extends SessionCollectionTable
+extends de.sciss.inertia.gui.SessionCollectionTable
 {
 	public ActiveTracksTable( final Session doc )
 	{

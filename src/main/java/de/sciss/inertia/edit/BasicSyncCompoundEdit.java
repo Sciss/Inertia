@@ -42,7 +42,6 @@ import de.sciss.util.LockManager;
  *
  *  @author			Hanns Holger Rutz
  *  @version		0.6, 03-Aug-04
- *  @see			de.sciss.meloncillo.util.LockManager
  */
 public class BasicSyncCompoundEdit
 extends SyncCompoundEdit
@@ -65,7 +64,6 @@ extends SyncCompoundEdit
 	 *
 	 *  @param  lm					the <code>LockManager</code> to use in synchronization
 	 *  @param  doors				the doors to lock exclusively using the provided <code>LockManager</code>
-	 *	@param	presentationName	text describing the compound edit
 	 */
 	public BasicSyncCompoundEdit( LockManager lm, int doors, String representationName )
 	{

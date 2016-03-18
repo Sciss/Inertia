@@ -150,7 +150,6 @@ extends JFrame
 	 *  Restores this frame's bounds and visibility
 	 *  from its class preferences.
 	 *
-	 *  @see	#restoreAllFromPrefs()
 	 */
 	protected void restoreFromPrefs()
 	{
@@ -244,7 +243,6 @@ extends JFrame
 	 *
 	 *  @param  root	application root
 	 *
-	 *  @see	MenuFactory#gimmeSomethingReal( JFrame )
 	 */
 	protected void init( Main root )
 	{

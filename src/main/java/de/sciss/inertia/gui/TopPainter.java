@@ -39,7 +39,6 @@ import java.awt.*;
  *  @author		Hanns Holger Rutz
  *  @version	0.67, 02-Sep-04
  *
- *  @see	de.sciss.meloncillo.surface.SurfacePane#addTopPainter( TopPainter )
  */
 public interface TopPainter
 {

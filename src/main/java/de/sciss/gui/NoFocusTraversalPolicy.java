@@ -47,7 +47,6 @@ import java.awt.Window;
  *  @author		Hanns Holger Rutz
  *  @version	0.10, 20-May-05
  *
- *  @see		HibernationGlassPane
  */
 public class NoFocusTraversalPolicy
 extends FocusTraversalPolicy

@@ -29,41 +29,50 @@
 
 package de.sciss.inertia.session;
 
+import de.sciss.app.*;
+import de.sciss.gui.GUIUtil;
+import de.sciss.gui.MenuAction;
+import de.sciss.gui.NumberField;
+import de.sciss.gui.ProgressBar;
+import de.sciss.inertia.Main;
+import de.sciss.inertia.edit.*;
+import de.sciss.inertia.gui.*;
+import de.sciss.inertia.gui.SessionCollectionTable;
+import de.sciss.inertia.io.MarkerManager;
+import de.sciss.inertia.realtime.*;
+import de.sciss.inertia.timeline.*;
+import de.sciss.inertia.timeline.ChannelRowHeader;
+import de.sciss.inertia.util.PrefsUtil;
+import de.sciss.io.IOUtil;
+import de.sciss.io.Marker;
+import de.sciss.io.Region;
+import de.sciss.io.Span;
+import de.sciss.util.*;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Element;
+
+import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
-import java.awt.datatransfer.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.prefs.*;
-import java.util.regex.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.stream.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-
-import net.roydesign.mac.MRJAdapter;
-
-import de.sciss.app.*;
-import de.sciss.gui.*;
-import de.sciss.io.*;
-import de.sciss.util.*;
-
-import de.sciss.inertia.*;
-import de.sciss.inertia.edit.*;
-import de.sciss.inertia.gui.*;
-import de.sciss.inertia.io.*;
-import de.sciss.inertia.math.*;
-import de.sciss.inertia.realtime.*;
-import de.sciss.inertia.session.*;
-import de.sciss.inertia.timeline.*;
-import de.sciss.inertia.util.*;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
 
 /**
  *  @author		Hanns Holger Rutz
@@ -181,7 +190,7 @@ implements ProgressComponent, TimelineListener, RealtimeConsumer, ToolActionList
 		final TimelineToolBar			timeTB			= new TimelineToolBar();
 		final Box						topPane			= Box.createHorizontalBox();
 		final Box						bottomPane		= Box.createHorizontalBox();
-		final SessionCollectionTable	activeTracksTable;
+		final SessionCollectionTable activeTracksTable;
 
 		transport		= doc.getTransport();
         scroll			= new TimelineScroll( doc );
@@ -671,7 +680,7 @@ final File f = (File) doc.getMap().getValue( Session.MAP_KEY_PATH );
 	{
 		boolean					revalidate	= false;
 
-		ChannelRowHeader		chanHead;
+		ChannelRowHeader chanHead;
 		OverviewDisplay			overview;
 		Track					t;
 		int						oldChannels, newChannels;
@@ -1061,7 +1070,7 @@ collChannelRulers.add( test );
 				return;
 			}
 			
-			final NumberSpace			spcColumn		= NumberSpace.createIntSpace( 1, numColumns );
+			final NumberSpace spcColumn		= NumberSpace.createIntSpace( 1, numColumns );
 			final JOptionPane			dlg;
 			final JPanel				msgPane;
 			final JComboBox				ggFormat, ggMarkerType, ggUnits, ggColStopType;

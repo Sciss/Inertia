@@ -29,24 +29,26 @@
 
 package de.sciss.inertia.math;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.util.prefs.*;
+import de.sciss.app.AbstractApplication;
+import de.sciss.app.PreferenceNodeSync;
+import de.sciss.gui.GUIUtil;
+import de.sciss.inertia.gui.VectorEditor;
+import de.sciss.inertia.gui.VectorSpace;
+import de.sciss.util.NumberSpace;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Vector;
 
 // INERTIA
 //import de.sciss.meloncillo.*;
 //import de.sciss.meloncillo.gui.*;
 //import de.sciss.meloncillo.render.*;
 //import de.sciss.meloncillo.util.*;
-import de.sciss.inertia.gui.*;
-
-import de.sciss.app.*;
-import de.sciss.gui.*;
-
-import de.sciss.util.NumberSpace;
 
 /**
  *  A VectorTransform is an algorithm
@@ -73,14 +75,12 @@ implements PreferenceNodeSync
 	 *  Key for getReceiver/Transmitter/RenderModuleTypes() : a human
 	 *  readable name for displaying to the user
 	 *
-	 *  @see	#getReceiverTypes()
 	 */
 	public static final Object  KEY_HUMANREADABLENAME   = "name";
 	/**
 	 *  Key for getReceiver/Transmitter/RenderModuleTypes() : a full
 	 *  qualifying class name for instantiating an object.
 	 *
- 	 *  @see	#getReceiverTypes()
 	 */
 	public static final Object  KEY_CLASSNAME			= "class";
 
@@ -176,10 +176,7 @@ implements PreferenceNodeSync
 	 *
 	 *  @return a list of maps describing the known transforms
 	 *
-	 *  @see	de.sciss.meloncillo.Main#KEY_HUMANREADABLENAME
-	 *  @see	de.sciss.meloncillo.Main#KEY_CLASSNAME
 	 *  @see	#KEY_RENDERPLUGIN
-	 *  @see	de.sciss.meloncillo.render.VectorTransformFilter
 	 */
 	public final static java.util.List getTransforms()
 	{
@@ -216,7 +213,7 @@ h.put( KEY_HUMANREADABLENAME, AbstractApplication.getApplication().getResourceSt
 		boolean		success = query( edit );
 		float[]		output;
 		NumberSpace nspc;
-		VectorSpace	vspc;
+		VectorSpace vspc;
 
 		if( success ) {
 			vspc	= edit.getSpace();

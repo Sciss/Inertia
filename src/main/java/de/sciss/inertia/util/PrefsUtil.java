@@ -29,29 +29,33 @@
  
 package de.sciss.inertia.util;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.prefs.*;
-import javax.swing.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
+import de.sciss.app.AbstractApplication;
+import de.sciss.gui.GUIUtil;
+import de.sciss.gui.HelpGlassPane;
+import de.sciss.inertia.Main;
+import de.sciss.inertia.io.RoutingConfig;
+import de.sciss.io.IOUtil;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import net.roydesign.mac.MRJAdapter;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 // INERTIA
 //import de.sciss.eisenkraut.*;
 //import de.sciss.eisenkraut.io.*;
-import de.sciss.inertia.Main;
-import de.sciss.inertia.io.RoutingConfig;
-
-import de.sciss.app.AbstractApplication;
-import de.sciss.gui.HelpGlassPane;
-import de.sciss.gui.GUIUtil;
-import de.sciss.io.IOUtil;
 
 /**
  *	A helper class for programme preferences. It
@@ -350,12 +354,12 @@ public class PrefsUtil
 				"C:\\Program Files\\SuperCollider_f"
 			});
 			if( f == null ) {
-				if( isMacOS ) {
-					try {
-						f = MRJAdapter.findApplication( "SCjm" );
-					}
-					catch( IOException e1 ) {}
-				}
+//				if( isMacOS ) {
+//					try {
+//						f = MRJAdapter.findApplication( "SCjm" );
+//					}
+//					catch( IOException e1 ) {}
+//				}
 				if( f == null ) {
 					warnings.add( AbstractApplication.getApplication().getResourceString( "errSCSynthAppNotFound" ));
 				}

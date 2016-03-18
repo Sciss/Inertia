@@ -48,7 +48,6 @@ import de.sciss.app.*;
  *  @version	0.6, 31-Jul-04
  *
  *  @see		ToolBar#addToolActionListener( ToolActionListener )
- *  @see		ToolPalette#addToolActionListener( ToolActionListener )
  *  @see		ToolActionListener
  *  @see		ToolAction
  */

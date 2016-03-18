@@ -54,7 +54,6 @@ import javax.swing.*;
  *
  *  @see		javax.swing.JPopupMenu#isPopupTrigger( MouseEvent )
  *  @see		javax.swing.JPopupMenu#show( Component, int, int )
- *  @see		MenuPopupListener
  */
 public class PopupListener
 extends MouseAdapter

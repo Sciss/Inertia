@@ -30,11 +30,21 @@
 
 package de.sciss.inertia.timeline;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import de.sciss.app.DynamicAncestorAdapter;
+import de.sciss.app.DynamicListening;
+import de.sciss.gui.HelpGlassPane;
+import de.sciss.inertia.gui.GraphicsUtil;
+import de.sciss.inertia.session.FlagsPanel;
+import de.sciss.inertia.session.Session;
+import de.sciss.inertia.session.SessionCollection;
+import de.sciss.inertia.session.Track;
+
 import javax.swing.*;
-import javax.swing.undo.*;
+import javax.swing.undo.UndoableEdit;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 // INERTIA
 //import de.sciss.eisenkraut.*;
@@ -44,16 +54,6 @@ import javax.swing.undo.*;
 //import de.sciss.eisenkraut.math.*;
 //import de.sciss.eisenkraut.session.*;
 //import de.sciss.eisenkraut.util.*;
-import de.sciss.inertia.gui.GraphicsUtil;
-import de.sciss.inertia.session.FlagsPanel;
-import de.sciss.inertia.session.Session;
-import de.sciss.inertia.session.SessionCollection;
-import de.sciss.inertia.session.Track;
-
-import de.sciss.app.DynamicAncestorAdapter;
-import de.sciss.app.DynamicListening;
-
-import de.sciss.gui.HelpGlassPane;
 
 /**
  *	A row header in Swing's table 'ideology'

@@ -46,7 +46,6 @@ import de.sciss.util.MapManager;
  *  @version	0.72, 08-Apr-05
  *
  *  @see		UndoManager
- *	@see		de.sciss.meloncillo.util.MapManager
  */
 public class EditPutMapValue
 extends BasicUndoableEdit
@@ -70,9 +69,6 @@ extends BasicUndoableEdit
 	 *  @param  map				the map to change (e.g. a session object's map)
 	 *	@param	key				the map entry to change
 	 *  @param  value			the new property value
-	 *
-	 *  @see	de.sciss.meloncillo.util.MapManager#putValue( Object, String, Object )
-	 *  @see	de.sciss.meloncillo.util.MapManager.Event
 	 *
 	 *  @synchronization		<code>lm.waitExclusive()</code> on <code>doors</code>
 	 */

@@ -47,8 +47,6 @@ implements EventManager.Processor
 	 *	play to layerB, and movieY play to layerA.
 	 *
 	 *	@param	source	the object which is responsible for the switch
-	 *	@param	layerA	the first layer of the switch operation
-	 *	@param	layerB	the second layer of the switch operation
 	 */
 	public void switchLayers( Object source, int layer1, int layer2 )
 	{

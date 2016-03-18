@@ -63,11 +63,8 @@ import de.sciss.io.*;
  *  @author		Hanns Holger Rutz
  *  @version	0.72, 26-Mar-05
  *
- *  @see		de.sciss.meloncillo.math.VectorTransformer#createPopupMenu( VectorEditor )
  *  @see		VectorDisplay.Listener
  *  @see		VectorDisplay.Event
- *  @see		de.sciss.meloncillo.receiver.SigmaReceiverEditor
- *  @see		de.sciss.meloncillo.transmitter.SimpleTransmitterEditor
  *
  *  @todo		a vertical (y) wrapping mode should be implemented
  *				similar to x-wrap, useful for circular value spaces like angles

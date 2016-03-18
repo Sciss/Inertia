@@ -72,8 +72,6 @@ import de.sciss.util.NumberSpace;
  *  @author		Hanns Holger Rutz
  *  @version	0.25, 07-Oct-05
  *
- *  @see	de.sciss.meloncillo.util.PreferenceNodeSync
- *  @see	de.sciss.meloncillo.io.AudioFileDescr
  *
  *  @todo   sample rates should be user adjustable through a
  *			JComboBox with an editable field. this to-do has

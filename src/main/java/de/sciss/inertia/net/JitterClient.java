@@ -8,24 +8,29 @@
 
 package de.sciss.inertia.net;
 
-import java.io.*;
-import java.net.*;
-import java.nio.*;
-import java.nio.channels.*;
-import java.util.*;
-
-import de.sciss.inertia.realtime.*;
-import de.sciss.inertia.session.*;
-import de.sciss.inertia.timeline.*;
-import de.sciss.inertia.util.*;
-
-import de.sciss.app.*;
-
+import de.sciss.app.AbstractApplication;
+import de.sciss.app.BasicEvent;
+import de.sciss.app.DocumentListener;
+import de.sciss.app.EventManager;
+import de.sciss.inertia.realtime.MultiTransport;
+import de.sciss.inertia.session.DocumentFrame;
+import de.sciss.inertia.session.Session;
+import de.sciss.inertia.timeline.TimelineEvent;
+import de.sciss.inertia.timeline.TimelineListener;
+import de.sciss.inertia.util.PrefsUtil;
 import de.sciss.io.Marker;
-
-import de.sciss.net.*;
-
+import de.sciss.net.OSCListener;
+import de.sciss.net.OSCMessage;
+import de.sciss.net.OSCReceiver;
+import de.sciss.net.OSCTransmitter;
 import de.sciss.util.MapManager;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.DatagramChannel;
+import java.util.Collections;
+import java.util.HashMap;
 
 /**
  *	Communicates with the video patch
@@ -82,11 +87,13 @@ implements OSCListener, DocumentListener, MapManager.Listener, EventManager.Proc
 			dch.configureBlocking( true );
 //			dch.socket().bind( new InetSocketAddress( "127.0.0.1", 0 ));
 //			dch.socket().bind( new InetSocketAddress( InetAddress.getLocalHost(), 0 ));
-			rcv	= new OSCReceiver( dch, null );	// otudp write uses separate unknown socket ;-(
+//			rcv	= new OSCReceiver( dch, null );	// otudp write uses separate unknown socket ;-(
+			rcv	= OSCReceiver.newUsing ( dch );	// otudp write uses separate unknown socket ;-(
 			rcv.addOSCListener( this );
 			rcv.startListening();
-			trns = new OSCTransmitter( dch );
-					
+//			trns = new OSCTransmitter( dch );
+			trns = OSCTransmitter.newUsing ( dch );
+
 			docHandler.addDocumentListener( this );
 		}
 		catch( IOException e1 ) {

@@ -92,7 +92,6 @@ implements	TimelineListener, MouseListener, MouseMotionListener,
 	 *  Constructs a new object for
 	 *  displaying the timeline ruler
 	 *
-	 *  @param  root	application root
 	 *  @param  doc		session Session
 	 */
 	public TimelineAxis( Timeline timeline, LockManager lm, int doors, Document doc )

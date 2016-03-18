@@ -49,7 +49,7 @@ import java.util.prefs.Preferences;
  *  @version	0.13, 15-Sep-05
  */
 public abstract class AbstractApplication
-extends net.roydesign.app.Application
+// extends net.roydesign.app.Application
 implements de.sciss.app.Application
 {
 	/*
@@ -96,7 +96,7 @@ implements de.sciss.app.Application
 			throw new RuntimeException( "AbstractApplication cannot be instantiated more than once" );
 		}
 		AbstractApplication.app	= this;
-		setName( name );
+		// setName( name );
 		
 		resBundle		= ResourceBundle.getBundle( name + "Strings", Locale.getDefault() );
 		this.mainClass	= mainClass;
@@ -188,13 +188,13 @@ implements de.sciss.app.Application
 		}
 	}
 
-	/**
-	 *	Returns <code>this</code>.
-	 */
-	public final net.roydesign.app.Application getMRJApplication()
-	{
-		return this;
-	}
+//	/**
+//	 *	Returns <code>this</code>.
+//	 */
+//	public final net.roydesign.app.Application getMRJApplication()
+//	{
+//		return this;
+//	}
 
 	public final String getResourceString( String key )
 	{

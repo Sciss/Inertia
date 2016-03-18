@@ -48,7 +48,6 @@ import de.sciss.app.AbstractApplication;
  *
  *  @author			Hanns Holger Rutz
  *  @version		0.3, 13-Jul-05
- *  @see			de.sciss.meloncillo.util.LockManager
  */
 public abstract class SyncCompoundEdit
 extends CompoundEdit

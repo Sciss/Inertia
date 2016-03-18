@@ -58,7 +58,6 @@ import de.sciss.io.Span;
  *  @version	0.6, 29-Jul-04
  *  @see		UndoManager
  *  @see		EditRemoveTimeSpan
- *  @see		de.sciss.meloncillo.timeline.TimelineFrame
  */
 public class EditSetTimelineScroll
 extends BasicUndoableEdit

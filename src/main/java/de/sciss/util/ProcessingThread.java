@@ -75,9 +75,6 @@ implements Runnable, ProgressComponent
 	 *  @param  rp				Interface whose method runProcessing() is called
 	 *							inside the new thread when it's started.
 	 *  @param  pc				Component responsible for displaying progress bar etc.
-	 *  @param  root			the current Main instance. During processing
-	 *							all menubars related to root will be disabled.
-	 *  @param  doc				the current Session instance
 	 *  @param  procName		Name for the thread and the process monitoring
 	 *  @param  rpArgument		anything the RunnableProcessing might need. This object
 	 *							is just passed to the rp.run() method

@@ -122,7 +122,6 @@ implements  TimelineListener, MultiTransport.Listener, RealtimeConsumer,
 	 *	may wish to add custom gadgets using <code>addButton</code>
 	 *	afterwards.
 	 *
-	 *	@param	root	Application root
 	 *	@param	doc		Session Session
 	 */
 	public TransportToolBar( MultiTransport transport, final Timeline timeline, final LockManager lm,

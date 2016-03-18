@@ -60,7 +60,6 @@ import de.sciss.io.Span;
  *  @see		EditSetTimelineLength
  *  @see		EditSetTimelineSelection
  *  @see		EditSetTimelineScroll
- *  @see		EditInsertTimeSpan
  */
 public class EditRemoveTimeSpan
 extends BasicSyncCompoundEdit

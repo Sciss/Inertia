@@ -261,7 +261,7 @@ implements Constants, ServerListener, de.sciss.app.DocumentListener
 //			}
 			server.addListener( this );
 			if( dumpMode != kDumpOff ) dumpOSC( dumpMode );
-			nw		= new NodeWatcher( server );
+			nw		=NodeWatcher.newFrom ( server ); // new NodeWatcher( server );
 //nw.VERBOSE	= true;
 			nw.start();
 			server.boot();

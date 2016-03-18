@@ -83,10 +83,6 @@ implements  DynamicListening, PreferenceChangeListener,
 	/**
 	 *  Constructs a new <code>PrefNumberField</code>.
 	 *
-	 *  @param  flags		type of number field, usually zero
-	 *  @param  space		NumberSpace to use for the number formatting
-	 *  @param  unitLabel   text label to display right to the text field
-	 *						or null
 	 *  @synchronization	Like any other Swing component,
 	 *						the constructor is to be called
 	 *						from the event thread.

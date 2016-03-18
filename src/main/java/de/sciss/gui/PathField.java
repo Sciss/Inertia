@@ -356,7 +356,6 @@ implements ActionListener, PathListener, EventManager.Processor
 	 *  file chooser or text editing).
 	 *
 	 *  @param  listener	the <code>PathListener</code> to register
-	 *  @see	de.sciss.meloncillo.util.EventManager#addListener( Object )
 	 */
 	public void addPathListener( PathListener listener )
 	{
@@ -368,7 +367,6 @@ implements ActionListener, PathListener, EventManager.Processor
 	 *  from receiving path change events.
 	 *
 	 *  @param  listener	the <code>PathListener</code> to unregister
-	 *  @see	de.sciss.meloncillo.util.EventManager#removeListener( Object )
 	 */
 	public void removePathListener( PathListener listener )
 	{

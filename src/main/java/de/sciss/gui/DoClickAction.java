@@ -96,8 +96,6 @@ extends KeyedAction
 	 *  @param  b   a button whose <code>doClick</code>
 	 *				method is called when the action
 	 *				is performed.
-	 *  @see	ToolPalette#ToolPalette( Main, Session )
-	 *  @see	MenuFactory#addGlobalKeyCommand( Action )
 	 */
 	public DoClickAction( AbstractButton b, KeyStroke stroke )
 	{

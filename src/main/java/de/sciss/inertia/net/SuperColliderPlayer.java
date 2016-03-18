@@ -29,15 +29,31 @@
 
 package de.sciss.inertia.net;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.nio.channels.*;
-import java.util.*;
-import java.util.prefs.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import de.sciss.app.AbstractApplication;
+import de.sciss.app.BasicEvent;
+import de.sciss.app.EventManager;
+import de.sciss.inertia.io.RoutingConfig;
+import de.sciss.inertia.math.MathUtil;
+import de.sciss.inertia.realtime.MultiTransport;
+import de.sciss.inertia.realtime.RealtimeConsumer;
+import de.sciss.inertia.realtime.RealtimeConsumerRequest;
+import de.sciss.inertia.realtime.RealtimeContext;
+import de.sciss.inertia.session.Atom;
+import de.sciss.inertia.session.LayerManager;
+import de.sciss.inertia.session.Session;
+import de.sciss.inertia.session.Track;
+import de.sciss.jcollider.*;
+import de.sciss.net.OSCBundle;
+import de.sciss.net.OSCListener;
+import de.sciss.net.OSCMessage;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 // INERTIA
 //import de.sciss.eisenkraut.*;
@@ -46,24 +62,6 @@ import javax.swing.event.*;
 //import de.sciss.eisenkraut.realtime.*;
 //import de.sciss.eisenkraut.session.*;
 //import de.sciss.eisenkraut.util.*;
-import de.sciss.inertia.math.MathUtil;
-import de.sciss.inertia.realtime.*;
-import de.sciss.inertia.session.*;
-import de.sciss.inertia.util.*;
-import de.sciss.inertia.io.RoutingConfig;
-
-import de.sciss.app.AbstractApplication;
-import de.sciss.app.Application;
-
-import de.sciss.net.*;
-
-import de.sciss.gui.GUIUtil;
-import de.sciss.gui.LogTextArea;
-import de.sciss.gui.PrefComboBox;
-
-import de.sciss.io.Span;
-
-import de.sciss.jcollider.*;
 
 /**
  *  @author		Hanns Holger Rutz
@@ -238,7 +236,7 @@ numInputChannels = 2;
 // INTERTIA
 //		synthPhasor			= Synth.basicNew( "eisen-phasor", server );
 //		busPhasor			= Bus.audio( server );
-		trigResp			= new OSCResponderNode( server.getAddr(), "/tr", new OSCListener() {
+		trigResp			= new OSCResponderNode( server /* .getAddr() */, "/tr", new OSCListener() {
 			public void messageReceived( OSCMessage msg, SocketAddress sender, long time )
 			{
 				final Object		nodeID	= msg.getArg( 0 );
@@ -266,7 +264,7 @@ numInputChannels = 2;
 		});
 		
 		// UUU XXX can be put in a NodeWatcher listener
-		nEndResp			= new OSCResponderNode( server.getAddr(), "/n_end", new OSCListener() {
+		nEndResp			= new OSCResponderNode( server /* .getAddr() */, "/n_end", new OSCListener() {
 			public void messageReceived( OSCMessage msg, SocketAddress sender, long time )
 			{
 				try {

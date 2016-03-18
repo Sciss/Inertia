@@ -41,7 +41,6 @@ import java.util.*;
  *  @author		Hanns Holger Rutz
  *  @version	0.25, 17-Sep-05
  *
- *  @see	de.sciss.meloncillo.gui.NumberField#FLAG_MINSEC
  *
  *  @todo   this <strong>might</strong> be buggy (in apple's VM).
  *			the transport position label used to feed a time format

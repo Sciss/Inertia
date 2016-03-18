@@ -44,7 +44,6 @@ import java.util.List;
  *  @author		Hanns Holger Rutz
  *  @version	0.22, 15-Sep-05
  *
- *  @see	de.sciss.meloncillo.io.AudioFileDescr#KEY_MARKERS
  */
 public class Marker
 implements Cloneable, Comparable, Serializable
@@ -61,8 +60,6 @@ implements Cloneable, Comparable, Serializable
 	 *	the markers as defined by the <code>Comparable</code>
 	 *	interface.
 	 *
-	 *	@see	Collections#sort( List )
-	 *	@see	Collections#sort( List, Comparator )
 	 */
 	public static final Comparator	nameComparator	= new NameComparator();
 
@@ -219,8 +216,7 @@ implements Cloneable, Comparable, Serializable
 	 *						the given name.
 	 *
 	 *	@see	#nameComparator
-	 *	@see	Collections.binarySearch( List, Object, Comparator )
-	 */	
+	 */
 	public static int find( java.util.List markers, String name, int startIndex )
 	{
 		for( int i = startIndex; i < markers.size(); i++ ) {
@@ -238,7 +234,7 @@ implements Cloneable, Comparable, Serializable
 		{
 			if( o1 instanceof String ) {
 				if( o2 instanceof String ) {
-					return( ((String) o1).compareTo( o2 ));
+					return( ((String) o1).compareTo( (String) o2 ));
 				} else if( o2 instanceof Marker ) {
 					return( ((String) o1).compareTo( ((Marker) o2).name ));
 				} else if( o2 instanceof Region ) {
@@ -246,7 +242,7 @@ implements Cloneable, Comparable, Serializable
 				}
 			} else if( o1 instanceof Marker ) {
 				if( o2 instanceof String ) {
-					return( ((Marker) o1).name.compareTo( o2 ));
+					return( ((Marker) o1).name.compareTo( (String) o2 ));
 				} else if( o2 instanceof Marker ) {
 					return( ((Marker) o1).name.compareTo( ((Marker) o2).name ));
 				} else if( o2 instanceof Region ) {
@@ -254,7 +250,7 @@ implements Cloneable, Comparable, Serializable
 				}
 			} else if( o1 instanceof Region ) {
 				if( o2 instanceof String ) {
-					return( ((Region) o1).name.compareTo( o2 ));
+					return( ((Region) o1).name.compareTo( (String) o2 ));
 				} else if( o2 instanceof Marker ) {
 					return( ((Region) o1).name.compareTo( ((Marker) o2).name ));
 				} else if( o2 instanceof Region ) {

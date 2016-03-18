@@ -43,7 +43,6 @@ package de.sciss.app;
  *  @author		Hanns Holger Rutz
  *  @version	0.13, 15-Sep-05
  *
- *  @see	ObserverPalette
  *  @see	DynamicAncestorAdapter
  */
 public interface DynamicListening

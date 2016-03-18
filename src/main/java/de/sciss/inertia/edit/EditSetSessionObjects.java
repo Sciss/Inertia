@@ -64,16 +64,12 @@ extends BasicUndoableEdit
 	 *  thus dispatching a <code>SessionObjectCollectionEvent</code>.
 	 *
 	 *  @param  source				who initiated the action
-	 *  @param  doc					session object which contains
-	 *								the submitted sessionObjects
 	 *	@param	quoi				XXX
 	 *  @param  collNewSelection	the new collection of sessionObjects
 	 *								which form the new selection. the
 	 *								previous selection is discarded.
 	 *	@param	doors				XXX
 	 *
-	 *  @see	de.sciss.meloncillo.session.SessionCollection
-	 *  @see	de.sciss.meloncillo.session.SessionCollection.Event
 	 *
 	 *  @synchronization			waitExclusive on doors
 	 */

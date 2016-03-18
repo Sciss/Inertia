@@ -52,7 +52,6 @@ import de.sciss.app.AncestorAdapter;
  *  @version	0.10, 20-May-05
  *
  *  @see		DynamicListening
- *  @see		de.sciss.meloncillo.surface.SurfacePane
  */
 public class DynamicAncestorAdapter
 extends AncestorAdapter

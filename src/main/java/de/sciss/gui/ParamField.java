@@ -263,7 +263,6 @@ implements PropertyChangeListener, EventManager.Processor
 	 *  the gadgets content.
 	 *
 	 *  @param  listener	the <code>NumberListener</code> to register
-	 *  @see	de.sciss.meloncillo.util.EventManager#addListener( Object )
 	 */
 	public void addListener( ParamField.Listener listener )
 	{
@@ -280,7 +279,6 @@ implements PropertyChangeListener, EventManager.Processor
 	 *  from receiving number change events.
 	 *
 	 *  @param  listener	the <code>NumberListener</code> to unregister
-	 *  @see	de.sciss.meloncillo.util.EventManager#removeListener( Object )
 	 */
 	public void removeListener( ParamField.Listener listener )
 	{

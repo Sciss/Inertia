@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- 
+	DTD for an inertia session file
+	lastmod : 07-aug-05
+-->
+<!ELEMENT inertia (map?,object*,coll*,prefs?)>
+<!ATTLIST inertia
+		  version CDATA #REQUIRED
+		  compatible CDATA #REQUIRED
+		  platform CDATA #REQUIRED>
+<!ELEMENT node (map, node*)>
+<!ATTLIST node
+		  name	CDATA #REQUIRED>
+<!ELEMENT map (entry*)>
+<!ELEMENT entry (flag*)>
+<!ATTLIST entry
+		  key	CDATA #REQUIRED
+		  value	CDATA #REQUIRED
+		  type	(int|long|float|double|boolean|string|file) #IMPLIED
+		  label	CDATA #IMPLIED>
+<!ELEMENT flag EMPTY>
+<!ATTLIST flag
+		  id	CDATA #REQUIRED>
+<!ELEMENT coll (map?,object*,coll*)>
+<!ATTLIST coll
+		  name	CDATA #REQUIRED>
+<!ELEMENT object (map?,object*,coll*)>
+<!ATTLIST object
+		  name	CDATA #REQUIRED
+		  class	CDATA #IMPLIED>
+<!ELEMENT prefs (node*)>

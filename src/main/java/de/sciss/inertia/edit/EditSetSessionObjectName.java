@@ -67,8 +67,6 @@ extends BasicUndoableEdit
 	 *							the session object
 	 *  @param  so				the session object to be renamed
 	 *  @param  name			the new name of the session object
-	 *  @see	de.sciss.meloncillo.session.SessionCollection
-	 *  @see	de.sciss.meloncillo.session.SessionCollection.Event
 	 *  @synchronization		waitExclusive on doors
 	 *  @warning				the serialization of session objects through
 	 *							the session's xml file requires that

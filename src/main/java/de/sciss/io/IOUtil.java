@@ -265,7 +265,6 @@ public class IOUtil
 	 *  @throws IOException if this method fails to create the file
 	 *  @see	File#createTempFile( String, String, File )
 	 *  @see	File#deleteOnExit()
-	 *  @see	PrefsUtil#KEY_TEMPDIR
 	 */
 	public static File createTempFile()
 	throws IOException
@@ -291,7 +290,6 @@ public class IOUtil
 	 *  @throws IOException if this method fails to create the file
 	 *  @see	File#createTempFile( String, String, File )
 	 *  @see	File#deleteOnExit()
-	 *  @see	PrefsUtil#KEY_TEMPDIR
 	 */
 	public static File createTempFile( String prefix, String suffix )
 	throws IOException

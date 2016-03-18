@@ -97,7 +97,6 @@ public class GUIUtil
 	 *						method.
 	 *  @param  title		name of the action in which the error occurred
 	 *
-	 *  @see	javax.swing.JOptionPane#showOptionDialog( Component, Object, String, int, int, Icon, Object[], Object )
 	 *  @see	java.lang.Throwable#getLocalizedMessage()
 	 */
 	public static void displayError( Component component, Exception exception, String title )
@@ -171,7 +170,6 @@ public class GUIUtil
 	 *					default font is used
 	 *
 	 *  @see	java.awt.Component#setFont( Font )
-	 *	@see	WindowHandler#getDefaultFont()
 	 */
 	public static void setDeepFont( Container c, Font fnt )
 	{

@@ -66,7 +66,6 @@ implements EventManager.Processor
 	 *	Creates a tool palette with
 	 *	default buttons for editing the timeline frame.
 	 *
-	 *	@param	root	Application root
 	 */
 // INERTIA
 //	public VectorEditorToolBar( Main root )

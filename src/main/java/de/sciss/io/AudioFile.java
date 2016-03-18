@@ -1237,14 +1237,14 @@ implements InterleavedStreamFile
 				case APPL_MAGIC:
 					i1		  = raf.readInt();
 					chunkLen -= 4;
-					strBuf	  = AbstractApplication.getApplication().getMacOSCreator().getBytes();
-					if( ((i1 & 0xFF) == strBuf[3]) && (((i1 >> 8) & 0xFF) == strBuf[2]) &&
-						(((i1 >> 16) & 0xFF) == strBuf[1]) && (((i1 >> 24) & 0xFF) == strBuf[0]) ) {
-						strBuf	= new byte[ chunkLen ];
-						raf.readFully( strBuf );
-						afd.setProperty( AudioFileDescr.KEY_APPCODE, strBuf );
-						chunkLen = 0;
-					}
+//					strBuf	  = AbstractApplication.getApplication().getMacOSCreator().getBytes();
+//					if( ((i1 & 0xFF) == strBuf[3]) && (((i1 >> 8) & 0xFF) == strBuf[2]) &&
+//						(((i1 >> 16) & 0xFF) == strBuf[1]) && (((i1 >> 24) & 0xFF) == strBuf[0]) ) {
+//						strBuf	= new byte[ chunkLen ];
+//						raf.readFully( strBuf );
+//						afd.setProperty( AudioFileDescr.KEY_APPCODE, strBuf );
+//						chunkLen = 0;
+//					}
 					break;
 				
 				default:
@@ -1425,13 +1425,13 @@ implements InterleavedStreamFile
 			}
 
 			// APPL Chunk
-			strBuf	= (byte[]) afd.getProperty( AudioFileDescr.KEY_APPCODE );
-			if( strBuf != null ) {
-				raf.writeInt( APPL_MAGIC );
-				raf.writeInt( 4 + strBuf.length );
-				raf.write( AbstractApplication.getApplication().getMacOSCreator().getBytes(), 0, 4 );
-				raf.write( strBuf );
-			}
+//			strBuf	= (byte[]) afd.getProperty( AudioFileDescr.KEY_APPCODE );
+//			if( strBuf != null ) {
+//				raf.writeInt( APPL_MAGIC );
+//				raf.writeInt( 4 + strBuf.length );
+//				raf.write( AbstractApplication.getApplication().getMacOSCreator().getBytes(), 0, 4 );
+//				raf.write( strBuf );
+//			}
 
 			// SSND Chunk (Header)
 			raf.writeInt( SSND_MAGIC );

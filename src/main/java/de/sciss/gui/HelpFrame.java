@@ -30,31 +30,22 @@
 
 package de.sciss.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import de.sciss.app.AbstractApplication;
+
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.Document;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.text.Document;
-
-import net.roydesign.mac.MRJAdapter;
-
-import de.sciss.app.AbstractApplication;
 
 /**
  *  A frame displaying online HTML help
@@ -260,9 +251,14 @@ implements HyperlinkListener, PropertyChangeListener
     {
         if( historyIndex >= 0 ) {
             try {
-                MRJAdapter.openURL( ((HistoryEntry) history.get( historyIndex )).url.toString() );
+                final URL url = ((HistoryEntry) history.get( historyIndex )).url;
+//                MRJAdapter.openURL( url.toString() );
+                Desktop.getDesktop ().browse ( url.toURI () );
             }
             catch( IOException e1 ) {
+                GUIUtil.displayError( this, e1, null );
+            } catch ( URISyntaxException e1 )
+            {
                 GUIUtil.displayError( this, e1, null );
             }
         }

@@ -57,7 +57,6 @@ import de.sciss.gui.StringItem;
  *  @version	0.22, 15-Sep-05
  *
  *  @see		AudioFile
- *  @see		de.sciss.meloncillo.gui.AudioFileFormatPane
  *
  *  @todo		all files are considered big endian at the
  *				moment which might be inconvenient on non
@@ -140,19 +139,16 @@ public class AudioFileDescr
 	/**
 	 *  property key : loop region. value class = Region
 	 *
-	 *  @see	de.sciss.fscape.util.Region
 	 */
 	public static final Object KEY_LOOP		=   new Integer( 0 );
 	/**
 	 *  property key : marker list. value class = java.util.List whose elements are of class Marker
 	 *
-	 *  @see	de.sciss.fscape.util.Marker
 	 */
 	public static final Object KEY_MARKERS  =   new Integer( 1 );
 	/**
 	 *  property key : region list. value class = java.util.List whose elements are of class Region
 	 *
-	 *  @see	de.sciss.fscape.util.Region
 	 */
 	public static final Object KEY_REGIONS  =   new Integer( 2 );
 	/**
@@ -338,7 +334,6 @@ public class AudioFileDescr
 	 *  @return a list of items for a PrefComboBox which
 	 *			list all supported audio file formats.
 	 *  
-	 *  @see	de.sciss.meloncillo.gui.PrefComboBox	PrefComboBox to learn about the use of StringItems
 	 */
 	public static StringItem[] getFormatItems()
 	{

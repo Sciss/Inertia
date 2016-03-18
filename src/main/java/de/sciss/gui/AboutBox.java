@@ -30,17 +30,12 @@
 
 package de.sciss.gui;
 
-import java.io.File;
-import javax.swing.ImageIcon;
+import de.sciss.app.AbstractApplication;
+
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import java.text.*;
-import java.util.*;
-
-import net.roydesign.mac.MRJAdapter;
-import net.roydesign.ui.StandardMacAboutFrame;
-
-import de.sciss.app.AbstractApplication;
+import java.io.File;
 
 /**
  *  About, Copyright + Credits Frame
@@ -49,71 +44,69 @@ import de.sciss.app.AbstractApplication;
  *  @version	0.16, 15-Sep-05
  */
 public class AboutBox
-extends StandardMacAboutFrame
+extends JFrame // StandardMacAboutFrame
 implements HyperlinkListener
 {
-	private static final long serialVersionUID = 0x050915L;
+    private static final long serialVersionUID = 0x050915L;
 
-	/**
-	 *  Value for add/getComponent(): the about box
-	 *
-	 *  @see	#getComponent( Object )
-	 *  @see	de.sciss.meloncillo.gui.AboutBox
-	 */
-	public static final Object COMP_ABOUTBOX		= AboutBox.class;
+    /**
+     *  Value for add/getComponent(): the about box
+     */
+    public static final Object COMP_ABOUTBOX		= AboutBox.class;
 
-	private static final String CREDITS_START   =
-		"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" "+
-		"\"http://www.w3.org/TR/REC-html40/loose.dtd\">"+
-		"<html><head><style type=\"text/css\"><!--\n"+
-		"p { font-family:\"Lucida Grande\" Helvetica sans-serif;font-size:"+
-		"10pt;padding:2pt 0 2pt 0;margin:0; }\n"+
-		"--></style></head><body>";
-	private static final String CREDITS_END		= "</body></html>";
+    private static final String CREDITS_START   =
+        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" "+
+        "\"http://www.w3.org/TR/REC-html40/loose.dtd\">"+
+        "<html><head><style type=\"text/css\"><!--\n"+
+        "p { font-family:\"Lucida Grande\" Helvetica sans-serif;font-size:"+
+        "10pt;padding:2pt 0 2pt 0;margin:0; }\n"+
+        "--></style></head><body>";
+    private static final String CREDITS_END		= "</body></html>";
 
     public AboutBox()
-	{
-        super( AbstractApplication.getApplication().getName(),
-			   String.valueOf( AbstractApplication.getApplication().getVersion() ));
+    {
+        super();
+        setTitle(AbstractApplication.getApplication().getName() + " v" +
+               String.valueOf( AbstractApplication.getApplication().getVersion() ));
 
-		final StringBuffer				credits	= new StringBuffer( CREDITS_START );
-		final de.sciss.app.Application	app		= AbstractApplication.getApplication();
-		final char						sep		= File.separatorChar;
+        final StringBuffer				credits	= new StringBuffer( CREDITS_START );
+        final de.sciss.app.Application	app		= AbstractApplication.getApplication();
+        final char						sep		= File.separatorChar;
 
-		setApplicationIcon( new ImageIcon( "images/application.png" ));
-		setCopyright( app.getResourceString( "copyright" ));
-		setHyperlinkListener( this );
-		credits.append( app.getResourceString( "credits" ));
-		credits.append( "<P>Java " );
-		credits.append( System.getProperty( "java.version" ));
-		credits.append( "</P>" );
-		credits.append( CREDITS_END );
-		setCredits( credits.toString(), "text/html" );
+//		setApplicationIcon( new ImageIcon( "images/application.png" ));
+//		setCopyright( app.getResourceString( "copyright" ));
+//		setHyperlinkListener( this );
+        credits.append( app.getResourceString( "credits" ));
+        credits.append( "<P>Java " );
+        credits.append( System.getProperty( "java.version" ));
+        credits.append( "</P>" );
+        credits.append( CREDITS_END );
+//		setCredits( credits.toString(), "text/html" );
 //System.err.println( credits.toString() );
 
 //		pack();
-	}
-	
-	public void setBuildVersion( File f )
-	{
-		final long build   = f.lastModified();
+    }
 
-		if( build != 0L ) {
-			setBuildVersion( DateFormat.getDateInstance( DateFormat.SHORT ).format( new Date( build )));
-		}
-	}
+//	public void setBuildVersion( File f )
+//	{
+//		final long build   = f.lastModified();
+//
+//		if( build != 0L ) {
+//			setBuildVersion( DateFormat.getDateInstance( DateFormat.SHORT ).format( new Date( build )));
+//		}
+//	}
 
-	// --------- HyperlinkListener interface ---------
+    // --------- HyperlinkListener interface ---------
 
-	public void hyperlinkUpdate( HyperlinkEvent e )
-	{
-		if( e.getEventType() == HyperlinkEvent.EventType.ACTIVATED ) {
-			try {
-				MRJAdapter.openURL( e.getURL().toString() );
-			}
-			catch( Exception e1 ) {
-				GUIUtil.displayError( this, e1, this.getTitle() );
-			}
-		}
-	}
+    public void hyperlinkUpdate( HyperlinkEvent e )
+    {
+        if( e.getEventType() == HyperlinkEvent.EventType.ACTIVATED ) {
+            try {
+//				MRJAdapter.openURL( e.getURL().toString() );
+            }
+            catch( Exception e1 ) {
+                GUIUtil.displayError( this, e1, this.getTitle() );
+            }
+        }
+    }
 }

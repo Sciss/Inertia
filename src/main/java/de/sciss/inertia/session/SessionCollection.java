@@ -105,7 +105,6 @@ implements EventManager.Processor
 	/**
 	 *  Pauses dispatching of <code>SessionCollection.Event</code>s.
 	 *
-	 *  @see	de.sciss.meloncillo.util.EventManager#pause()
 	 */
 	public void pauseDispatcher()
 	{
@@ -115,7 +114,6 @@ implements EventManager.Processor
 	/**
 	 *  Resumes dispatching of <code>SessionCollection.Event</code>s.
 	 *
-	 *  @see	de.sciss.meloncillo.util.EventManager#resume()
 	 */
 	public void resumeDispatcher()
 	{
@@ -434,7 +432,6 @@ implements EventManager.Processor
 	 *
 	 *  @param  listener	the <code>Listener</code> to register
 	 *
-	 *  @see	de.sciss.meloncillo.util.EventManager#addListener( Object )
 	 */
 	public void addListener( SessionCollection.Listener listener ) // , Set keySet, int mode )
 	{
@@ -447,7 +444,6 @@ implements EventManager.Processor
 	 *  the session object collection.
 	 *
 	 *  @param  listener	the <code>Listener</code> to unregister
-	 *  @see	de.sciss.meloncillo.util.EventManager#removeListener( Object )
 	 */
 	public void removeListener( SessionCollection.Listener listener )
 	{
@@ -560,11 +556,7 @@ implements EventManager.Processor
 		 *  Constructs a new <code>SessionObjectCollectionEvent</code>.
 		 *
 		 *  @param  source		who originated the action / event
-		 *  @param  ID			one of <code>CHANGED</code>, <code>TRANSFORMED</code>
-		 *						or <code>SELECTED</code>.
 		 *  @param  when		system time when the event occured
-		 *  @param  actionID	unused, must be zero at the moment
-		 *  @param  actionObj	currently unused (provide null)
 		 */
 		private Event( Object source, long when, java.util.List affectedColl, int type )
 		{
