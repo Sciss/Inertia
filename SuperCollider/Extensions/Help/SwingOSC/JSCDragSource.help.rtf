@@ -1,0 +1,135 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green0\blue191;\red96\green96\blue96;
+\red191\green0\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of SCDragSource / SCDragSink / SCDragBoth . last mod: 25-apr-06 sciss\
+Also refer to [\cf2 \ul \ulc2 JSCView\ulnone ] for different behaviour affecting all widgets\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	
+\f0\b \
+different behaviour\
+
+\f1\b0 	string compilation	the compilation of a string dragged from an external application happens at the end\
+					of the dnd gesture ; in cocoa gui, the string is compiled as soon as the mouse is\
+					moved over a gui component.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 		\
+extended functionality\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	string compilation	string compilation can be switched off by calling interpretDroppedStrings_( false ).\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 \
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	file drag			should enable dragging files from the finder (could result in a PathName object)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JSCDragSource, JSCDragSink, JSCDragBoth
+\f2\b0\fs18 \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b \cf0 Note: please use the abstraction layer GUI.dragSource / .dragSink / .dragBoth if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 \
+Drag+Drop Gadgets ; JSCDragSource can be a source of a drag gesture, JSCDragSink can be a target of a drag gesture. JSCDragBoth combines both a source and a target.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf3 \
+\cf0 (\
+	\cf3 var\cf0  w, f, r;\
+\
+	w = \cf3 JSCWindow\cf0 .new;\
+	f = \cf3 FlowLayout\cf0 ( w.view.bounds );\
+	r = \cf3 Rect\cf0 ( 0, 0, 150, 30 );\
+	w.view.decorator = f;\
+	\cf3 JSCStaticText\cf0 ( w, r ).string_( \cf4 "JSCDragSource"\cf0  );\
+	x = \cf3 JSCDragSource\cf0 ( w, r );\
+	f.nextLine;\
+	\cf3 JSCStaticText\cf0 ( w, r ).string_( \cf4 "JSCDragSink"\cf0  );\
+	y = \cf3 JSCDragSink\cf0 ( w, r );\
+	f.nextLine;\
+	\cf3 JSCStaticText\cf0 ( w, r ).string_( \cf4 "JSCDragBoth"\cf0  );\
+	z = \cf3 JSCDragBoth\cf0 ( w, r );\
+	w.front;\
+	f.nextLine;\
+	\cf3 JSCStaticText\cf0 ( w, r ).string_( \cf4 "Ctrl+Press+Move"\cf0  );\
+	\cf3 JSCSlider\cf0 ( w, r );\
+)\
+\cf5 \
+// detect drops\cf0 \
+y.action = \{ \cf3 arg\cf0  butt;\
+	(\cf4 "Woooha! We got "\cf0 ++butt.object).postln;\
+\}\
+\
+\cf5 // set the object that can be dragged\cf0 \
+x.object = \cf4 "Schnucki 3000"\cf0 ;\
+z.object = \cf4 "Haschimoto";\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 External applications :\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \'d0 dragging from SwingOSC to an external application will export the transferable object as a string (
+\f2\fs20 \cf3 currentDrag.asString
+\f1\fs24 \cf2 ).\
+\'d0 dragging a string from an external application to SwingOSC will compile that string and save the result in 
+\f2\fs20 \cf3 currentDrag
+\f1\fs24 \cf2 . 
+\f0\b Example
+\f1\b0 : boot the local server, select the following code snipped and drag it onto the drag sink in the window created above:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 (\
+	\{ \cf3 Pan2\cf0 .ar( \cf3 SinOsc\cf0 .ar( 220.5, mul: 0.5 ))\}.play;\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf2 Example
+\f1\b0 : drag the following snipped onto the slider:
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 (\
+	sqrt( 0.5 );\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf2 \'d0 this automatic compilation can be switched off, by calling interpretDroppedStrings_( false ) (works with SwingOSC only!):\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 y.interpretDroppedStrings = \cf3 false\cf0 ;\
+\cf5 // now try again to drop a string onto the drag sink!\
+}

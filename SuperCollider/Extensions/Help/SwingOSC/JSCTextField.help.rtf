@@ -1,0 +1,84 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green0\blue191;\red96\green96\blue96;
+\red191\green0\blue0;\red0\green115\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of SCTextField. last mod: 25-apr-06 sciss\
+Also refer to [\ul \ulc2 JSCView\ulnone ] for different behaviour affecting all widgets\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	typingColor			not effective\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 \
+different behaviour\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	class hierarchy		JSCTextField and JSCNumberBox are subclasses of JSCTextEditBase\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 		\
+extended functionality\
+\
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	background color	Colors with alpha != 1 produce painting artifacts with Aqua look'n'feel\
+	umlaute			using SuperCollider's defaultKeyDownAction mechanism prohibits the\
+					proper use of umlaute (basically everything above ASCII 127) ;\
+					until this is fixed, the defaultKeyDownAction has been commented out\
+					as to provide a better standard behaviour of the gadget ; press enter\
+					to commit edit and trigger action function\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JSCTextField
+\f2\b0\fs18 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b\fs24 \cf0 Note: please use the abstraction layer GUI.textField if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+superclass: JSCTextEditBase\
+\
+(\
+	\cf3 var\cf0  w;\
+	\
+	w = \cf3 JSCWindow\cf0 ( \cf4 "JSCTextField"\cf0  );\
+	b = 	\cf3 JSCTextField\cf0 ( w, \cf3 Rect\cf0 ( 10, 10, 150, 30 ));\
+	b.string = \cf4 "hi there"\cf0 ;\
+	b.action = \{ \cf3 arg\cf0  field; field.value.postln; \};\
+	w.front;\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 // does not do the action\cf0 \
+b.value = \cf4 "yo"\cf0 ;\
+\
+\
+b.setProperty(\cf6 \\boxColor\cf0 ,\cf3 Color\cf0 .grey);\
+b.setProperty(\cf6 \\stringColor\cf0 ,\cf3 Color\cf0 .white);\
+b.setProperty(\cf6 \\align\cf0 ,\cf6 \\center\cf0 );\
+\
+\pard\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf5 // default keyboard mappings\
+// not active at the moment!\
+// all keyboard events are handled by the look-and-feel\
+// (cursor, copy, paste, deleting etc.)\
+\cf0 enter	commit edit\
+}

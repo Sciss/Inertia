@@ -1,0 +1,262 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+\f3\fswiss\fcharset77 ArialMT;\f4\fnil\fcharset77 MarkerFelt-Thin;}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green0\blue191;\red185\green46\blue141;
+\red96\green96\blue96;\red255\green54\blue100;\red191\green0\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of Font. last mod: 21-jan-07 sciss\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	antiAliasing_		has no effect\
+	smoothing_		has no effect\
+	
+\f0\b \
+different behaviour\
+		\
+extended functionality\
+
+\f1\b0 	style				extra field for plain / bold / italic\
+	defaultXYZFace		the cocoa compatibility patch is not yet in the standard distrib\
+	boldVariant			the cocoa compatibility patch is not yet in the standard distrib\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 \
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	availableFonts		needs to be called asynchronously the first time\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JFont
+\f1\b0\fs24 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b \cf0 Note: please use the abstraction layer GUI.font if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 JFont is a typeface description that can used with some [\ul JSCView\ulnone ] objects to define the type of font used for text rendering.\
+[\ul JSCStaticText\ulnone ], [\ul JSCButton\ulnone ], [\ul JSCNumberBox\ulnone ], [\ul JSCDragView\ulnone ], [\ul JSCDragSink\ulnone ], [\ul JSCDragBoth\ulnone ], [\ul JSCCheckBox\ulnone ] can set their fonts.\
+Besides, fonts can be used in user generated views : see [\ul JSCUserView\ulnone ] and [\ul JPen\ulnone ] for details.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\b \cf0 Instantiation\
+\
+
+\f2\b0\fs20 \cf3 	JFont.new( \cf4 <name>\cf3 , \cf4 <size>\cf3 , [ \cf4 <style>\cf3  ])
+\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 \
+where 'name' is a String or Symbol of the font face, size is integer font size in points, style is an integer of 0 (plain = default), 1 (bold), 2 (italic) or a combination of these. style is not supported for cocoa fonts (you use special font names instead), so it is advised to not use it if possible.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 Example:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  w,f;\
+\
+w = \cf3 JSCWindow\cf0 ( \cf5 "Fonts"\cf0 , \cf3 Rect\cf0 ( 128, 64, 340, 360 ));\
+w.view.decorator = f = \cf3 FlowLayout\cf0 ( w.view.bounds, 4 @ 4, 4 @ 2 );\
+\
+[\
+\cf5 "
+\f0\b\fs24 \cf5 Helvetica-Bold
+\f2\b0\fs18 \cf5 "\cf0 ,\
+\cf5 "
+\f1\fs24 \cf5 Helvetica
+\f2\fs18 \cf5 "\cf0 ,\
+\cf5 "Monaco"\cf0 ,\
+\cf5 "
+\f3 \cf5 Arial
+\f2 \cf5 "\cf0 ,\
+\cf5 "
+\f1 \cf5 Gadget
+\f2 \cf5 "\cf0 ,\
+\cf5 "
+\f4\fs24 \cf5 MarkerFelt-Thin
+\fs18 "
+\f2 \cf0 \
+\
+].do(\{ \cf3 arg\cf0  name;\
+	\cf3 var\cf0  v, s, n, spec, p, height = 16;\
+\
+	v = \cf3 JSCStaticText\cf0 ( w, \cf3 Rect\cf0 ( 0, 0, 56, height + 2 ));\
+	v.font = \cf3 JFont\cf0 ( name, 13 );\
+	v.string = name;\
+\
+	s = \cf3 JSCButton\cf0 ( w, \cf3 Rect\cf0 ( 0, 0, 140, height + 2 ));\
+	s.font = \cf3 JFont\cf0 ( name, 13 );\
+	s.states = [[ name ]];\
+	\
+	n = \cf3 JSCNumberBox\cf0 ( w, \cf3 Rect\cf0 ( 0, 0, 56, height + 2 ));\
+	n.font = \cf3 JFont\cf0 ( name, 13 );\
+	n.object = pi;\
+\
+	f.nextLine;\
+\});\
+\
+w.front;\
+\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\b\fs24 \cf0 Retrieving All Available Fonts
+\f2\b0\fs18 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs20 \cf3 	JFont.availableFonts
+\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 Note:
+\f1\b0 \cf0  that on SwingOSC this call is 
+\f0\b \cf6 asynchronous
+\f1\b0 \cf0  this first time, because the names must be fetched from the Server. this requires that the call is placed inside a Routine. Successive calls can be carried out normally. You can avoid the extra hassle by calling *availableFonts once in your startup procedure like this:\
+\
+	
+\f2\fs20 \{ \cf3 JFont\cf0 .availableFonts \}.fork( \cf3 AppClock\cf0  );
+\f1\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 Example:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  w, f, t, c, names, range, char, start, stop, lastStop, fontSize = 14; \cf7 // change fontSize if you like\cf0 \
+\
+w		= \cf3 JSCWindow\cf0 ( \cf5 "Fonts"\cf0 , \cf3 Rect\cf0 ( 128, 128, 800, (fontSize + 9) * 20 + 80 ), resizable: \cf3 false\cf0  );\
+t		= \cf3 JSCTabbedPane\cf0 ( w, w.view.bounds );\
+names	= \cf3 JFont\cf0 .availableFonts;\
+stop		= 0;\
+lastStop	= stop;\
+while(\{ stop < names.size \}, \{\
+	if( names[ stop ].first != char, \{\
+		char 	= names[ stop ].first;\
+		start	= stop;\
+	\});\
+	stop = stop + 1;\
+	if( (((stop - lastStop) % 60) == 0) || (stop == names.size), \{\
+		if( (stop < names.size) && (start > lastStop), \{\
+			stop = start;\
+		\});\
+		c = \cf3 JSCCompositeView\cf0 ( t, t.bounds );\
+		c.decorator = f = \cf3 FlowLayout\cf0 ( c.bounds, 4 @ 4, 4 @ 2 );\
+		range = names.copyRange( lastStop, stop - 1 );\
+		t.setTitleAt( t.numTabs - 1, range.first.first ++ \cf5 " ... "\cf0  ++ range.last.first );\
+		range.do(\{ \cf3 arg\cf0  name, i; \cf3 var\cf0  font;\
+			font = \cf3 JFont\cf0 ( name, 13 );\
+			\
+			\cf3 JSCStaticText\cf0 ( c, \cf3 Rect\cf0 ( 0, 0, 56, fontSize + 7 ))\
+				.font_( font )\
+				.string_( name );\
+		\
+			\cf3 JSCButton\cf0 ( c, \cf3 Rect\cf0 ( 0, 0, 140, fontSize + 7 ))\
+				.font_( font )\
+				.states_([[ name ]])\
+				.action_(\{ font.postcs \});\
+			\
+			\cf3 JSCNumberBox\cf0 ( c, \cf3 Rect\cf0 ( 0, 0, 56, fontSize + 7 ))\
+				.font_( font )\
+				.object_( pi );\
+				\
+			if( (i = i + 1) % 3 == 0, \{ f.nextLine \});\
+		\});\
+		lastStop = stop;\
+	\});\
+\});\
+\
+w.front;\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\b\fs24 \cf0 \
+Logical Names and Variants
+\f2\b0\fs18 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 Since it typically depends on your platform which fonts are available, convenient methods are provided to access some standard types of fonts and to get variants of fonts:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf0 	
+\fs20 \cf3 JFont.defaultSansFace
+\fs18 \cf0 \
+	
+\fs20 \cf3 JFont.defaultSerifFace
+\fs18 \cf0 \
+	
+\fs20 \cf3 JFont.defaultMonoFace
+\fs18 \cf0 \
+	
+\fs20 \cf4 <swingOSCserver>\cf3 .boldVariant
+\fs18 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 Example:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 (\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  w, f, font;\
+\
+w = \cf3 JSCWindow\cf0 ( \cf5 "Fonts"\cf0 , \cf3 Rect\cf0 ( 256, 256, 240, 120 ), resizable: \cf3 false\cf0  );\
+w.view.decorator = f = \cf3 FlowLayout\cf0 ( w.view.bounds, 4 @ 4, 4 @ 2 );\
+\
+[\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 "sans"\cf0 ,  \cf3 JFont\cf0 .defaultSansFace,\
+\cf5 "serif"\cf0 , \cf3 JFont\cf0 .defaultSerifFace,\
+\cf5 "mono"\cf0 ,  \cf3 JFont\cf0 .defaultMonoFace\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 ].pairsDo(\{ \cf3 arg\cf0  label, name;\
+	font = \cf3 JFont\cf0 ( name, 14 );\
+	\cf3 JSCStaticText\cf0 ( w, \cf3 Rect\cf0 ( 0, 0, 100, 22 ))\
+		.font_( font )\
+		.string_( label );\
+	font = font.boldVariant;\
+	\cf3 JSCStaticText\cf0 ( w, \cf3 Rect\cf0 ( 0, 0, 100, 22 ))\
+		.font_( font )\
+		.string_( label ++ \cf5 "-bold"\cf0  );\
+	f.nextLine;\
+\});\
+\
+w.front;\
+\
+)\
+}

@@ -1,0 +1,558 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+\f3\fnil\fcharset77 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green0\blue191;\red96\green96\blue96;
+\red191\green0\blue0;\red0\green115\blue0;\red185\green46\blue141;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of SCView. last mod: 04-feb-07 sciss\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	
+\f0\b \
+different behaviour\
+
+\f1\b0 	threading			methods needn't be called in the app thread ; however all actions performed from\
+					OSCresponders are deferred to the app thread for compatibility with cocoa GUI\
+	bounds			for some gadgets the actual bounds are bigger than specified because in Swing,\
+					the focus decoration needs to be painted inside the gadget's bounds. generally you\
+					shouldn't recognize a difference. however, for gadgets that are part of the standard\
+					look-and-feel, no addtional insets are used at the moment, as example the\
+					JSCPopUpMenu on Mac OS X (Aqua look-and-feel) is actually smaller than with\
+					cocoa GUI because the focus border is not accounted for. I'll try to fix this some day.\
+	font				the default font is not Helvetica 12, but depends on the platform. On Mac OS X for\
+					example, the default font is Lucida Grande 11.\
+	mouseOverAction	on Mac OS X mouse-over can only be tracked when the window is activated.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 	\
+extended functionality\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	server field			reference to the SwingOSC instance which manages the component\
+	id method			returns the nodeID for the component\
+	mouseOverAction	key-modifer argument is passed\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 	\
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	findByID			not yet implemented\
+	focus				calling focus( false ) has no effect\
+	id_				you should not change the id as it's currently identical to the nodeID on the server\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JSCView
+\f2\b0\fs18 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b\fs24 \cf0 Note: please use the abstraction layer GUI.view if possible! (see [\ul GUI\ulnone ])\
+\
+superclass: Object\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f1\b0 \cf0 \
+JSCView is the abstract superclass for all SC GUI widgets, using a SwingOSC java server. Several key methods and variables are defined in JSCView and inherited in its subclasses. For a list of subclasses, refer to the [\ul CocoaVsJava\ulnone ] help document.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 resize_(int)\
+\
+
+\f1\b0 This setting controls how the widget will behave when it's window or enclosing view is resized. This is illustrated graphically below:
+\f0\b\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 		1  2  3\
+		4  5  6\
+		7  8  9\
+		\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf0 (\
+	w = \cf3 JSCWindow\cf0 ( \cf4 "Resize"\cf0 , \cf3 Rect\cf0 ( 40, 40, 300, 330 ));\
+	\cf3 JSCPopUpMenu\cf0 ( w, \cf3 Rect\cf0 ( 3, 3, 270, 26 ))\
+		.items_([	\cf4 "1 - fixed to left, fixed to top"\cf0 ,\
+				\cf4 "2 - horizontally elastic, fixed to top"\cf0 ,\
+				\cf4 "3 - fixed to right, fixed to top"\cf0 ,\
+				\
+				\cf4 "4 - fixed to left, vertically elastic"\cf0 ,\
+				\cf4 "5 - horizontally elastic, vertically elastic"\cf0 ,\
+				\cf4 "6 - fixed to right, vertically elastic"\cf0 ,\
+				\
+				\cf4 "7 - fixed to left, fixed to bottom"\cf0 ,\
+				\cf4 "8 - horizontally elastic, fixed to bottom"\cf0 ,\
+				\cf4 "9 - fixed to right, fixed to bottom"\cf0  ])\
+		.action_(\{ \cf3 arg\cf0  b;\
+			x.resize = b.value + 1;\
+		\});\
+	c = \cf3 JSCCompositeView\cf0 ( w, w.view.bounds.insetAll( 0, 30, 0, 0 ))\
+		.background_( \cf3 Color\cf0 .yellow )\
+		.resize_( 5 );\
+	x = \cf3 JSCStaticText\cf0 ( c, \cf3 Rect\cf0 ( 100, 100, 100, 100 ))\
+		.string_( \cf4 "Resize"\cf0  )\
+		.background_( \cf3 Color\cf0 .red );\
+	w.front;\
+)\
+\
+\cf5 // additionally constrain the minimum and maximum dimensions\cf0 \
+x.setProperty( \cf6 \\minWidth\cf0 , 20 );\
+x.setProperty( \cf6 \\maxWidth\cf0 , 200 );\
+x.setProperty( \cf6 \\minHeight\cf0 , 10 );\
+x.setProperty( \cf6 \\maxHeight\cf0 , 150 );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 resize\
+\
+
+\f1\b0 Return an Integer corresponding to the current resize behaviour (see above).\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 keyDownAction_(aFunction)
+\f1\b0 \
+\
+Register a 
+\f0\b Function
+\f1\b0  to be evaluated when a keystroke is received and this view is in focus.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf5 // select the slider, type something and watch the post window\cf0 \
+(\
+	w = \cf3 JSCWindow\cf0 .new;\
+	c = \cf3 JSCSlider\cf0 ( w, \cf3 Rect\cf0 ( 0, 0, 100, 30 ));\
+	c.keyDownAction = \{ \cf3 arg\cf0  view,char,modifiers,unicode,keycode;\
+		[ char, modifiers, unicode, keycode ].postln;\
+	\};\
+	w.front;\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf2 // use the following on Mac OS X to find out about the different codes returned\
+// from cocoa and java:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 (\
+	w = \cf3 JSCWindow\cf0 ( \cf4 "j"\cf0 , \cf3 Rect\cf0 ( 400, 500, 120, 80 ));\
+	c = \cf3 JSCButton\cf0 ( w, \cf3 Rect\cf0 ( 10, 10, 90, 30 ));\
+	c.states = [[ \cf4 "Hit any Key"\cf0  ]];\
+	c.keyDownAction = \{ \cf3 arg\cf0  view,char,modifiers,unicode,keycode;\
+		[ \cf4 "j "\cf0 , modifiers, unicode, keycode ].postln;\
+	\};\
+	w.front;\
+	c.focus;\
+\
+	w = \cf3 SCWindow\cf0 ( \cf4 "c"\cf0 , \cf3 Rect\cf0 ( 540, 500, 120, 80 ));\
+	c = \cf3 SCButton\cf0 ( w, \cf3 Rect\cf0 ( 10, 10, 90, 30 ));\
+	c.states = [[ \cf4 "Hit any Key"\cf0  ]];\
+	c.keyDownAction = \{ \cf3 arg\cf0  view,char,modifiers,unicode,keycode;\
+		[ \cf4 "c "\cf0 , modifiers, unicode, keycode ].postln;\
+	\};\
+	w.front;\
+	c.focus;\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 If you return 
+\f2\fs20 \cf3 nil
+\f1\fs24 \cf0  from your function, or you have no function registered, the event will bubble up to the parent view which may then respond.  It will continue to bubble up unless something responds or it hits the topView of the window.  You may register a function in the window's topView to respond to all unhandled events for the window.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 There are default keyDownActions for some views, which will be overridden when you set a keydown action.\
+\
+When called, the function will be passed the following arguments:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\f0\b \cf0 view -
+\f1\b0  The receiving instance of SCView.\
+\
+
+\f0\b char - 
+\f1\b0 The character pressed, possibly unprintable.  Character sequences (for example \'8e) get passed as two characters, the first one blank ( ), the second one is the unmodified character (e).  This will also vary depending on the nationality the keyboard is set to.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\f0\b\fs24 \cf0 modifiers - 
+\f1\b0 An integer bit field indicating the modifier keys in effect. You can examine individual flag settings using the C bitwise AND operator.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\fs20 \cf0 	\
+	65536 NSAlphaShiftKeyMask \
+	Set if Caps Lock key is pressed. \
+	\
+	131072 NSShiftKeyMask \
+	Set if Shift key is pressed. \
+	\
+	262144 NSControlKeyMask \
+	Set if Control key is pressed. \
+	\
+	524288 NSAlternateKeyMask \
+	Set if Option or Alternate key is pressed. \
+	\
+	1048576 NSCommandKeyMask \
+	Set if Command key is pressed. \
+	\
+	2097152 NSNumericPadKeyMask \
+	Set if any key in the numeric keypad is pressed. The numeric keypad is generally on the right side of the keyboard. \
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\fs24 \cf2 // TODO (not yet working)
+\fs20 \cf5 \
+//	4194304 NSHelpKeyMask \cf0 \
+\cf5 //	Set if the Help key is pressed. \cf0 \
+	\
+	8388608 NSFunctionKeyMask \
+	Set if any function key is pressed. The function keys include the F keys at the top of most keyboards (F1, F2, and so on) and the navigation keys in the center of most keyboards (Help, Forward Delete, Home, End, Page Up, Page Down, and the arrow keys). \
+	\
+	arrow keys have an extra modifier value of 
+\fs18 10485760\
+	so for a shift arrow key do a bitwise 'or' with the shift mask:\
+		10485760 | 131072
+\fs20 \
+	= 
+\fs18 10616832 // this is the mask for shift arrow key\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\f0\b\fs24 \cf0 unicode - 
+\f1\b0 The unicode integer, identical to the char.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\f3\fs20 \cf0 	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\f0\b\fs24 \cf0 keycode - 
+\f1\b0 The hardware dependent keycode indicating the physical key.  This will vary from machine to machine, but is useful for building musical interfaces using the computer keyboard.  In order to play little melodies, this code will identify which key you consider to be special.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\f0\b\fs24 \cf0 N.B.:
+\f1\b0  Function key modifier may change the keycode.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+
+\f0\b \cf2 N.B.:
+\f1\b0 	The virtual java key codes are not translated into actual hardware key codes, thus the\
+		codes received through Cocoa GUI are different from those received through SwingOSC.\
+		For example, pressing '#' reports keycode 92 using SwingOSC or keycode 42 using Cocoa.\
+		\
+		Since java virtual codes are layout independant, there is no unique way to map them to Cocoa\
+		keycodes which are layout dependant (e.g. the 'Y' key will have different Cocoa keycodes\
+		on a QWERTZ and a QWERTY keyboard, while java will always attribute the value 89 to it).\
+		That's why an attempt to map values has not been made !!!\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 	\cf2 tab, shift tab, ctrl tab are consumed by swing's default focus traversal handler;\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1140\fi-560\ql\qnatural
+\cf2 //For various reasons these don't make it through cocoa:\
+//	most command modifiers\
+//	 ctrl-tab\
+//	 ctrl-escape\
+//	 tab and shift tab are currently trapped by SC itself for cycling the focus through the views.\
+//	 	(we could change this)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 keyDownAction\
+\
+
+\f1\b0 Return the current keyDownAction function for this view if there is one, otherwise return nil.
+\f2\fs18 \
+\
+
+\f0\b\fs24 *globalKeyDownAction_(func)
+\fs28 \
+
+\f1\b0\fs24 \
+A function that is evaluated for every keyDown event on every SCView. See 
+\f0\b keyDownAction_
+\f1\b0  for details.
+\f2\fs18 \
+\
+
+\f0\b\fs24 mouse action functions\
+\
+
+\f1\b0 Four functions can be assigned to track mouse events with a view. The methods to assign these functions are 
+\f2\fs20 \cf3 mouseDownAction_
+\f0\b\fs24 \cf0  
+\f1\b0 (called when the mouse button is pressed over the view), 
+\f2\fs20 \cf3 mouseUpAction_
+\f0\b\fs24 \cf0  
+\f1\b0 (called when the mouse button is released over the view), 
+\f2\fs20 \cf3 mouseMoveAction_
+\f0\b\fs24 \cf0  
+\f1\b0 (called when the mouse button is kept pressed and the mouse is dragged over the view), and 
+\f2\fs20 \cf3 mouseOverAction_
+\f1\fs24 \cf0  (called when the mouse is moved over the view). Mouse tracking is enabled once one of these methods are called. Since you often don't need to track mouse movements without the button being pressed, using requires that you additionally call 
+\f2\fs20 \cf3 acceptsMouseOver_( true )
+\f1\fs24 \cf0  on the window that contains the view to make it actually work (not accepting mouse over events saves CPU power and OSC traffic).\
+\
+All these functions are called with four arguments (the view, mouseX, mouseY, key-modifiers), where the mouse coordinates are global to the top view, not local to the child view!\
+\
+Example:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf5 // use the 'mouse pad' to telepathically control the 2D slider on the right\cf0 \
+(\
+	w = \cf3 JSCWindow\cf0 ( \cf4 "Mouse Actions"\cf0 , \cf3 Rect\cf0 ( 200, 400, 350, 180 ), resizable: \cf3 false\cf0  );\
+	a = \cf3 JSCStaticText\cf0 ( w, \cf3 Rect\cf0 ( 10, 10, 160, 160 ))\
+		.string_( \cf4 "Mouse Pad"\cf0  )\
+		.stringColor_( Color.white )\
+		.align_( \cf6 \\center\cf0  )\
+		.background_( \cf3 Color\cf0 .blue );\
+	b = \cf3 JSC2DSlider\cf0 ( w, \cf3 Rect\cf0 ( 180, 10, 160, 160 ))\
+		.canFocus_( \cf3 false\cf0  );\
+	f = \{ \cf3 arg\cf0  view, x, y, modif; \cf3 var\cf0  bounds = view.bounds;\
+		b.setXY( (x - bounds.left) / bounds.width, 1.0 - ((y - bounds.top) / bounds.height) );\
+	\};\
+	a.mouseMoveAction = f;\
+	a.mouseDownAction = \{ \cf3 arg\cf0  ... args; b.knobColor = \cf3 Color\cf0 .red; f.value( *args )\};\
+	a.mouseUpAction = \{ \cf3 arg\cf0  ... args; b.knobColor = \cf3 Color\cf0 .clear; f.value( *args )\};\
+	w.front;\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 \
+Now additionally enable mouse-over actions:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 a.mouseOverAction = f;\
+w.acceptsMouseOver = \cf3 true\cf0 ;  \cf5 // otherwise mouseOverAction won't be called\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 	\
+Mouse events are only fired if the component is enabled.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 a.enabled = \cf3 false\cf0 ;\
+a.enabled = \cf3 true\cf0 ;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 \
+\
+focus\
+\
+
+\f1\b0 Calling 
+\f2\fs20 \cf3 focus
+\f1\fs24 \cf0  brings this view into focus (it will receive keyboard events).\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 (\
+	w = \cf3 JSCWindow\cf0 .new;\
+	c = \cf3 JSCSlider\cf0 ( w, \cf3 Rect\cf0 ( 0, 0, 100, 30 ));\
+	d = \cf3 JSCSlider\cf0 ( w, \cf3 Rect\cf0 ( 0, 30, 100, 30 ));\
+	w.front;\
+)\
+\
+c.focus;\
+d.focus;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 You can switch of the ability of a view to get focussed. This you will want to do, if that view should not be controllable via keyboard or if you do not wish to see the focus border painted. To switch on / off focusability, call 
+\f2\fs20 \cf3 canFocus_( \cf7 <(Boolean) onOff> \cf3 )
+\f1\fs24 \cf0  . To check whether a view has focus, call 
+\f2\fs20 \cf3 hasFocus
+\f1\fs24 \cf0  (it returns 
+\f2\fs20 \cf3 true
+\f1\fs24 \cf0  or 
+\f2\fs20 \cf3 false
+\f1\fs24 \cf0 ).\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 c.focus;\
+c.hasFocus;	\cf5 // --> true\cf0 \
+c.canFocus_( \cf3 false\cf0  );	\cf5 // cannot be focused anymore. as a side-effect, the gadget looses focus\cf0 \
+c.hasFocus;	\cf5 // --> false\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 refresh\
+\
+
+\f1\b0 Under certain circumstances a view will not automatically update its appearance. This forces a redraw.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 This behaviour is different in Cocoa and SwingOSC ; in SwingOSC generally you need to call refresh\
+only in a very few cases ; one case (shown below) is when you open a window containing buttons to\
+which no states have been yet assigned:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 (\
+	w = \cf3 JSCWindow\cf0 .new;\
+	c = \cf3 JSCButton\cf0 (w,\cf3 Rect\cf0 (0,0,100,30));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf2 //	c.states = [["a",Color.black,Color.red]];\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 	d = \cf3 JSCButton\cf0 (w,\cf3 Rect\cf0 (0,30,100,30));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf2 //	d.states = [["a",Color.black,Color.red]];\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 	w.front;\
+)\
+\
+\cf5 // won't display change...\
+\cf0 c.states = [[\cf4 "b"\cf0 ,\cf3 Color\cf0 .red,\cf3 Color\cf0 .black]];\
+d.states = [[\cf4 "b"\cf0 ,\cf3 Color\cf0 .red,\cf3 Color\cf0 .black]];\
+\
+\cf5 //until\
+\cf0 c.refresh;\
+\
+\cf5 //needs separate refresh\
+\cf0 d.refresh;\
+\
+\cf5 // in some cases might be better to refresh the whole window\
+// which does refresh on all damaged areas (it keeps track, doesn't redraw whole thing)\
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf2 // c.states = [["a",Color.black,Color.red]];\
+// w.refresh;\
+// w.close;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 	\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 drag and drop\
+
+\f1\b0 \
+Each view subclass has a default object that it exports when dragged from.  For sliders its the value of the slider, for lists it is the currently selected numeric index etc.  \
+\
+By setting the beginDragAction handler you can return a different object based on the context and your application.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 Note that the default drag-starting gesture is 
+\f0\b Control+Click+Move
+\f1\b0 , since Command+Click+Move (as used with Cocoa GUIs) causes problems with some components, and besides the Command key is not available on PC keyboards.\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 beginDragAction(theView)
+\f1\b0  - return the object you wish your view to export by dragging\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 	aView.beginDragAction =  \{ \cf3 arg\cf0  theView;  someList[ theView.value ]  \}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 	\
+The current dragged thing can be found in the classvar JSCView.currentDrag.  Objects dragged from within \
+SuperCollider are also in JSCView.currentDragString as a compile string.  Text dragged\
+from other applications is in JSCView.currentDragString and the results of attempting to\
+compile that as sc code is in JSCView.currentDrag\
+\
+Each view subclass has a defaultCanReceiveDrag method that determines if the current object being dragged is possible for this view to accept, and a defaultReceiveDrag method for actually receiving the drag.  Sliders accept numbers, simple text labels do not accept drags etc.  After receiving the drag, the JSCView.currentDrag is set to nil.\
+\
+By setting the canReceiveDragHandler and receiveDragHandler you can make any view accept and receive objects based on the context and your application.  (Note: currently not possible for SCStaticText (?))\
+\
+
+\f0\b canReceiveDrag(theView)
+\f1\b0  - return true/false if you are willing to accept the current drag.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 	aView.canReceiveDrag = \cf3 false\cf0 ; \cf5 // no, leave me alone\cf0 \
+	aView.canReceiveDrag = \{ \cf3 JSCView\cf0 .currentDrag.isString \};\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 	\
+
+\f0\b receiveDrag(theView)
+\f1\b0  - accept the drag.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 	aView.receiveDrag = \{ \
+		\cf3 JSCView\cf0 .currentDrag.postln;\
+	\}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 \
+\
+The default drag object from a list view is the currently selected integer index.\
+Here a list view is made to export a string.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf5 // ctrl+press+move initiates the drag from the list view\cf0 \
+(\
+	f = \cf3 JSCWindow\cf0 .new;\
+	a = \cf3 JSCListView\cf0 ( f, Rect( 10, 10, 100, 120 ));\
+	a.items = [ \cf4 "alpha"\cf0 , \cf4 "beta"\cf0 , \cf4 "gamma"\cf0 ];\
+	a.beginDragAction = \{ \cf3 arg\cf0  listView;\
+		listView.items[ listView.value ].debug( \cf4 "begun dragging" \cf0 );\
+	\};\
+	\
+	c = \cf3 nil\cf0 ;\
+	b = \cf3 JSCButton\cf0 ( f, \cf3 Rect\cf0 ( 10, 160, 100, 24 ));\
+	b.states = [[ \cf4 "Drop stuff on me" \cf0 ]];\
+	b.canReceiveDragHandler = \{ \cf3 JSCView\cf0 .currentDrag.isString \};\
+	b.receiveDragHandler = \{ \
+		b.states = [[ \cf3 JSCView\cf0 .currentDrag ]];\
+		c = \cf3 JSCView\cf0 .currentDrag;\
+	\};\
+	b.action = \{ c.postln \};\
+	f.front;\
+)}

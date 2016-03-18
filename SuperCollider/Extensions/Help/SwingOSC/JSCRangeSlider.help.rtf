@@ -1,0 +1,121 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green0\blue191;\red96\green96\blue96;
+\red191\green0\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of SCRangeSlider. last mod: 02-feb-07 sciss\
+Also refer to [\cf2 \ul \ulc2 JSCView\ulnone ] for different behaviour affecting all widgets\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	
+\f0\b \
+different behaviour\
+
+\f1\b0 	knobColor			default is clear (grey) not blue\
+	keyboard modifiers	alt+click enforces resize ; shift+click extends resize nearest bar end\
+	preferred size		optimum height is 17px\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 		\
+extended functionality\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	setSpan(Active)		more efficient shortcut for setting both lo and hi [available for Cocoa GUI through extCocoaCompat.sc]\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 \
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	focus border		(FIXED?) not adjusted when resizing the component\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JSCRangeSlider
+\f2\b0\fs18 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b\fs24 \cf0 Note: please use the abstraction layer GUI.rangeSlider if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+superclass: JSCSliderBase\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 A range slider is like a normal slider but instead of a fixed-size knob, the knob has a variable extent. The value of the range slider is represented by a 'lo' and a 'hi' component, both being normalized to range 0 ... 1 which corresponds to maximally left / bottom and maximally right / top.\
+ 
+\f0\b \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs20 \cf0 (\
+\cf3 	var\cf0  win;\
+\
+	win = \cf3 JSCWindow\cf0 ( \cf4 "JSCRangeSlider"\cf0 , \cf3 Rect\cf0 ( 100, 100, 200, 200 ), resizable: \cf3 false\cf0  );\
+\
+	n = \cf3 JSCRangeSlider\cf0 ( win, \cf3 Rect\cf0 ( 20, 20, 160, 17 )).lo_( 0 ).hi_( 0.6666 );\
+	\cf5 // knobColor_ sets the colour of the slider's knob\cf0 \
+	n.knobColor_( \cf3 Color\cf0 .red );\
+	n = \cf3 JSCRangeSlider\cf0 ( win, \cf3 Rect\cf0 ( 20, 45, 160, 17 )).lo_( 0.3333 ).hi_( 0.8333 );\
+	n.knobColor_( \cf3 Color\cf0 .white );\
+	n = \cf3 JSCRangeSlider\cf0 ( win, \cf3 Rect\cf0 ( 20, 70, 160, 17 )).lo_( 0.6666 ).hi_( 1.0 );\
+	n.knobColor_( \cf3 Color\cf0 .blue );\
+	\
+	win.front;\
+)\
+\
+\cf5 // action_ assigns a function that is executed whenever the user adjusts the slider.\
+// note: 'n' holds to bottom-most (blue) slider\cf0 \
+n.action = \{ arg b; (\cf4 "lo = "\cf0 ++b.lo++\cf4 "; range = "\cf0 ++b.range).postln \};\
+\cf5 // enabled_ can be used to disable or re-enable editing\cf0 \
+n.enabled_( \cf3 false\cf0  );\
+n.enabled_( \cf3 true\cf0  );\
+\cf5 // lo_, hi_ and range_ programmatically adjust the lo and hi value of the slider\cf0 \
+n.lo_( 0.36 );\
+n.range_( 0.4 );\
+\cf5 // the activeXYZ-methods additionally invoke the action function\cf0 \
+n.activeHi_( 0.8 );\
+\cf5 // using step_ the slider values are snapped to a grid\cf0 \
+n.step_( 0.25 );\
+\cf5 // a step value of 0 means 'no grid'\cf0 \
+n.step_( 0 );\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 Like [\ul JSCSlider\ulnone ], the range slider automatically appears with horizontal or vertical orientation, according\
+to the width-to-height ratio:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 n.bounds = n.bounds.resizeTo( 17, 100 );\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf5 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf5 // default keyboard mappings\cf0 \
+\pard\tx2240\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 R	random lo/hi\
+N	minimum lo/hi\
+X	maximum lo/hi\
+C	center lo/hi\
+A	select all (0...1)\
+csr left/down	decrease lo/hi\
+csr right/up	increase lo/hi\
+}

@@ -1,0 +1,189 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red191\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of EZNumber. last mod: 30-jan-07 sciss\
+For known issues and different behaviour, consult the help files of JSCStaticText,\
+and JSCNumberBox.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs40 \cf0 \
+JEZNumber			wrapper class for label + number box\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+\cf0 Note: please use the abstraction layer GUI.ezNumber if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+// NOTE: this class might be removed in the future (when EZNumber uses GUI)\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs40 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 JEZNumber(window, dimensions, label, controlSpec, action, initVal, initAction, labelWidth, numberWidth)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 JEZNumber is a wrapper class for managing a label and number box.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 \
+	window 
+\f1\b0 - the SCWindow containing the views.\
+	
+\f0\b dimensions
+\f1\b0  - a Point giving the width and height of the combined views.\
+	
+\f0\b label
+\f1\b0  - a String\
+	
+\f0\b controlSpec
+\f1\b0  - the ControlSpec for the value.\
+	
+\f0\b action
+\f1\b0  - a function called when the value changes. The function is passed the JEZNumber instance as its argument.\
+	
+\f0\b initVal
+\f1\b0  - the value to initialize the number box with. If nil, then it uses the ControlSpec's default value.\
+	
+\f0\b initAction
+\f1\b0  - a Boolean indicating whether the action function should be called when setting the initial value. The default is false.\
+	
+\f0\b labelWidth
+\f1\b0  - number of pixels width for the label. default is 80.\
+	
+\f0\b numberWidth
+\f1\b0  - number of pixels width for the number box. default is 80.\
+	\
+The contained views can be accessed via the JEZNumber instance variables:\
+	
+\f0\b labelView
+\f1\b0 , 
+\f0\b numberView
+\f1\b0 \
+\
+Another useful instance variable is 
+\f0\b round
+\f1\b0 , the rounding precision for the number box display. The default value for 
+\f0\b round
+\f1\b0  is 0.001 .\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 Example:
+\fs20 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 (\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 // start server\cf0 \
+s.boot;\
+)\
+\
+(\
+\cf3 // define a synth\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 SynthDef\cf0 (\cf5 "window-test"\cf0 , \{ \cf4 arg\cf0  note = 36, fc = 1000, rq = 0.25, bal=0, amp=0.4, gate = 1;\
+		\cf4 var\cf0  x;\
+		x = \cf4 Mix\cf0 .fill(4, \{ \
+			\cf4 LFSaw\cf0 .ar((note + \{0.1.rand2\}.dup).midicps, 0, 0.02) \
+		\});\
+		x = \cf4 RLPF\cf0 .ar(x, fc, rq).softclip;\
+		x = \cf4 RLPF\cf0 .ar(x, fc, rq, amp).softclip;\
+		x = \cf4 Balance2\cf0 .ar(x[0], x[1], bal);\
+		x = x * \cf4 EnvGen\cf0 .kr(\cf4 Env\cf0 .cutoff, gate, doneAction: 2);\
+		\cf4 Out\cf0 .ar(0, x);\
+	\}, [0.1, 0.1, 0.1, 0.1, 0.1, 0]\
+).send(s);\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 (\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 var\cf0  w, startButton, noteControl, cutoffControl, resonControl;\
+\cf4 var\cf0  balanceControl, ampControl;\
+\cf4 var\cf0  synth, cmdPeriodFunc;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 // make the window\cf0 \
+w = \cf4 JSCWindow\cf0 ( \cf5 "another control panel"\cf0 , \cf4 Rect\cf0 ( 20, 400, 240, 180 ), resizable: false );\
+w.front; \cf3 // make window visible and front window.\cf0 \
+w.view.decorator = \cf4 FlowLayout\cf0 (w.view.bounds);\
+\
+\cf3 //w.view.background = Gradient( Color.rand( 0.0, 1.0 ), Color.rand( 0.0, 1.0 ), [ \\h, \\v ].choose );\cf0 \
+\
+\cf3 // add a button to start and stop the sound.\cf0 \
+startButton = \cf4 JSCButton\cf0 ( w, 75 @ 24 )\
+	.states_([\
+		[ \cf5 "Start"\cf0 , \cf4 Color\cf0 .black, \cf4 Color\cf0 .green ],\
+		[ \cf5 "Stop"\cf0 , \cf4 Color\cf0 .white, \cf4 Color\cf0 .red ]\
+	])\
+	.action_(\{ \cf4 arg\cf0  view;\
+		if( view.value == 1, \{\
+			\cf3 // start sound\cf0 \
+			synth = \cf4 Synth\cf0 ( \cf5 "window-test"\cf0 , [\
+				\cf6 \\note\cf0 , noteControl.value,\
+				\cf6 \\fc\cf0 , cutoffControl.value,\
+				\cf6 \\rq\cf0 , resonControl.value,\
+				\cf6 \\bal\cf0 , balanceControl.value,\
+				\cf6 \\amp\cf0 , ampControl.value.dbamp ]);\
+		\}, \{\
+			\cf3 // set gate to zero to cause envelope to release\cf0 \
+			synth.release; synth = \cf4 nil\cf0 ;\
+		\});\
+	\});\
+\
+\cf3 // create controls for all parameters\cf0 \
+w.view.decorator.nextLine;\
+noteControl = \cf4 JEZNumber\cf0 ( w, 400 @ 24, \cf5 "Note"\cf0 , \cf4 ControlSpec\cf0 ( 24, 60, \cf6 \\lin\cf0 , 1 ), \
+	\{ \cf4 arg\cf0  ez; synth.set( \cf6 \\note\cf0 , ez.value )\}, 36 );\
+	\
+w.view.decorator.nextLine;\
+cutoffControl = \cf4 JEZNumber\cf0 ( w, 400 @ 24, \cf5 "Cutoff"\cf0 , \cf4 ControlSpec\cf0 ( 200, 5000, \cf6 \\exp\cf0  ), \
+	\{ \cf4 arg\cf0  ez; synth.set( \cf6 \\fc\cf0 , ez.value )\}, 1000 );\
+	\
+w.view.decorator.nextLine;\
+resonControl = \cf4 JEZNumber\cf0 ( w, 400 @ 24, \cf5 "Resonance"\cf0 , \cf4 ControlSpec\cf0 ( 0.1, 0.7 ), \
+	\{ \cf4 arg\cf0  ez; synth.set( \cf6 \\rq\cf0 , ez.value )\}, 0.2 );\
+	\
+w.view.decorator.nextLine;\
+balanceControl = \cf4 JEZNumber\cf0 ( w, 400 @ 24, \cf5 "Balance"\cf0 , \cf6 \\bipolar\cf0 , \
+	\{ \cf4 arg\cf0  ez; synth.set( \cf6 \\bal\cf0 , ez.value )\}, 0 );\
+	\
+w.view.decorator.nextLine;\
+ampControl = \cf4 JEZNumber\cf0 (w, 400 @ 24, \cf5 "Amp"\cf0 , \cf4 ControlSpec\cf0 ( 0.ampdb, 1.ampdb, \cf6 \\db\cf0  ), \
+	\{ \cf4 arg\cf0  ez; synth.set( \cf6 \\amp\cf0 , ez.value.dbamp )\}, -6 );\
+\
+\
+\cf3 // set start button to zero upon a cmd-period\cf0 \
+cmdPeriodFunc = \{ startButton.value = 0; synth = \cf4 nil\cf0  \};\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 CmdPeriod\cf0 .add( cmdPeriodFunc );\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 // stop the sound when window closes and remove cmdPeriodFunc.\cf0 \
+w.onClose = \{\
+	synth.free;\
+	\cf4 CmdPeriod\cf0 .remove( cmdPeriodFunc );\
+\};\
+)\
+}

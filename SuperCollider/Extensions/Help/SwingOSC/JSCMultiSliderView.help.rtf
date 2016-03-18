@@ -1,0 +1,360 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red191\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of SCMultiSliderView. last mod: 07-feb-07 sciss\
+Also refer to [\cf2 \ul \ulc2 JSCView\ulnone ] for different behaviour affecting all widgets\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	
+\f0\b \
+different behaviour\
+
+\f1\b0 	reference			slightly different polyline filling (see additional lines in waveform example)\
+	size_, items_		these methods have been removed because they have no defined behaviour\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 		\
+extended functionality\
+\
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	focus border		not adjusted when resizing the component programmatically (why?)\
+	drag+drop			NOT YET IMPLEMENTED\
+	background		todo: custom colours should not be darkened?\
+	metaAction			does not get evaluated on ctrl+mouseclick/drag\
+	antialiasing			rounded outline rectangles look ugly on Linux / Sun Java SE 1.6\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JSCMultiSliderView\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b\fs24 \cf0 Note: please use the abstraction layer GUI.multiSliderView if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 isFilled = true
+\f2\b0\fs18 \
+looks like a candlestick graph\
+(\
+\cf3 //use as table\cf0 \
+\cf4 var\cf0  size;\
+size = 350 / 6;\
+a = \cf4 JSCWindow\cf0 (\cf5 "test"\cf0 , \cf4 Rect\cf0 (200 , 450, 450, 150));\
+a.view.decorator = \cf4 FlowLayout\cf0 (a.view.bounds);\
+b = \cf4 JSCMultiSliderView\cf0 (a, \cf4 Rect\cf0 (0, 0, 350, 100));\
+\
+c = \cf4 Array\cf0 .new;\
+size.do(\{\cf4 arg\cf0  i;\
+	c = c.add(0.01 * i);\
+	\});\
+c = c.reverse;\
+b.value_(c);\
+\
+b.isFilled_(\cf4 true\cf0 );\
+\
+\cf3 // width in pixels of each stick \cf0 \
+b.indexThumbSize_(2.0);\
+\cf3 // spacing on the value axis\cf0 \
+b.gap_(4);\
+\
+a.front;\
+)\
+\
+\cf3 // snap values to a grid (0 = no snapping)\cf0 \
+b.step = 0.125;\
+b.step = 0.0;\
+\
+\
+
+\f0\b\fs24 elasticMode
+\f2\b0\fs18 \
+b.resize = 5;		\cf3 // so the view adjusts with the window bounds\cf0 \
+b.elasticMode = 1;	\cf3 // slider size is determined from view size\cf0 \
+\
+\
+
+\f0\b\fs24 flip by 90 degree
+\f2\b0\fs18 \
+(\
+b.resize = 1;\
+b.indexIsHorizontal_(\cf4 false\cf0 );\
+\
+a.bounds_(\cf4 Rect\cf0 (200 , 450, 150, 430));\
+b.bounds_( \cf4 Rect\cf0 (10, 0, 100, 390));\
+\
+b.background_(\cf4 Color\cf0 .black);\
+b.strokeColor_(\cf4 Color\cf0 .white);\
+b.fillColor_(\cf4 Color\cf0 .white);\
+\
+b.gap = 1;\
+\
+a.front;\
+)\
+\
+\
+
+\f0\b\fs24 isFilled = false\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 individual squares for each point\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 (\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //use as multislider\cf0 \
+\cf4 var\cf0  size;\
+size = 12;\
+a = \cf4 JSCWindow\cf0 (\cf5 "test"\cf0 , \cf4 Rect\cf0 (200 , 450, 10 + (size * 17), 10 + (size * 17)));\
+a.view.decorator =  \cf4 FlowLayout\cf0 (a.view.bounds);\
+b = \cf4 JSCMultiSliderView\cf0 (a, \cf4 Rect\cf0 (0, 0, size * 17, size * 17));\
+b.action = \{\cf4 arg\cf0  xb; (\cf5 "index: "\cf0  ++ xb.index ++\cf5 " value: "\cf0  ++ xb.currentvalue).postln\};\
+\
+c = \cf4 Array\cf0 .new;\
+size.do(\{\cf4 arg\cf0  i;\
+	c = c.add(i/size);\
+\});\
+b.value_(c);\
+\
+b.isFilled = \cf4 false\cf0 ;\
+\
+b.xOffset_(5);\
+b.thumbSize_(12.0);\
+\
+\cf3 // value axis size of each blip in pixels\cf0 \
+b.valueThumbSize_(15.0);\
+\cf3 // index axis size of each blip in pixels\cf0 \
+b.indexThumbSize_( b.bounds.width / c.size );\
+b.gap = 0;\
+\
+b.strokeColor_(\cf4 Color\cf0 .blue);\
+b.fillColor_(\cf4 Color\cf0 .blue);\
+\
+a.front;\
+)\
+\
+
+\f0\b\fs24 read only mode
+\f2\b0\fs18 \
+(\
+b.readOnly = \cf4 true\cf0 ;\
+\cf3 // show an area as selected, used like a cursor\cf0 \
+b.showIndex = \cf4 true\cf0 ;\
+\cf3 // move the selection index\cf0 \
+b.index = 4;\
+\cf3 // 1 item wide\cf0 \
+b.selectionSize = 1;\
+\
+)\
+\
+b.index;\
+b.selectionSize;	\cf3 // note: use shift+click to extend the selection\cf0 \
+\
+(\
+\cf3 //use it as sequencer\cf0 \
+b.setProperty(\cf6 \\showIndex\cf0 , \cf4 true\cf0 );\
+\
+r = \cf4 Routine\cf0 (\{\
+	\cf4 var\cf0  j = 0;\
+	20.do(\{ \cf4 arg\cf0  i;\
+		0.1.wait;\
+		b.index_(j);\
+		if (j < 11 ,\{j = j + 1\},\{j = 0\});\
+	\});\
+	0.1.wait;\
+	20.do(\{ \cf4 arg\cf0  i;\
+		[0.1,0.2].choose.wait;\
+		b.index_(b.size.rand);\
+	\});\
+\});\
+\cf4 AppClock\cf0 .play(r);\
+\
+)\
+Note: this forces the entire view to redraw at each step and will spend a lot of CPU.\
+\
+
+\f0\b\fs24 drawLines
+\f2\b0\fs18 \
+(\
+\cf3 //use as multislider II with lines\cf0 \
+\cf4 var\cf0  size;\
+size = 12;\
+a = \cf4 JSCWindow\cf0 (\cf5 "test"\cf0 , \cf4 Rect\cf0 (200 , 450, 450, 150));\
+a.view.decorator =  \cf4 FlowLayout\cf0 (a.view.bounds);\
+b = \cf4 JSCMultiSliderView\cf0 (a, \cf4 Rect\cf0 (0, 0, size * 17, 50));\
+a.view.decorator.nextLine;\
+\cf3 //e = SCDragBoth(a , Rect(0, 0, size * 17, 50));\cf0 \
+e = \cf4 JSCMultiSliderView\cf0 (a, \cf4 Rect\cf0 (0, 0, size * 17, 50));\
+c = \cf4 Array\cf0 .new;\
+size.do(\{\cf4 arg\cf0  i;\
+	c = c.add(i/size);\
+\});\
+b.value_(c);\
+\
+b.xOffset_(18);\
+b.thumbSize_(1);\
+b.strokeColor_(\cf4 Color\cf0 .blue);\
+b.drawLines_(\cf4 true\cf0 );\
+b.drawRects_(\cf4 true\cf0 );\
+b.indexThumbSize_(1);\
+b.valueThumbSize_(1);\
+\
+a.front;\
+)\
+c = \cf4 Array\cf0 .newClear(12);\
+b.getProperty(\cf6 \\referenceValues\cf0 , \cf4 Array\cf0 .newClear(12));\
+c.size;\
+\
+\
+\
+(\
+\cf3 //press shift to extend the selection\cf0 \
+\cf3 //use as waveView: scrubbing over the view returns index\cf0 \
+\cf3 //if showIndex(false) the view is not refreshed (faster);\cf0 \
+\cf3 //otherwise you can make a selection with shift - drag.\cf0 \
+\cf4 var\cf0  size, file, maxval, minval;\
+size = 640;\
+a = \cf4 JSCWindow\cf0 (\cf5 "test"\cf0 , \cf4 Rect\cf0 (200 , 140, 650, 150));\
+a.view.decorator =  \cf4 FlowLayout\cf0 (a.view.bounds);\
+b = \cf4 JSCMultiSliderView\cf0 (a, \cf4 Rect\cf0 (0, 0, size, 90));\
+b.readOnly_(\cf4 true\cf0 );\
+b.resize_( 5 );\
+a.view.decorator.nextLine;\
+\
+\
+\
+d = \cf4 Array\cf0 .new;\
+c = \cf4 FloatArray\cf0 .newClear(65493);\
+\
+e = \cf4 JSCSlider\cf0 ( a, \cf4 Rect\cf0 (0, 0, size, 20));\
+e.resize_( 8 );\
+e.action = \{\cf4 arg\cf0  ex; b.setProperty(\cf6 \\xOffset\cf0 , (ex.value * 4) + 1 )\};\
+\
+file = \cf4 SoundFile\cf0 .new;\
+file.openRead(\cf5 "sounds/a11wlk01.wav"\cf0 );\
+file.numFrames.postln;\
+file.readData(c);\
+\cf3 //file.inspect;\cf0 \
+file.close;\
+minval = 0;\
+maxval = 0;\
+f = \cf4 Array\cf0 .new;\
+d = \cf4 Array\cf0 .new;\
+c.do(\{\cf4 arg\cf0  fi, i;\
+	if(fi < minval, \{minval = fi\});\
+	if(fi > maxval, \{maxval = fi\});\
+\
+	\cf3 //f.postln;\cf0 \
+	if(i % 256 == 0,\{\
+		d = d.add((1 + maxval ) * 0.5 );\
+		f = f.add((1 + minval ) * 0.5 );\
+	\
+		minval = 0;\
+		maxval = 0;\
+	\});\
+\});\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs22 \cf2 // note: these four lines are necessary in SwingOSC to \
+// make each halfwave be correctly filled!\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 d[ 0 ] = 0.5;\
+d[ d.size - 1 ] = 0.5;\
+f[ 0 ] = 0.5;\
+f[ d.size - 1 ] = 0.5;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+b.reference_(d); \cf3 //this is used to draw the upper part of the table\cf0 \
+b.value_(f);\
+\
+e = \cf4 JSCSlider\cf0 ( a, \cf4 Rect\cf0 (0, 0, size, 20));\
+e.resize_( 8 );\
+e.action = \{\cf4 arg\cf0  ex; b.setProperty(\cf6 \\startIndex\cf0 , ex.value *f.size )\};\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //b.enabled_(false);\cf0 \
+b.action = \{\cf4 arg\cf0  xb; (\cf5 "index: "\cf0  ++ xb.index).postln\};\
+b.drawLines_(\cf4 true\cf0 );\
+b.drawRects_(\cf4 false\cf0 );\
+b.isFilled_(\cf4 true\cf0 );\
+b.selectionSize_(10);\
+b.index_(10);\
+b.thumbSize_(1); \
+b.gap_(0);\
+b.colors_(\cf4 Color\cf0 .black, \cf4 Color\cf0 .blue(1.0,1.0));\
+b.showIndex_(\cf4 true\cf0 );\
+a.front;\
+\
+)\
+\
+\
+\
+
+\f0\b\fs24 the "index" is also the "selection"\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 setting showIndex = true will allow selections.\
+shift click and drag will select an area.\
+setting selectionSize will set that selection area.\
+this dispay may also be used to look like an index as in the above sequencer example.\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 var\cf0  size;\
+size = 12;\
+a = \cf4 JSCWindow\cf0 (\cf5 "test"\cf0 , \cf4 Rect\cf0 (200 , 450, 10 + (size * 17), 10 + (size * 17)));\
+a.view.decorator =  \cf4 FlowLayout\cf0 (a.view.bounds);\
+b = \cf4 JSCMultiSliderView\cf0 (a, \cf4 Rect\cf0 (0, 0, size * 17, size * 17));\
+b.action = \{ \cf4 arg\cf0  xb; (\cf5 "index: "\cf0  ++ xb.index ++\cf5 " value: "\cf0  ++ xb.currentvalue).postln\};\
+\
+c = \cf4 Array\cf0 .new;\
+size.do(\{ \cf4 arg\cf0  i;\
+	c = c.add(i/size);\
+\});\
+b.value_(c);\
+\
+b.xOffset_(5);\
+b.thumbSize_(12.0);\
+b.strokeColor_(\cf4 Color\cf0 .blue);\
+b.fillColor_(\cf4 Color\cf0 .blue);\
+\
+b.drawLines(\cf4 false\cf0 );\
+\
+b.showIndex = \cf4 true\cf0 ;\
+b.index_(4);\
+a.front;\
+\
+)\
+\
+\cf3 // this means the x-dimension size in pixels\cf0 \
+b.indexThumbSize = 40\
+\
+\cf3 // not the selection size \cf0 \
+\
+\cf3 // value pixels, the y-dimension\cf0 \
+b.valueThumbSize = 100\
+\
+}

@@ -1,0 +1,260 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+\f3\fswiss\fcharset77 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green0\blue191;\red185\green46\blue141;
+\red191\green0\blue0;\red96\green96\blue96;\red0\green115\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class allows you to access Java classes in a rather direct way. last mod: 21-jan-07 sciss.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 JavaObject
+\f2\b0\fs18 \cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs20 \cf3 JavaObject
+\f1\fs24 \cf0  is a 
+\f3\i client
+\f1\i0 -side representation of some java object created on the SwingOSC 
+\f3\i server
+\f1\i0  instance. You can use this object to 'script' java in more intuitive way than sending explict OSC messages. Every method you call on a 
+\f2\fs20 \cf3 JavaObject
+\f1\fs24 \cf0  gets automatically translated into an appropriate OSC message. For example, if your JavaObject 
+\f2\fs20 \cf3 x
+\f1\fs24 \cf0  where to reference an instance of 
+\f2\fs20 \cf3 java.awt.Frame
+\f1\fs24 \cf0 , calling 
+\f2\fs20 \cf3 x.toFront
+\f1\fs24 \cf0  would bring that frame to the front, etc. There are a few exceptions where the method names are reserved by 
+\f2\fs20 \cf3 JavaObject
+\f1\fs24 \cf0  itself or its superclass 
+\f2\fs20 \cf3 Object
+\f1\fs24 \cf0 . Also, methods that should return a value have a special underscore trailing character (see section "Client-Side Retrieval").\
+\
+
+\f0\b Instantiation
+\f1\b0 \
+\
+You create an instance of a java class by calling\
+\
+	
+\f2\fs20 \cf3 JavaObject.new( \cf4 <fullyQualifiedJavaClassName>\cf3 , [ \cf4 <swingOSCserver>\cf3 , [ ... \cf4 <constructorArgs>\cf3  ]])
+\f1\fs24 \cf0 \
+	\
+You can then access that instance just like you would in java, by calling any of its methods. Note however, that methods defined in 
+\f2\fs20 \cf3 Object.sc
+\f1\fs24 \cf0  are often handled by SuperCollider and are not forwarded to java. Some of these have been overriden to be usable in java, like 
+\f2\fs20 \cf3 free
+\f1\fs24 \cf0 , 
+\f2\fs20 \cf3 stop
+\f1\fs24 \cf0 , 
+\f2\fs20 \cf3 update
+\f1\fs24 \cf0 , but others not (e.g. 
+\f2\fs20 \cf3 equals
+\f1\fs24 \cf0 ). In case of a name conflict, you must make direct use of 
+\f2\fs20 \cf3 SwingOSC
+\f1\fs24 \cf0  -> 
+\f2\fs20 \cf3 sendMsg
+\f1\fs24 \cf0 .\
+\
+Example:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf0 \
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 var\cf0  cx, cy, rx, ry, sh, sw, dur;\
+\
+\cf5 // create an instance of java.awt.Robot\cf0 \
+x = \cf3 JavaObject\cf0 ( \cf6 "java.awt.Robot"\cf0  );\
+sw	= \cf3 JSCWindow\cf0 .screenBounds.width;\
+sh	= \cf3 JSCWindow\cf0 .screenBounds.height;\
+cx	= sw.div( 2 );\
+cy	= sh.div( 2 );\
+rx	= cx.div( 2 );\
+ry	= cy.div( 2 );\
+dur	= 5;\
+fork \{\
+	360.do(\{ \cf3 arg\cf0  i;\
+		\cf5 // call the method 'moveMouse' in java.awt.Robot\cf0 \
+		x.mouseMove( cx + (cos( i * pi / 180 ) * rx),\
+		             cy - (sin( i * pi / 180 ) * ry));\
+		(dur/360).wait;\
+	\});\
+\};\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 \
+
+\f0\b Server-Side Assignment\
+\
+
+\f1\b0 Getting results from java objects is tricky as this is essentially an asynchronous process. one workaround is to store results of java calls in a new java object (instead of transferring it to the client side / supercollider), using the special method 
+\f2\fs20 \cf3 *newFrom
+\f1\fs24 \cf0  :\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 	
+\f2\fs20 \cf3 JavaObject.newFrom( \cf4 <anExistingJavaObject>\cf3 , \cf4 <aMethodInExistingObject>\cf3 , [ ... \cf4 <argsToTheMethodCall>\cf3  ]])
+\f1\fs24 \cf0 \
+\
+Example:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf5 \
+(\cf0 \
+\cf5 // assumes 'x' is still assigned from the example above!\cf0 \
+\cf5 // x = JavaObject( "java.awt.Robot" );\cf0 \
+\
+\cf5 // call the method 'createScreenCapture' in java.awt.Robot and store the result in a new\cf0 \
+\cf5 // object 'a'. notice how we use another JavaObject (the rectangle) as a regular method argument\cf0 \
+a = \cf3 JavaObject\cf0 .newFrom( x, \cf7 \\createScreenCapture\cf0 , \cf3 JavaObject\cf0 ( \cf6 "java.awt.Rectangle"\cf0 , \cf3 nil\cf0 , 0, 0, 256, 256 ));\
+\
+\cf5 // create an icon view from the image. note: the second argument is always the SwingOSC server (nil = default)\cf0 \
+b = \cf3 JavaObject\cf0 ( \cf6 "javax.swing.ImageIcon"\cf0 , \cf3 nil\cf0 , a );\
+\
+\cf5 // create a panel that contains the icon view\cf0 \
+c = \cf3 JavaObject\cf0 ( \cf6 "javax.swing.JOptionPane"\cf0 , \cf3 nil\cf0 , \cf6 "Here's a part of your screen"\cf0 , -1, 0, b );\
+\
+\cf5 // create a dialog that contains the panel\cf0 \
+d = \cf3 JavaObject\cf0 .newFrom( c, \cf7 \\createDialog\cf0 , \cf3 nil\cf0 , \cf6 "Test"\cf0  );\
+\
+\cf5 // show the dialog\cf0 \
+d.show;\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\b\fs24 \cf0 \
+Client-Side Retrieval\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 ...if you really need the values inside SuperCollider, you can use asynchronous getter methods. These are named as the regular java methods but with a trailing underscore _ character. these methods must be run inside a Routine (as they wait for the reply from the server). You can only read primitive values. Java objects need to be decomposed using several getter calls that return primitive values. For example, a 
+\f2\fs18 \cf3 java.awt.Color
+\f1\fs24 \cf0  object cannot be transferred to SuperCollder, but its R/G/B components can:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf0 e = \cf3 JavaObject\cf0 .newFrom( x, \cf7 \\getPixelColor\cf0 , 30, 10 );\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 // note: fork \{ \} is short for Routine(\{ \}).play\cf0 \
+fork \{ \cf3 var\cf0  red, green, blue;\
+	red		= e.getRed_;\
+	green	= e.getGreen_;\
+	blue		= e.getBlue_;\
+	(\cf6 "screen pixel (30,10) has : red = "\cf0 ++red++\cf6 "; green = "\cf0 ++green++\cf6 "; blue = "\cf0 ++blue).postln;\
+\}\
+)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\b\fs24 \cf0 Accessing classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 Sometimes you will want to access static methods, i.e. you need access to a class object which you don't instantiate. One example is showing a dialog using javax.swing.JOptionPane. To do this, use 
+\f2\fs20 \cf3 *getClass
+\f1\fs24 \cf0  :\
+\
+	
+\f2\fs20 \cf3 JavaObject.getClass( \cf4 <fullyQualifiedJavaClassName>\cf3 , [ \cf4 <swingOSCserver>\cf3  ])
+\f1\fs24 \cf0 \
+\
+Example:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf0 \
+f = \cf3 JavaObject\cf0 .getClass( \cf7 'javax.swing.JOptionPane'\cf0  );\
+f.showMessageDialog( \cf3 nil\cf0 , \cf6 "Il arrive que la realite\\nsoit trop complexe\\npour la transmission orale"\cf0  );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 // after the user has confirmed the input dialog, the result (java.lang.String) is stored in server-side g:\cf0 \
+g = \cf3 JavaObject\cf0 .newFrom( f, \cf7 \\showInputDialog\cf0 , \cf3 nil\cf0 , \cf6 "Votre marque de voiture?"\cf0  );\
+\cf5 // let's read that string:\cf0 \
+fork \{ g.toString_.postln \}; \cf5 // tricky ;-)\cf0 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\b\fs24 \cf0 Wrapping existing server-side objects\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 If you wish to access an already existing object on the server whose identifier you know, you can create a wrapper object:\
+\
+	
+\f2\fs20 \cf3 JavaObject.basicNew( \cf4 <identifier>\cf3 , [ \cf4 <swingOSCserver>\cf3  ])
+\f1\fs24 \cf0 \
+\
+Example:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf0 \
+w = \cf3 JSCWindow\cf0 .new.front;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 // wrap the window in a JavaObject instance:\cf0 \
+x = \cf3 JavaObject\cf0 .basicNew( w.id, w.server );\
+\cf5 // call setCursor (which is a method in java.awt.Component and thus also applies to javax.swing.JFrame)\cf0 \
+x.setCursor( \cf3 JavaObject\cf0 ( \cf7 'java.awt.Cursor'\cf0 , x.server, 1 ));   \cf5 // 1 = crosshair shape\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\b\fs24 \cf0 \
+\
+Cleaning up\
+\
+
+\f1\b0 When you plan to use JavaObject extensively in your projects, make sure to delete the object references when they are not needed anymore, otherwise these objects cannot be processed by java's garbage collector:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf0 a.destroy;\
+b.destroy;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 // etc.\cf0 \
+a.toString;	\cf5 // --> FAILURE /method Object not found  (reference was deleted)\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 \
+or shortcut (beware!):\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs18 \cf3 JavaObject\cf0 .destroyAll;\
+f.toString;	\cf5 // --> FAILURE /method Object not found  (reference was deleted)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 Note that 
+\f2\fs20 \cf3 *destroyAll
+\f1\fs24 \cf0  is called upon shutdown (quitting SuperCollider or recompiling the class library)! 
+\f2\fs20 \cf3 *destroyAll
+\f1\fs24 \cf0  ignores objects created using 
+\f2\fs20 \cf3 *basicNew
+\f1\fs24 \cf0 .\
+}

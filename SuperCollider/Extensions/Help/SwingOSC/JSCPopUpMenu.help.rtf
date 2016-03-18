@@ -1,0 +1,105 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green0\blue191;\red96\green96\blue96;
+\red191\green0\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of SCPopUpMenu. last mod: 22-jan-07 sciss\
+Also refer to [\cf2 \ul \ulc2 JSCView\ulnone ] for different behaviour affecting all widgets\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	background		background colour cannot be changed\
+	
+\f0\b \
+different behaviour\
+
+\f1\b0 	size				gadget height is fixed and look-and-feel dependant.\
+					for aqua (os x) the height is around 26px including focus border\
+	alignment			text is left aligned, not centered\
+	
+\f0\b 	\
+extended functionality\
+
+\f1\b0 	allowsReselection	can be set to 'true' to trigger action even if the user selects the same item again\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 \
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	drag-n-drop		drag gesture not yet recognized\
+	background		cannot be made transparent since it introduces drawing glitches in\
+					the menu (with apple's vm) - the background colour is used also\
+					for the menu. default background is therefore not Color.clear\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JSCPopUpMenu
+\f2\b0\fs18 \cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b\fs24 \cf0 Note: please use the abstraction layer GUI.popUpMenu if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf3 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs22 \cf0 The 8-fold noble path
+\f2\b0\fs18 \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 (\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 	var\cf0  items;\
+	w = \cf3 JSCWindow( "JSCPopUpMenu", Rect( 200, 200, 200, 50 ), resizable: false );\cf0 \
+	items = [\
+		\cf4 "left view"\cf0 , \cf4 "left thinking"\cf0 , \cf4 "left mindfulness"\cf0 , \cf4 "left speech"\cf0 ,\
+		\cf4 "left action"\cf0 , \cf4 "left diligence"\cf0 , \cf4 "left concentration"\cf0 , \cf4 "left livelihood"\cf0 \
+	];\
+	m = \cf3 JSCPopUpMenu\cf0 ( w, \cf3 Rect\cf0 ( 10, 10, 180, 26 ));\
+	m.items = items;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 //	m.background = Color.white;\cf0 \
+	m.action = \{ \cf3 arg\cf0  butt;\
+		[ butt.value, butt.items.at( butt.value )].postcs;  \cf5 // .value returns the integer\cf0 \
+	\};\
+	w.front;\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 You will notice that the action is not called if the user re-selects the same item. You can change this behaviour by setting 
+\f2\fs18 \cf3 allowsReselection
+\f1\fs24 \cf0  to 
+\f2\fs18 \cf3 true
+\f1\fs24 \cf0  (works only in SwingOSC!):\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+m.allowsReselection = \cf3 true\cf0 ;\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf5 \
+\pard\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf5 // default keyboard mappings\cf0 \
+space bar	open menu (look-and-feel dependant)\
+csr up/down	open menu and scroll (look-and-feel dependant)\
+return	chooose selected item (look-and-feel dependant)\
+csr left/right	decrease/increase selected item\
+}

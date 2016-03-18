@@ -1,0 +1,280 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green115\blue0;\red191\green0\blue0;
+\red0\green0\blue191;\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of the Knob class by blackrain. last mod: 03-feb-07 sciss\
+Also refer to [\cf2 \ul \ulc2 JSCView\ulnone ] and [\ul JSCUserView\ulnone ]\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	
+\f0\b \
+different behaviour\
+
+\f1\b0 	modifiers			drag-n-drop uses control modifier (as in all dnd ops). for vert mode, use shift key\
+	
+\f0\b \
+extended functionality\
+\
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs36 \cf0 \
+JKnob		a gui control with round, horizontal or vertical action
+\f2\b0\fs18 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 JKnob.new
+\f1\b0 (parent, bounds)\
+
+\f0\b value -
+\f1\b0  set or get the control's value.\
+
+\f0\b valueAction(newValue) -
+\f1\b0  sets the knob's value and performs the action function.\
+
+\f0\b action(view, x, y, modifiers) -
+\f1\b0  user defined action hook function.\
+
+\f0\b mouseOverAction(view, x, y) -
+\f1\b0  user defined action hook for mouse over event. 
+\f0\b acceptsMouseOver
+\f1\b0  must be set to 
+\f0\b true
+\f1\b0  in the parent window for the 
+\f0\b mouseOverAction
+\f1\b0  hook to to work\cf2 .\cf0 \
+
+\f0\b color -
+\f1\b0  array of colors: 
+\f0\b [
+\f1\b0 center 
+\f0\b Color
+\f1\b0 ,  value 
+\f0\b Color
+\f1\b0 , range 
+\f0\b Color
+\f1\b0 , dial 
+\f0\b Color]
+\f1\b0 .\
+
+\f0\b canFocus(bool) - 
+\f1\b0 enables/disables focus gain for the control\
+
+\f0\b mode -
+\f1\b0  knob's tracking mode. can be \cf3 \\round\cf0 , \cf3 \\horiz\cf0  or \cf3 \\vert.\cf0  defaults to \cf3 \\round\cf0  \
+
+\f0\b centered -
+\f1\b0  
+\f0\b bool
+\f1\b0 . the knob's center scale, 0.5 is zero in the value scale. eg. as in a pan control. defaults to 
+\f0\b false
+\f1\b0 . 
+\f0\b \
+step -
+\f1\b0  step in which the value is incremented/decremented while draging in \cf3 \\horiz\cf0  and \cf3 \\vert\cf0  modes. defaults to 0.01.\
+
+\f0\b keystep -
+\f1\b0  step in which the value is incremented/decremented with the keyboard. defaults to 0.01.\
+
+\f0\b visible -
+\f1\b0  boolean; set knob's visibility true/false.\
+
+\f0\b enabled -
+\f1\b0  boolean; enable/disable the knob.\
+
+\f0\b refresh -
+\f1\b0  redraws the knob.\
+
+\f0\b canFocus -
+\f1\b0  enable/disable the knob's capability to gain focus.\
+
+\f0\b canReceiveDragHandler - 
+\f1\b0 customize drag methods see example.
+\f0\b \
+receiveDragHandler - 
+\f1\b0 customize drag methods see example.
+\f2\fs18 \
+
+\f0\b\fs24 beginDragAction - 
+\f1\b0 customize drag methods see example.
+\f2\fs18 \
+
+\f1\fs24 \
+Keys work like on slider when the Knob gains focus:\
+
+\f0\b arrow up
+\f1\b0 , 
+\f0\b arrow right
+\f1\b0  or 
+\f0\b ]
+\f1\b0  - increment value by keystep\
+
+\f0\b arrow dn
+\f1\b0 , 
+\f0\b arrow left 
+\f1\b0 or 
+\f0\b [
+\f1\b0  decrement value by keystep\
+
+\f0\b x 
+\f1\b0 - set value to 1.0\
+
+\f0\b c
+\f1\b0  - set value to 0.5\
+
+\f0\b n
+\f1\b0  - set value to 0.0\
+\
+
+\f0\b Behavior:
+\f1\b0 \
+The Knob's default tracking mode is \cf3 \\round\cf0 .\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //Pressing the 
+\f0\b Control
+\f1\b0  key and drag places the knob temporarily into \\vert tracking mode.\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 Pressing the 
+\f0\b Shift
+\f1\b0  key and drag places the knob temporarily into \\vert tracking mode.\cf0 \
+Pressing the 
+\f0\b Option
+\f1\b0  key and drag places the knob temporarily into \cf3 \\horiz\cf0  tracking mode.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //Pressing the 
+\f0\b Command
+\f1\b0  or 
+\f0\b Apple
+\f1\b0  key drags out the knob's value. like for other views.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 Pressing the 
+\f0\b Control
+\f1\b0  key drags out the knob's value. like for other views.\cf0 \
+\
+In \cf3 \\round\cf0  mode, draging farther from the knob's center increases the control's precision.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // examples\cf0 \
+(\
+\cf5 var\cf0  window, size = 32; \cf4 // try different sizes - from 15 to 200 or more!\cf0 \
+window = \cf5 JSCWindow\cf0 .new(\cf6 "Knob"\cf0 , \cf5 Rect\cf0 (300,300,270,100)).front;\
+k = \cf5 JKnob\cf0 .new(window, \cf5 Rect\cf0 (20, 10, size, size));\
+k.action_(\{\cf5 |v,x,y,m|\cf0  [\cf6 "action func"\cf0 , v.value].postln; \});\
+\cf4 //k.color[1] = Color.gray(alpha:0);\cf0 \
+)\
+k.value\
+k.value = 0.25\
+k.valueAction = 0.125\
+\
+\cf4 // modes\cf0 \
+k.mode = \cf3 \\vert\cf0 ;\
+k.mode = \cf3 \\horiz\cf0 ;\
+k.mode = \cf3 \\round\cf0 ; \cf4 // default\cf0 \
+\
+k.visible\
+k.visible = \cf5 false\cf0 \
+k.visible = \cf5 true\cf0 \
+k.enabled_(\cf5 false\cf0 )\
+k.enabled_(\cf5 true\cf0 )\
+k.canFocus = \cf5 false\cf0 \
+k.canFocus = \cf5 true\cf0 \
+\
+\cf4 // centered mode - a pan control\cf0 \
+(\
+\cf5 var\cf0  window, spec;\
+spec = \cf5 ControlSpec\cf0 (-1, 1, default: 0);\
+window = \cf5 JSCWindow\cf0 .new(\cf6 "Pan Knob"\cf0 , \cf5 Rect\cf0 (350,400,270,70)).front;\
+k = \cf5 JKnob\cf0 .new(window, \cf5 Rect\cf0 (20,10,28,28));\
+k.action_(\{\cf5 |v,x,y,m|\cf0  spec.map(v.value).postln; \})\
+\cf4 //	.mode_(\\horiz)\cf0 \
+	.centered_(\cf5 true\cf0 )\
+	.value_(spec.unmap(0)); \cf4 // 0.5\cf0 \
+\cf4 //k.color[1] = Color.gray(alpha:0);\cf0 \
+)\
+\
+k.centered\
+k.centered = \cf5 false\cf0 \
+k.centered = \cf5 true\cf0 \
+\
+k.refresh\
+\
+\cf4 // mouseOverAction\cf0 \
+(\
+\cf5 var\cf0  size = 28;\
+w = \cf5 JSCWindow\cf0 .new(\cf6 "Knobs"\cf0 , \cf5 Rect\cf0 (250,500,270,70));\
+w.acceptsMouseOver=\cf5 true\cf0 ; \cf4 // true in parent window!\cf0 \
+w.view.decorator = \cf5 FlowLayout\cf0 (w.view.bounds);\
+h = \cf5 JSCStaticText\cf0 (w, 150 @ 20);\
+w.view.decorator.nextLine;\
+k = \cf5 Array\cf0 (8);\
+8.do(\{\cf5 |item, i|\cf0 \
+	\cf5 var\cf0  knob;\
+	knob = \cf5 JKnob\cf0 .new(w, size @ size)\
+	\cf4 //	.canFocus_(false)\cf0 \
+		.action_(\{\cf5 |v,x,y,m|\cf0  h.string = \cf6 "val: "\cf0  ++ v.value.asString; \})\
+		.mouseOverAction_(\{\cf5 |v,x,y|\cf0  h.string = \cf6 "val: "\cf0  ++ v.value.asString; \});\
+	\
+	knob.color[0] = [\cf5 Color\cf0 .blue(0.7, 0.4), \cf5 Color\cf0 .red(0.7, 0.7), \cf5 Color\cf0 .green(0.3, 0.6),\
+		\cf5 Color\cf0 .black.alpha_(0.3)].choose;\
+	k = k.add(knob);\
+\});\
+w.front\
+)\
+k[4].value\
+\
+\cf4 // drag and drop\
+// in SwingOSC : ctrl+press+move initiated drag!\cf0 \
+(\
+\cf5 var\cf0  w, txt, size = 36;\
+w = \cf5 JSCWindow\cf0 .new(\cf6 "knobs"\cf0 , \cf5 Rect\cf0 (400,400,250,100)).front;\
+w.acceptsMouseOver=\cf5 true\cf0 ;\
+w.view.decorator = \cf5 FlowLayout\cf0 (w.view.bounds).gap_(10 @ 10).margin_(10 @10);\
+txt = \cf5 JSCStaticText\cf0 (w, 200 @ 14);\
+w.view.decorator.nextLine;\
+\
+k = \cf5 JKnob\cf0 (w, size @ size);\
+k.action = \{\cf5 arg\cf0  v,x,y;  v.value.postln; txt.string_(\cf6 "value: "\cf0  ++ v.value); \};\
+k.mouseOverAction = \{\cf5 |v|\cf0  txt.string_(\cf6 "value: "\cf0  ++ v.value); \};\
+\
+j = \cf5 JKnob\cf0 (w, size @ size);\
+j.action = \{\cf5 arg\cf0  v,x,y;  j.value.postln; txt.string_(\cf6 "value: "\cf0  ++ v.value); \};\
+j.knob.mouseOverAction = \{ txt.string_(\cf6 "value: "\cf0  ++ j.value); \};\
+\
+n = \cf5 JSCNumberBox\cf0 (w, 100 @ 20);\
+\cf4 //n.setProperty(\\boxColor,Color.grey(alpha:0.0));\cf0 \
+n.value = 0.0;\
+)\
+\
+\cf4 // customize drag and drop methods\cf0 \
+k.canReceiveDragHandler\
+k.canReceiveDragHandler = \cf5 false\cf0 ; \cf4 // don't accept drops\cf0 \
+\
+k.canReceiveDragHandler = \{ \cf5 JSCView\cf0 .currentDrag.isFloat \}; \cf4 // accept only if drag is float\cf0 \
+\
+k.receiveDragHandler = \{ (\cf6 "value droped in: "\cf0  ++ \cf5 JSCView\cf0 .currentDrag).postln \}\
+\
+k.receiveDragHandler = \{ k.valueAction = \cf5 JSCView\cf0 .currentDrag.clip(0.0, 1.0); \}\
+\
+k.beginDragAction = \{ (\cf6 "drag out -> "\cf0  ++ k.value).postln; \}\
+\
+k.beginDragAction = \{ k.value.asFloat; \}\
+\
+\
+\
+}

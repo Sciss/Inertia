@@ -1,0 +1,331 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red191\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of SCUserView. last mod: 31-jan-07 sciss\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	
+\f0\b \
+different behaviour\
+	
+\f1\b0 refresh			unlike cocoa, there is no "natural" refresh, like from resizing or focussing the\
+					component, because of the client/server split. however, this makes this implementation\
+					much more stringent (IMO). setting a new drawFunc repaints the gadget\
+	view bounds		here is no way to paint outside the logical bounds of a swing view, all draw operations\
+					are automatically clipped to the view's bounds.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 	\
+extended functionality\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	focusVisible_		allows you to switch off the default focus border painting\
+	refreshOnFocus_	allows you to switch off refreshing as result of focus change\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 	\
+known issues / todo\
+	
+\f1\b0 refresh			At the moment window.refresh will not refresh its children, instead call userView.refresh directly!\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JSCUserView				
+\fs28 user-definable view
+\f1\b0\fs24 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b \cf0 Note: please use the abstraction layer GUI.userView if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+superclass: JSCView
+\f1\b0 \
+\
+JSCUserView is a user-definable View intended mainly for use with JPen and drawHooks.\
+\
+See also: 
+\f0\b [\ul JSCWindow\ulnone ]
+\f1\b0 , 
+\f0\b [\ul JPen\ulnone ], [\ul Color\ulnone ]
+\f1\b0 , and 
+\f0\b [\ul String\ulnone ]
+\f1\b0 \
+\
+\
+
+\f0\b drawFunc_\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 \
+Sets the function which should be evaluated if the view is refreshed.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 Note: 
+\f1\b0 This happens when you call userView.refresh.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //In cocoa GUI, this happens every time the whole window is refreshed (manually by calling JSCWindow-refresh\cf0 \
+\cf3 //or e.g. by selecting the view or resizing the window).\cf0 \
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 (\
+	\cf4 var\cf0  func;\
+	\
+	func = \{ \cf4 arg\cf0  me;\
+		\cf4 JPen\cf0 .use \{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 			// clipping into the boundingbox\
+\cf0 			\cf4 JPen\cf0 .addRect( me.bounds );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 			\cf4 JPen\cf0 .clip;
+\fs22 \
+\
+
+\fs20 			\cf3 // draw background\cf0 \
+			\cf4 JPen\cf0 .color = \cf4 Color\cf0 .gray( 0.5 );\
+			\cf4 JPen\cf0 .moveTo( me.bounds.left @ me.bounds.top );\
+			\cf4 JPen\cf0 .lineTo( (me.bounds.left @ me.bounds.top) +\
+			             (me.bounds.width @ 0) );\
+			\cf4 JPen\cf0 .lineTo( (me.bounds.left @ me.bounds.top) +\
+			             (me.bounds.width @ me.bounds.height) );\
+			\cf4 JPen\cf0 .lineTo( (me.bounds.left @ me.bounds.top ) +\
+			             (0 @ me.bounds.height) );\
+			\cf4 JPen\cf0 .lineTo( me.bounds.left @ me.bounds.top );\
+			\cf4 JPen\cf0 .fill;\
+\
+			\cf4 JPen\cf0 .translate( 100, 100 );\
+			10.do \{\
+				\cf4 JPen\cf0 .color = \cf4 Color\cf0 .red( rrand( 0.0, 1 ), rrand( 0.0, 0.5 ));\
+				\cf4 JPen\cf0 .addArc( 400.exprand( 2 ) @ 100.rand, rrand( 10, 100 ), 2pi.rand, pi );\
+				\cf4 JPen\cf0 .perform([ \cf5 \\stroke\cf0 , \cf5 \\fill\cf0  ].choose );\
+			\}\
+		\}\
+	\};\
+\
+	w = \cf4 JSCWindow\cf0 .new( \cf6 "DrawFunc Examples"\cf0  ).front;\
+	w.view.background_( \cf4 Color\cf0 .white );\
+	3.do \{ \cf4 arg\cf0  i;\
+		v = \cf4 JSCUserView\cf0 ( w, \cf4 Rect\cf0 ( 20 + (i * 120), 100, 100, 100 ));\
+		v.drawFunc = func;\
+	\};\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //	w.refresh;\cf0 \
+)\
+	\
+v.refresh;	\cf3 // updates the last created (third) view\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf2 // these only work in SwingOSC:
+\f2\b0\fs20 \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 v.refreshOnFocus = \cf4 false\cf0 ;   \cf3 // do not re-evaluate drawFunc when focus is gained or lost (can be more efficient)\
+\cf0 v.focusVisible = \cf4 false\cf0 ;  \cf3 // don't paint focus border. you can do yourself in the drawFunc, checking for me.hasFocus!\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs26 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 keyDownFunc_\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 \
+Sets the function which should be evaluated if the view is in focus and a key is pressed. This function will be passed four arguments: the View, the key pressed as a 
+\f0\b Char
+\f1\b0 , modifier keys (shift, alt, etc.), and the unicode value. See 
+\f0\b [\ul JSCView\ulnone ]
+\f1\b0  for more details.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 	(\
+	\cf3 // select the window, type something and watch the post window\cf0 \
+		w = \cf4 JSCWindow\cf0 .new( \cf6 "select this window and type something" \cf0 );\
+		c = \cf4 JSCUserView\cf0 ( w, w.view.bounds );\
+		c.keyDownFunc = \{ \cf4 arg\cf0  view,char,modifiers,unicode;\
+			[char, modifiers, unicode].postln;\
+			c.drawFunc = \{\
+				\cf4 JPen\cf0 .font			= \cf4 JFont\cf0 ( \cf6 "Helvetica"\cf0 , 70 );\
+				\cf4 JPen\cf0 .fillColor	= \cf4 Color\cf0 .blue( 0.3, 0.5 );\
+				\cf4 JPen\cf0 .stringAtPoint( char.asString, 180 @ 150 );\
+			\};\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //			w.refresh;\cf0 \
+		\};\
+		w.front; c.focus;\
+	)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf0 	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 mouseBeginTrackFunc_\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 \
+Sets the function which should be evaluated if the mouse is at the beginning of tracking (mouse-down). This function will be passed four arguments: theView, x coordinate, y coordinate, and keyboard modifiers.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 mouseTrackFunc_\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 \
+Sets the function which should be evaluated if the mouse is tracked. This function will be passed four arguments: theView, x coordinate, y coordinate, and keyboard modifiers.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf0 mouseEndTrackFunc_
+\f1\b0 \
+\
+Sets the function which should be evaluated if the mouse is at the end of tracking (mouse-up). This function will be passed four arguments: theView, x coordinate, y coordinate, and keyboard modifiers.\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 (\
+	\cf4 var\cf0  drawFunc, beginTrackFunc, endTrackFunc, trackFunc, sat = 0, absX;\
+	\
+	drawFunc = \{ \cf4 arg\cf0  me;\
+		\cf4 JPen\cf0 .use \{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 			// clipping into the boundingbox\
+\cf0 			\cf4 JPen\cf0 .addRect( me.bounds );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 			\cf4 JPen\cf0 .clip;
+\fs22 \
+
+\fs20 \
+			\cf3 // draw background\cf0 \
+			\cf4 JPen\cf0 .color = \cf4 Color\cf0 .gray( sat );\
+			\cf4 JPen\cf0 .moveTo( me.bounds.left @ me.bounds.top );\
+			\cf4 JPen\cf0 .lineTo( (me.bounds.left @ me.bounds.top) +\
+			             (me.bounds.width @ 0) );\
+			\cf4 JPen\cf0 .lineTo( (me.bounds.left @ me.bounds.top) +\
+			             (me.bounds.width @ me.bounds.height) );\
+			\cf4 JPen\cf0 .lineTo( (me.bounds.left @ me.bounds.top ) +\
+			             (0 @ me.bounds.height) );\
+			\cf4 JPen\cf0 .lineTo( me.bounds.left @ me.bounds.top );\
+			\cf4 JPen\cf0 .fill;\
+\
+			\cf4 JPen\cf0 .translate( 100, 100 );\
+			10.do \{\
+				\cf4 JPen\cf0 .color = \cf4 Color\cf0 .red( rrand( 0.0, 1 ), rrand( 0.0, 0.5 ));\
+				\cf4 JPen\cf0 .addArc( 400.exprand( 2 ) @ 100.rand, rrand( 10, 100 ), 2pi.rand, pi );\
+				\cf4 JPen\cf0 .perform([ \cf5 \\stroke\cf0 , \cf5 \\fill\cf0  ].choose );\
+			\}\
+		\}\
+	\};\
+	beginTrackFunc = \{ \cf4 arg\cf0  me, x, y, mod;\
+		absX = x;\
+		postf( \cf6 "begin path: x=%\\n"\cf0 , absX );\
+	\};\
+	endTrackFunc = \{ \cf4 arg\cf0  me, x, y, mod;\
+		postf( \cf6 "end path: (absX-x)=%\\n"\cf0 , (absX - x));\
+	\};\
+	trackFunc = \{ \cf4 arg\cf0  me, x, y, mod;\
+		sat = (absX - x) / 100;\
+		me.refresh;\
+	\};\
+\
+	w = \cf4 JSCWindow\cf0 .new.front;\
+	w.view.background_(\cf4 Color\cf0 .white);\
+	3.do\{ \cf4 arg\cf0  i;\
+		v = \cf4 JSCUserView\cf0 ( w, \cf4 Rect\cf0 ( 20 + (i * 120), 100, 100, 100 ));\
+		\cf3 //v.background_(Color.white); // not affecting anything...\cf0 \
+		v.drawFunc = drawFunc;\
+		v.mouseBeginTrackFunc = beginTrackFunc;\
+		v.mouseEndTrackFunc = endTrackFunc;\
+		v.mouseTrackFunc = trackFunc;\
+	\};\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //	w.refresh;\cf0 \
+)
+\f1\fs26 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf3 // draw on the view\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 // 
+\f0\b\fs24 \cf2 NOTE: 
+\f2\b0\fs20 \cf3 in swing, do not rely on correct painting\cf0 \
+\cf3 // when components overlap. components should never overlap.\cf0 \
+\cf3 // therefore, in this example, we use the drawFunc of the user view\cf0 \
+\cf3 // and not the window to paint (see SCUserView help for comparison)\
+\
+// 
+\f0\b\fs24 \cf2 NOTE: 
+\f2\b0\fs20 \cf3 after some drawing, sclang starts to partially drop\
+// OSC packets resulting in illegal drawing commands sent and\
+// the dislay to flicker\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li200\ql\qnatural
+\cf0 (\
+	\cf4 var\cf0  w, txt, tmppoints, all;\
+	tmppoints = [];\
+	\
+	w = \cf4 JSCWindow\cf0 ( \cf6 "draw on me"\cf0 , \cf4 Rect\cf0 ( 128, 64, 340, 360 ));\
+	v = \cf4 JSCUserView\cf0 ( w, \cf4 Rect\cf0 ( 0, 0, 340, 360 ))\
+		.canFocus_( false )\
+		.mouseTrackFunc_(\{ \cf4 arg\cf0  v,x,y;\
+			tmppoints = tmppoints.add( x @ y );\
+			v.refresh;\
+		\})\
+		.mouseEndTrackFunc_(\{\cf4 |v,x,y|\cf0 \
+			all = all.add(tmppoints.copy);\
+			tmppoints = [];\
+			v.refresh;\
+		\})\
+		.drawFunc_(\{\
+			\cf4 JPen\cf0 .use \{	\
+				\cf4 JPen\cf0 .width = 1;\
+				\cf4 JPen\cf0 .beginPath;\
+				\
+				tmppoints.do \{ \cf4 arg\cf0  p, i;\
+					if( i == 0, \{\
+						\cf4 JPen\cf0 .moveTo( p );\
+					\}, \{\
+						\cf4 JPen\cf0 .lineTo( p );\
+					\});\
+				\};\
+				all.do\{ \cf4 arg\cf0  points;\
+					points.do \{ \cf4 arg\cf0  p, i;\
+						if( i == 0, \{\
+							\cf4 JPen\cf0 .moveTo( p );\
+						\}, \{\
+							\cf4 JPen\cf0 .lineTo( p );\
+						\});\
+					\};\
+				\};\
+				\cf4 JPen\cf0 .stroke;\
+			\};\
+		\});\
+		\
+	w.front;\
+)}

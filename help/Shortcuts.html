@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Keyboard Shortcuts</title>
+<LINK REL="stylesheet" TYPE="text/css" HREF="stylesheet.css">
+</head>
+<body>
+<h1>Keyboard Shortcuts</h1>
+<P>
+molec tool : d = duplicate selected atoms . escape = abort drag . alt + click = delete atom, shift + click = extend selection, meta + click = send molec to the background (allows to select overlapping molecs). ctrl + shift + click = nudge audio region. ctrl + drag = move / drag atom.
+</P>
+<BLOCKQUOTE>
+addendum v0.5 : global commands are disabled (for now). they are accessible from each soundfile's waveform window. transport shortcuts are accessible when the waveform display is focussed. new shortcuts: <code>Tab</code> selects the region between adjectant markers. successive <code>Tab</code> pressed cycle forward, <code>Alt+Tab</code> cycles backward, <code><var>[</var>Alt+<var>]</var>Shift+Tab</code> extends selection. <code>Cursor Up/Down</code> sets timeline position to selection start/stop. <code>Numpad 1/2</code> accesses rewind and fast forward. <code>Meta+Cursor Right</code> zooms to sample level. <code>M</code> drops a marker (marker view must be enabled). <code>A+&Uuml;/+</code> nudge volume; <code>P+&Uuml;/+</code> nudge pitch; <code>T+&Uuml;/+</code> nudge time. <code>Y</code> split selected molecules along timeline position. <code>F</code> fuse selected molecs. <code>L</code> align selected molec start to timeline position.
+</BLOCKQUOTE>
+<p>
+<STRONG>Note:</STRONG> the shortcuts have been tested on Mac OS with German Apple Pro keyboard. There may be inconsistencies with other configurations or smaller keyboards (PowerBooks for example). Please report any problems and I try to fix them.
+</P>
+<P>
+The key modifier <code>Meta</code> is the platform's default menu key, which is the <code>Apple</code>-key on Mac OS and <code>Ctrl</code> on Windows and Linux(?).
+</P>
+<h3>Global Commands</h3>
+<P>
+<STRONG>Note:</STRONG> windows without menu bars (this help frame for example) do not react to global commands. This will be fixed in a future version.
+</p>
+<P>&nbsp;&nbsp;&nbsp;<B><A HREF="TransportTools.html">Transport</A></B>:</P>
+<UL>
+<LI><code>Space</code> or <code>Numpad-0</code> : toggle play / stop</LI>
+<LI><code>Shift+Space</code> : play at half speed</LI>
+<LI><code>Alt+Shift+Space</code> : play at double speed</LI>
+<LI><code>Numpad-/</code> : toggle loop playback</LI>
+<!-- <LI><code>Numpad-*</code> : enabled / disable <A HREF="RealtimeDialog.html">realtime plug-in</A></LI> -->
+<LI><code>G</code> : open go-to-time dialog</LI>
+</UL>
+<P>&nbsp;&nbsp;&nbsp;<B>Editing</B>:</P>
+<UL>
+<LI><code>F1 ... Fn</code> : select tool</LI>
+<LI><code>Caps lock</code> : toggle <A HREF="ToolBlending.html">blending mode</A></LI>
+<LI><code>V</code> : toggle <A HREF="ToolCatch.html">catch mode</A></LI>
+</UL>
+<h3>Main Frame</h3>
+<UL>
+<LI><code>Return</code> : stop playback and go to start of document</LI>
+<LI><code>Shift+Return</code> : extend selection to document start</LI>
+<LI><code>Alt+Shift+Return</code> : extend selection to document end</LI>
+<LI><code>Cursor Left/Right</code> : scroll to begin/end of selection</LI>
+<LI><code>Cursor Up/Down</code> : set timeline position to selection begin/end</LI>
+<LI><code>Alt+F</code> : fit visible span to selection</LI>
+<LI><code>Alt+A</code> or <code>Meta+Cursor Left</code> : zoom all the way out</LI>
+<LI><code>Meta+Cursor Right</code> : zoom to sample level</LI>
+<LI><code>Delete</code> (<code>Backspace</code>) : remove selected time span</LI>
+<LI><code>Meta+A</code> : select whole document span</LI>
+<LI><code>M</code> : drop marker at current timeline position. only effective if marker display is enabled from the view menu.</LI>
+</UL>
+<h3>Special Gadgets</h3>
+<P>&nbsp;&nbsp;&nbsp;<B>Path Fields</B>:</P>
+<UL>
+<LI><code>Meta+Shift+Numpad-1 ... Numpad-9</code> : store directory in user preferences 1 ... 9</LI>
+<LI><code>Meta+Numpad-1 ... Numpad-9</code> : recall directory from user preferences 1 ... 9</LI>
+</UL>
+</body>
+</html>

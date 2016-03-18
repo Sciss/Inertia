@@ -1,0 +1,1716 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+\f3\fswiss\fcharset77 Helvetica-Oblique;\f4\fnil\fcharset77 TrebuchetMS;}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green0\blue191;\red191\green0\blue0;
+\red0\green115\blue0;\red96\green96\blue96;\red255\green55\blue177;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of Pen. last mod: 04-feb-07 sciss\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	String -> *bounds	calls a cocoa primitive. there is no replacement in SwingOSC due to the\
+					fact that this would need to be implemented asynchronously\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 \
+different behaviour\
+	
+\f1\b0 strokeOval			uses stroke width (as expected); this is a bug in cocoa\
+	stroke			swing's stroke is a tiny bit thicker than cocoa's ; with antialiasing off the stroke is about 1px thicker\
+	color				Color.set does NOT work (it calls a cocoa primitive); instead we use JPen.color_ to\
+					set the color (similiarily JPen.strokeColor_ and JPen.fillColor_).\
+					Compatibility methods (Pen.strokeColor_ etc.) are provided.\
+	strings			\'a5 String.drawAtPoint does NOT work ; instead we use JPen.stringAtPoint to draw a string\
+					(similiarily JPen.stringInRect, JPen.stringCenteredIn etc.). JPen.font_ to set font.\
+					Compatibility methods (Pen.stringAtPoint, Pen.font_ etc.) are provided.\
+					\'a5 stringCenteredIn, stringLeftJustIn, stringRightJustIn break lines according to the bounding\
+					box instead of actually calling stringAtPoint, which is obviously more logic (otherwise you\
+					wouldn't need a rect argument. they are still compatible with cocoa Pen if the rect width\
+					is greater than the text bounds width)\
+					\'a5 the string drawing commands do not overwrite the strokeColor setting (bug in cocoa)\
+
+\f0\b 	\
+extended functionality\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	curveTo, quadCurveTo, addRect have been implemented\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 	\
+known issues / todo\
+	
+\f1\b0 speed			especially for large bodies of drawing functions this can be\
+					significantly slower than the cocoa class\
+	string location		the calculation in stringAtPoint is a bit unclear; adding ascent\
+					plus descent results in y-position similiar to cocoa, albeit a bit illogic\
+	font size			font sizes and line heights (when using stringInRect) are a little\
+					bit smaller than in cocoa\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JPen				
+\fs28 draw on an JSCWindow or JSCUserView
+\f1\b0\fs24 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b \cf0 Note: please use the abstraction layer GUI.pen if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+superclass: Object\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 \
+A class which allows you to draw on a 
+\f0\b [\ul \ulc3 JSCWindow\ulnone ]
+\f1\b0  or a 
+\f0\b [\ul JSCUserView\ulnone ]
+\f1\b0 . It has no instance methods.
+\f2\fs18 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 \
+The following methods must be called within an JSCWindow-drawHook or a JSCUserView-drawFunc function, and will only be visible once the window or the view is refreshed. Each call to JSCWindow-refresh or JSCUserView-refresh will 'overwrite' all previous drawing by executing the currently defined function.\
+\
+See also: 
+\f0\b [\ul JSCWindow\ulnone ]
+\f1\b0 , 
+\f0\b [\ul JSCUserView\ulnone ]
+\f1\b0 , 
+\f0\b [\ul Color\ulnone ]
+\f1\b0 , and 
+\f0\b [\ul String\ulnone ]\
+\
+Note: 
+\f1\b0 as of v0.42, the string painting methods do note use font and colour arguments any more. Instead you set the font using JPen.font_ and the colour using JPen.fillColor_ !
+\f0\b \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs28 \cf0 Drawing Methods
+\fs24 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf0 The following methods define paths. You will need to call 
+\f0\b *stroke
+\f1\b0  or 
+\f0\b *fill
+\f1\b0  to actually draw them.\
+
+\f0\b \
+	*moveTo (point)\
+
+\f1\b0 		Move the Pen to 
+\f0\b point
+\f1\b0 . 
+\f0\b point
+\f1\b0  is an instance of 
+\f0\b [\ul Point\ulnone ]
+\f1\b0 . See 
+\f0\b *stroke
+\f1\b0  for an example.\
+
+\f2\fs18 		\
+
+\f0\b\fs24 	*lineTo (point)\
+
+\f1\b0 		Draw a line (define a path) from the current position to 
+\f0\b point
+\f1\b0 . 
+\f0\b point
+\f1\b0  is an instance of 
+\f0\b [\ul Point\ulnone ]
+\f1\b0 .\
+		See 
+\f0\b *stroke
+\f1\b0  for an example.\
+ \
+
+\f0\b 	*line (p1, p2)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1120\fi-1120\ql\qnatural
+
+\f1\b0 \cf0 		Draw a line (define a path) from p1 to p2. Current position will be p2. 
+\f0\b p1
+\f1\b0  and 
+\f0\b p2
+\f1\b0  are instances of 
+\f0\b [\ul Point\ulnone ]
+\f1\b0 .\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 \
+		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_( \cf3 Color\cf0 .white );\
+		w.drawHook = \{\
+			\cf3 var\cf0  x1, y1, x2, y2, x1a, y1a, x2a, y2a, txr, tyr, rr;\
+		\
+			\cf3 JPen\cf0 .translate( 200, 200 );\
+			\cf3 JPen\cf0 .scale( 0.5, 0.5 );\
+			\cf3 JPen\cf0 .width = 0.5;\
+			x1 = 175.0.bilinrand;\
+			x2 = 175.0.bilinrand;\
+			y1 = 175.0.bilinrand;\
+			y2 = 175.0.bilinrand;\
+			x1a = 15.0.bilinrand;\
+			x2a = 15.0.bilinrand;\
+			y1a = 15.0.bilinrand;\
+			y2a = 15.0.bilinrand;\
+			txr = 2.0.bilinrand;\
+			tyr = 2.0.bilinrand;\
+			rr  = 0.05pi.bilinrand;\
+			\cf3 JPen\cf0 .moveTo( 175 @ 0 );\
+			200.do \{ \cf3 arg\cf0  i;\
+				\cf3 JPen\cf0 .translate( txr, tyr );\
+				\cf3 JPen\cf0 .rotate( rr );\
+				\cf3 JPen\cf0 .line( x1 @ y1, x2 @ y2 );\
+				x1 = x1 + x1a;\
+				x2 = x2 + x2a;\
+				y1 = y1 + y1a;\
+				y2 = y2 + y2a;\
+			\};\
+			\cf3 JPen\cf0 .stroke;\
+		\};\
+		w.refresh;\
+		)\
+
+\f0\b\fs24 \
+
+\f2\b0\fs18 		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 0.75.wait; \}\}.fork( AppClock );\
+		)\
+
+\f0\b\fs24 \
+	*curveTo(point, cpoint1, cpoint2)\
+
+\f1\b0 		draws an interpolated curve from the current position to 
+\f0\b point
+\f1\b0 . \
+		
+\f0\b cpoint1, cpoint2 
+\f1\b0 are help-points determining the curves curvature.\
+		(Cubic Spline)\
+\
+
+\f2\fs18 		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_( \cf3 Color\cf0 .white );\
+		w.drawHook = \{\
+			var x1, y1, x2, y2, x1a, y1a, x2a, y2a, txr, tyr, rr;\
+		\
+			\cf3 JPen\cf0 .translate( 200, 200 );\
+			\cf3 JPen\cf0 .scale( 0.5, 0.5 );\
+			\cf3 JPen\cf0 .width = 0.5;\
+			x1 = 175.0.bilinrand;\
+			x2 = 175.0.bilinrand;\
+			y1 = 175.0.bilinrand;\
+			y2 = 175.0.bilinrand;\
+			x1a = 25.0.bilinrand;\
+			x2a = 25.0.bilinrand;\
+			y1a = 25.0.bilinrand;\
+			y2a = 25.0.bilinrand;\
+			txr = 4.0.bilinrand;\
+			tyr = 4.0.bilinrand;\
+			rr  = 0.05pi.bilinrand;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 			JPen.moveTo( 175 @ 0 );\cf0 \
+			100.do \{\
+				\cf3 JPen\cf0 .translate( txr, tyr );\
+				\cf3 JPen\cf0 .rotate( rr );\
+				\cf3 JPen\cf0 .curveTo( 175 @ 0, x1 @ y1, x2 @ y2 );\
+				x1 = x1 + x1a;\
+				x2 = x2 + x2a;\
+				y1 = y1 + y1a;\
+				y2 = y2 + y2a;\
+			\};\
+			\cf3 JPen\cf0 .stroke;\
+		\};\
+		w.refresh;\
+		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 \
+
+\f2\b0\fs18 		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 0.75.wait; \}\}.fork( AppClock );\
+		)\
+\
+
+\f0\b\fs24 	*quadCurveTo(point, cpoint1)\
+
+\f1\b0 		draws an interpolated curve from the current position to 
+\f0\b point
+\f1\b0 . \
+		
+\f0\b cpoint1 
+\f1\b0 is a help-point determining the curves curvature.\
+
+\f2\fs18 \
+		(\
+		var ang1a, ang2a, ang1s, ang2s, rad1a, rad2a, trans;\
+\
+		ang1a	= \cf3 Array\cf0 .fill( 4, 0.0 );\
+		ang2a	= \cf3 Array\cf0 .fill( 4, 0.0 );\
+		ang1s	= \cf3 Array\cf0 .fill( 4, 0.0 );\
+		ang2s	= \cf3 Array\cf0 .fill( 4, 0.0 );\
+		rad1a	= \cf3 Array\cf0 .fill( 4, 0.0 );\
+		rad2a	= \cf3 Array\cf0 .fill( 4, 0.0 );\
+\
+		trans	= [ 225 @ 225, 350 @ 0, 0 @ 350, -350 @ 0 ];\
+\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_( \cf3 Color\cf0 .white );\
+		w.drawHook = \{\
+			\cf3 var\cf0  ang1, ang2, rad1, rad2;\
+			\cf3 var\cf0  di = 1.0 - d;\
+		\
+			\cf3 JPen\cf0 .width = 0.5;\
+			\cf3 JPen\cf0 .scale( 0.5, 0.5 );\
+			4.do(\{ \cf3 arg\cf0  i;\
+				\cf3 JPen\cf0 .translate( trans[ i ].x, trans[ i ].y );\
+				ang1s[ i ]	= ang1s[ i ] * d + (pi.bilinrand * di);\
+				ang2s[ i ]	= ang2s[ i ] * d + (pi.bilinrand * di);\
+				ang1			= ang1s[ i ];\
+				ang2			= ang2s[ i ];\
+				rad1			= 150;\
+				rad2			= 75;\
+				ang1a[ i ]	= ang1a[ i ] * d + ((pi/16).bilinrand * di);\
+				ang2a[ i ]	= ang2a[ i ] * d + ((pi/16).bilinrand * di);\
+				rad1a[ i ]	= (rad1a[ i ] * d + (20.0.bilinrand * di)).clip( -20.0, 20.0 );\
+				rad2a[ i ]	= (rad2a[ i ] * d + (10.0.bilinrand * di)).clip( -10.0, 10.0 );\
+				100.do \{\
+					\cf3 JPen\cf0 .moveTo( 0 @ 0 );\
+					\cf3 JPen\cf0 .quadCurveTo( (ang1.cos * rad1) @ (ang1.sin * rad1),\
+								    (ang2.cos * rad2) @ (ang2.sin * rad2) );\
+					ang1		= ang1 + ang1a[ i ];\
+					ang2		= ang2 + ang2a[ i ];\
+					rad1		= (rad1 + rad1a[ i ]).clip( 0, 150 );\
+					rad2		= (rad2 + rad2a[ i ]).clip( 0, 150 );\
+				\};\
+				\cf3 JPen\cf0 .stroke;\
+			\});\
+		\};\
+		d = 0.0;\
+		w.refresh;\
+		d = 0.97; \cf4 // animation decay\cf0 \
+		)\
+\
+		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 0.1.wait; \}\}.fork( AppClock );\
+		)\
+		\
+		d = 0.8;  	\cf4 // faster\cf0 \
+		d = 0.99;  	\cf4 // really slow\cf0 \
+\
+\
+
+\f0\b\fs24 	*addArc(center, radius, startAngle, arcAngle)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1120\fi-1120\ql\qnatural
+\cf0 		
+\f1\b0 Draw an arc around the 
+\f0\b [Point]
+\f1\b0  
+\f0\b center
+\f1\b0 , at 
+\f0\b radius
+\f1\b0  number of pixels. 
+\f0\b startAngle
+\f1\b0  and 
+\f0\b arcAngle
+\f1\b0  refer to the starting angle and the extent of the arc, and are in radians [0..2pi].
+\f2\fs18 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf3 JPen\cf0 .translate(100, 100);\
+			10.do\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //				Color.red(rrand(0.0, 1), rrand(0.0, 0.5)).set;\cf0 \
+				\cf3 JPen\cf0 .color = \cf3 Color\cf0 .red( rrand( 0.0, 1 ), rrand( 0.0, 0.5 ));\
+				\cf3 JPen\cf0 .addArc((100.rand)@(100.rand), rrand(10, 100), 2pi.rand, pi);\
+				\cf3 JPen\cf0 .perform([\cf5 \\stroke\cf0 , \cf5 \\fill\cf0 ].choose);\
+			\}\
+		\};\
+		w.refresh;\
+		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 \
+
+\f2\b0\fs18 		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 0.1.wait; \}\}.fork( AppClock );\
+		)\
+
+\f0\b\fs24 \
+	*addWedge(center, radius, startAngle, arcAngle)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1120\fi-1120\ql\qnatural
+\cf0 		
+\f1\b0 Draw a wedge around the 
+\f0\b [Point]
+\f1\b0  
+\f0\b center
+\f1\b0 , at 
+\f0\b radius
+\f1\b0  number of pixels. 
+\f0\b startAngle
+\f1\b0  and 
+\f0\b arcAngle
+\f1\b0  refer to the starting angle and the extent of the arc, and are in radians [0..2pi].
+\f0\b \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf4 // set the Color\cf0 \
+			\cf3 JPen\cf0 .translate(100, 100);\
+			10.do\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //				Color.blue(rrand(0.0, 1), rrand(0.0, 0.5)).set;\cf0 \
+				\cf3 JPen\cf0 .color = \cf3 Color\cf0 .blue( rrand( 0.0, 1 ), rrand( 0.0, 0.5 ));\
+				\cf3 JPen\cf0 .addWedge((100.rand)@(100.rand), rrand(10, 100), 2pi.rand, 2pi.rand);\
+				\cf3 JPen\cf0 .perform([\cf5 \\stroke\cf0 , \cf5 \\fill\cf0 ].choose);\
+			\}\
+		\};\
+		w.refresh;\
+		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 \
+
+\f2\b0\fs18 		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 0.1.wait; \}\}.fork( AppClock );\
+		)\
+
+\f0\b\fs24 \
+	*addAnnularWedge (center, innerRadius, outerRadius, startAngle, arcAngle)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1120\fi-1120\ql\qnatural
+\cf0 		
+\f1\b0 Draw an annular wedge around the 
+\f0\b [Point]
+\f1\b0  
+\f0\b center
+\f1\b0 , from 
+\f0\b innerRadius
+\f1\b0  to 
+\f0\b outerRadius
+\f1\b0  in pixels. 
+\f0\b startAngle
+\f1\b0  and 
+\f0\b arcAngle
+\f1\b0  refer to the starting angle and the extent of the arc, and are in radians [0..2pi].
+\f0\b \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf3 JPen\cf0 .translate(100, 100);\
+			1000.do\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //				Color.green(rrand(0.0, 1), rrand(0.0, 0.5)).set;\cf0 \
+				\cf3 JPen\cf0 .color = \cf3 Color\cf0 .green( rrand( 0.0, 1 ), rrand( 0.0, 0.5 ));\
+				\cf3 JPen\cf0 .addAnnularWedge(\
+					(100.rand)@(100.rand), \
+					rrand(10, 50), \
+					rrand(51, 100), 	\
+					2pi.rand, \
+					2pi.rand\
+				);\
+				\cf3 JPen\cf0 .perform([\cf5 \\stroke\cf0 , \cf5 \\fill\cf0 ].choose);\
+			\}\
+		\};\
+		w.refresh;\
+		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 \
+
+\f2\b0\fs18 		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 1.0.wait; \}\}.fork( AppClock );\
+		)\
+
+\f0\b\fs24 \
+	*addRect(rect)\
+
+\f1\b0 		adds a rectangle to the drawing; \
+
+\f2\fs18 \
+		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_( \cf3 Color\cf0 .white );\
+		w.drawHook = \{\
+			\cf3 var\cf0  x1, y1, x2, y2, x1a, y1a, x2a, y2a, txr, tyr, x1o, y1o, x2o, y2o, size;\
+		\
+			\cf3 JPen\cf0 .translate( 200, 200 );\
+			\cf3 JPen\cf0 .scale( 0.25, 0.25 );\
+			\cf3 JPen\cf0 .width = 0.5;\
+			x1 = 175.0.bilinrand;\
+			x2 = 175.0.bilinrand;\
+			y1 = 175.0.bilinrand;\
+			y2 = 175.0.bilinrand;\
+			x1a = 15.0.rand;\
+			x2a = 15.0.rand;\
+			y1a = 15.0.rand;\
+			y2a = 15.0.rand;\
+			txr = -15.0.rand;\
+			tyr = -15.0.rand;\
+			\cf3 JPen\cf0 .moveTo( 175 @ 0 );\
+			200.do \{ \cf3 arg\cf0  i;\
+				\cf3 JPen\cf0 .translate( txr, tyr );\
+				x1o	= x1;\
+				y1o	= y1;\
+				x2o	= x2;\
+				y2o	= y2;\
+				x1	= x1 + x1a;\
+				x2 	= x2 + x2a;\
+				y1 	= y1 + y1a;\
+				y2 	= y2 + y2a;\
+				size	= max( (x2 - x1).abs, (y2 - y1).abs );\
+				\cf3 JPen\cf0 .addRect( Rect( x1, y1, size, size ));\
+			\};\
+			\cf3 JPen\cf0 .stroke;\
+		\};\
+		w.refresh;\
+		)\
+\
+		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 0.1.wait; \}\}.fork( AppClock );\
+		)\
+\
+	
+\f0\b\fs24 *stroke\
+
+\f1\b0 		outline the previous defined path. \
+
+\f2\fs18 		\
+		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf4 // set the Color\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .red;\
+			\cf3 JPen\cf0 .moveTo(200@100);\
+			\
+			\cf3 JPen\cf0 .lineTo(250@200);\
+			\cf3 JPen\cf0 .lineTo(300@200);\
+			\cf3 JPen\cf0 .lineTo(200@250);\
+			\cf3 JPen\cf0 .lineTo(100@200);\
+			\cf3 JPen\cf0 .lineTo(150@200);\
+			\cf3 JPen\cf0 .lineTo(200@100);\
+\
+			\cf3 JPen\cf0 .stroke\
+		\};\
+		w.refresh;\
+		)\
+		\
+	
+\f0\b\fs24 *fill\
+
+\f1\b0 		fill the previous defined path. \
+
+\f2\fs18 		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf4 // set the Color\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .red;\
+			\cf3 JPen\cf0 .moveTo(200@100);\
+\
+			\cf3 JPen\cf0 .lineTo(250@200);\
+			\cf3 JPen\cf0 .lineTo(300@200);\
+			\cf3 JPen\cf0 .lineTo(200@250);\
+			\cf3 JPen\cf0 .lineTo(100@200);\
+			\cf3 JPen\cf0 .lineTo(150@200);\
+			\cf3 JPen\cf0 .lineTo(200@100);\
+\
+			\cf3 JPen\cf0 .fill\
+		\};\
+		w.refresh;\
+		)\
+					\
+
+\f1\fs24 The following methods do NOT require separate calls to 
+\f0\b *stroke
+\f1\b0  or 
+\f0\b *fill
+\f1\b0 .\
+
+\f0\b \
+	*strokeRect(rect)\
+
+\f1\b0 		Strokes a rectangle into the window. 
+\f0\b rect
+\f1\b0  is an instance of 
+\f0\b [\ul Rect\ulnone ]
+\f1\b0 .\
+\
+		
+\f2\fs18 (\
+		w = \cf3 JSCWindow\cf0 ( \cf6 "strokeRect"\cf0 , \cf3 Rect\cf0 ( 128, 64, 360, 360 ));\
+		w.drawHook = \{\
+			\cf3 var\cf0  r;\
+			r = \cf3 Rect\cf0 ( 100, 100, 160, 80 );\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .black.alpha_( 0.8 );\
+			\cf3 JPen\cf0 .strokeRect( r );\
+		\};\
+		w.front;\
+		)\
+		\
+		
+\f1\fs24 Notice how the coordinates appear to lie 
+\f3\i between
+\f1\i0  two pixels not in a pixel's center, so\
+		the stroke appears blurred. You can avoid this behaviour by shifting the coordinates by 0.5, 0.5:\
+
+\f0\b \
+
+\f1\b0 		
+\f2\fs18 (\
+		w = \cf3 JSCWindow\cf0 ( \cf6 "strokeRect"\cf0 , \cf3 Rect\cf0 ( 128, 64, 360, 360 ));\
+		w.drawHook = \{\
+			\cf3 var\cf0  r;\
+			\cf3 JPen\cf0 .translate( 0.5, 0.5 );  \cf4 // !\cf0 \
+			r = \cf3 Rect\cf0 ( 100, 100, 160, 80 );\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .black.alpha_( 0.8 );\
+			\cf3 JPen\cf0 .strokeRect( r );\
+		\};\
+		w.front;\
+		)\
+
+\f0\b\fs24 \
+	*fillRect(rect)\
+
+\f1\b0 		Draws a filled rectangle into the window. 
+\f0\b rect
+\f1\b0  is an instance of 
+\f0\b [\ul Rect\ulnone ]
+\f1\b0 .\
+\
+		
+\f2\fs18 (\
+		w = \cf3 JSCWindow\cf0 ( \cf6 "fillRect"\cf0 , resizable: \cf3 false\cf0  );\
+		w.view.background = Color.white;\
+		w.drawHook = \{\
+			\cf3 var\cf0  r;\
+			200.do(\{\
+				\cf3 JPen\cf0 .color = \cf3 Color\cf0 .black.alpha_( 1.0.rand.pow( 6 ));\
+				\cf3 JPen\cf0 .fillRect( \cf3 Rect\cf0 ( 200.0.rand, 200.0.rand, 200.0.rand, 200.0.rand ));\
+			\});\
+		\};\
+		w.front;\
+		)
+\f1\fs24 \
+
+\f0\b \
+
+\f2\b0\fs18 		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 0.2.wait; \}\}.fork( AppClock );\
+		)\
+
+\f0\b\fs24 \
+	*strokeOval(rect)\
+
+\f1\b0 		Strokes an oval into the window. 
+\f0\b rect
+\f1\b0  is an instance of 
+\f0\b [\ul Rect\ulnone ]
+\f1\b0 .\
+		\
+		
+\f2\fs18 (\
+		w = \cf3 JSCWindow\cf0 (\cf6 "strokeOval"\cf0 , \cf3 Rect\cf0 (128, 64, 360, 360));\
+		w.drawHook = \{\
+			\cf3 var\cf0  h, v, r;\
+			v = h = 300.0;\
+			r = \cf3 Rect\cf0 (100, 100, 160, 80);\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .black.alpha_( 0.8 );\
+			\cf3 JPen\cf0 .strokeOval(r);\
+		\};\
+		w.front;\
+		)
+\f1\fs24 \
+\
+
+\f0\b 	*fillOval(rect)\
+
+\f1\b0 		Draws a filled oval into the window. 
+\f0\b rect
+\f1\b0  is an instance of 
+\f0\b [\ul Rect\ulnone ]
+\f1\b0 .\
+
+\f2\fs18 \
+
+\f1\fs24 		
+\f2\fs18 (\
+		w = \cf3 JSCWindow\cf0 ( \cf6 "fillOval"\cf0 , resizable: \cf3 false\cf0  );\
+		w.view.background = \cf3 Color\cf0 .black;\
+		w.drawHook = \{\
+			\cf3 var\cf0  r;\
+			200.do(\{\
+				\cf3 JPen\cf0 .color = \cf3 Color\cf0 .white.alpha_( 1.0.rand.pow( 6 ));\
+				\cf3 JPen\cf0 .fillOval( \cf3 Rect\cf0 ( 200.0.rand, 200.0.rand, 200.0.rand, 200.0.rand ));\
+			\});\
+		\};\
+		w.front;\
+		)
+\f1\fs24 \
+
+\f0\b \
+
+\f2\b0\fs18 		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 0.2.wait; \}\}.fork( AppClock );\
+		)\
+	\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 String Drawing Methods\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf0 	*stringAtPoint	\
+
+\f1\b0 		Draws a string left aligned from a given point. There are no line breaks,\
+		and the text is vertically aligned such that the given y position referes to\
+		the top of the text.\
+		\
+		
+\f2\fs18 (\
+		w = \cf3 JSCWindow\cf0  (\cf6 "stringAtPoint"\cf0 , \cf3 Rect\cf0 ( 128, 64, 360, 360 ), \cf3 false\cf0  );\
+		w.drawHook = \{\
+			\cf3 var\cf0  pt;\
+			\
+			\cf3 JPen\cf0 .font = \cf3 JFont\cf0 ( \cf6 "Monospaced"\cf0 , 16 );\
+			\cf3 JPen\cf0 .strokeColor = \cf3 Color\cf0 .red;\
+			\
+			12.do(\{\
+				pt = \cf3 Point\cf0 ( rrand( 10, 280 ), rrand( 10, 340 ));\
+				\cf3 JPen\cf0 .stringAtPoint( \cf6 "Evidence"\cf0 , pt );\
+				\cf3 JPen\cf0 .moveTo( pt.translate( -8 @  0 ));\
+				\cf3 JPen\cf0 .lineTo( pt.translate( -2 @  0 ));\
+				\cf3 JPen\cf0 .moveTo( pt.translate(  0 @ (-8) ));\
+				\cf3 JPen\cf0 .lineTo( pt.translate(  0 @ (-2) ));\
+				\cf3 JPen\cf0 .moveTo( pt.translate(  2 @ 0 ));\
+				\cf3 JPen\cf0 .lineTo( pt.translate(  8 @ 0 ));\
+				\cf3 JPen\cf0 .moveTo( pt.translate(  0 @ 2 ));\
+				\cf3 JPen\cf0 .lineTo( pt.translate(  0 @ 8 ));\
+				\cf3 JPen\cf0 .stroke;\
+			\});\
+		\};\
+		w.front;\
+		)
+\f1\fs24 \
+
+\f0\b \
+	*stringInRect		
+\f1\b0 \cf4 // draw string as paragraph in a box with left/top aligment
+\f0\b \cf0 \
+	*stringCenteredIn	
+\f1\b0 \cf4 // draw string as paragraph in a box with x-centered/y-centered aligment
+\f0\b \cf0 \
+	*stringLeftJustIn	
+\f1\b0 \cf4 // draw string as paragraph in a box with left/y-centered aligment
+\f0\b \cf0 \
+	*stringRightJustIn	
+\f1\b0 \cf4 // draw string as paragraph in a box with right/y-centered aligment
+\f0\b \cf0 \
+\
+
+\f2\b0\fs18 		(\
+		w = \cf3 JSCWindow\cf0 ( \cf6 "String in Rect"\cf0 , \cf3 Rect\cf0 ( 128, 64, 300, 560 ), \cf3 false\cf0  ).front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf3 var\cf0  rect, txt;\
+\
+			\cf4 // umlaute and accents don't work at the moment!\cf0 \
+			txt	= \cf6 "Il arrive que la realite soit trop complexe pour la transmission orale."\cf0 ;\
+			\cf3 JPen\cf0 .font = \cf3 JFont\cf0 ( \cf6 "SansSerif"\cf0 , 14 );\
+			\
+			\cf3 JPen\cf0 .strokeColor = \cf3 Color\cf0 .blue;\
+			rect	= \cf3 Rect\cf0 ( 50, 50, 200, 100 );\
+			\cf3 JPen\cf0 .stringInRect( txt, rect );\
+			\cf3 JPen\cf0 .strokeRect( rect );\
+\
+			rect = rect.moveBy( 0, rect.height + 20 );\
+			\cf3 JPen\cf0 .stringLeftJustIn( txt, rect );\
+			\cf3 JPen\cf0 .strokeRect( rect );\
+\
+			rect = rect.moveBy( 0, rect.height + 20 );\
+			\cf3 JPen\cf0 .stringCenteredIn( txt, rect );\
+			\cf3 JPen\cf0 .strokeRect( rect );\
+\
+			rect = rect.moveBy( 0, rect.height + 20 );\
+			\cf3 JPen\cf0 .stringRightJustIn( txt, rect );\
+			\cf3 JPen\cf0 .strokeRect( rect );\
+		\};\
+		w.refresh;\
+		)\
+
+\f0\b\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs28 \cf0 \
+Graphics State Methods\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+
+\f1\fs24 The following commands transform the graphics state, i.e. they effect all subsequent drawing commands. These transformations are cumulative, i.e. each command applies to the previous graphics state, 
+\f3\i not
+\f1\i0  the original one.\
+
+\f0\b \
+	*translate(x=0, y=0)\
+
+\f1\b0 		translate the coordinate system to have its origin moved by 
+\f0\b x
+\f1\b0 ,
+\f0\b y
+\f1\b0 \
+
+\f2\fs18 \
+		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf4 // set the Color\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .blue;\
+			\cf3 JPen\cf0 .translate(200,100);\
+			\
+			\cf4 // 0@0 is now 200@100\cf0 \
+			\cf3 JPen\cf0 .moveTo(0@0);\
+\
+			\cf3 JPen\cf0 .lineTo(50@100);\
+			\cf3 JPen\cf0 .lineTo(100@100);\
+			\cf3 JPen\cf0 .lineTo(0@150);\
+			\cf3 JPen\cf0 .lineTo(-100@100);\
+			\cf3 JPen\cf0 .lineTo(-50@100);\
+			\cf3 JPen\cf0 .lineTo(0@0);\
+\
+			\cf3 JPen\cf0 .stroke\
+		\};\
+		w.refresh;\
+		)\
+		\
+		\cf4 // cumulative translations\cf0 		\
+		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //		w.view.background_(Color.clear); // note: not a good idea with swing\cf0 \
+		w.drawHook = \{\
+			\cf4 // set the Color\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .black;\
+			\cf4 // draw 35 lines\cf0 \
+			35.do \{\
+				\cf3 JPen\cf0 .moveTo(0@0);\
+				\cf3 JPen\cf0 .lineTo(50@350);\
+				\cf4 // shift 10 to the right every time\cf0 \
+				\cf3 JPen\cf0 .translate(10, 0);\
+				\cf3 JPen\cf0 .stroke\
+			\}\
+		\};\
+		w.refresh;\
+		)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 	*scale (x=0, y=0)\
+		
+\f1\b0 Scales subsequent drawing. 
+\f0\b x
+\f1\b0  and 
+\f0\b y
+\f1\b0  are scaling factors (i.e. 1 is normal, 2 is double size, etc.).\
+
+\f2\fs18 	\
+		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf4 // set the Color\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .green;\
+			\cf3 JPen\cf0 .translate(200,100);\
+			\cf3 JPen\cf0 .scale(0.5, 2);\
+			\cf4 // you have to set a starting point...\cf0 \
+			\cf3 JPen\cf0 .moveTo(0@0);\
+\
+			\cf3 JPen\cf0 .lineTo(50@100);\
+			\cf3 JPen\cf0 .lineTo(100@100);\
+			\cf3 JPen\cf0 .lineTo(0@150);\
+			\cf3 JPen\cf0 .lineTo(-100@100);\
+			\cf3 JPen\cf0 .lineTo(-50@100);\
+			\cf3 JPen\cf0 .lineTo(0@0);\
+\
+			\cf3 JPen\cf0 .stroke\
+		\};\
+		w.refresh;\
+		)
+\f0\b\fs24 \
+\
+	*skew (x=0, y=0)\
+		
+\f1\b0 Skews subsequent drawing. 
+\f0\b x
+\f1\b0  and 
+\f0\b y
+\f1\b0  are skewing factors (i.e. 1 is normal).\
+
+\f2\fs18 		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf4 // set the Color\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .green( 0.5, 0.8 );\
+			\cf3 JPen\cf0 .translate(200,100);\
+			\cf3 JPen\cf0 .skew(0.5, 0.2);\
+			\cf4 // you have to set a starting point...\cf0 \
+			\cf3 JPen\cf0 .moveTo(0@0);\
+\
+			\cf3 JPen\cf0 .lineTo(50@100);\
+			\cf3 JPen\cf0 .lineTo(100@100);\
+			\cf3 JPen\cf0 .lineTo(0@150);\
+			\cf3 JPen\cf0 .lineTo(-100@100);\
+			\cf3 JPen\cf0 .lineTo(-50@100);\
+			\cf3 JPen\cf0 .lineTo(0@0);\
+\
+			\cf3 JPen\cf0 .fill\
+		\};\
+		w.refresh;\
+		)
+\f0\b\fs24 \
+\
+	*rotate (angle=0, x=0, y=0)\
+		
+\f1\b0 Rotates subsequent drawing around the 
+\f0\b Point
+\f1\b0  x@y by the amount 
+\f0\b angle 
+\f1\b0 in radians [0..2pi].\
+
+\f2\fs18 		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		c = 0;\
+		w.drawHook = \{\
+			\cf3 JPen\cf0 .translate(220, 200);\
+			\
+			10.do(\{\
+				\cf3 JPen\cf0 .translate(0,10);\
+				\cf4 // set the Color for all "real" drawing\cf0 \
+				\cf3 JPen\cf0 .color = \cf3 Color\cf0 .hsv( c.fold( 0, 1 ), 1, 1, 0.5 );\
+				\
+				\cf4 // you have to set a starting point...\cf0 \
+				\cf3 JPen\cf0 .moveTo(0@0);\
+	\
+				\cf3 JPen\cf0 .lineTo(50@100);\
+				\cf3 JPen\cf0 .lineTo(100@100);\
+				\cf3 JPen\cf0 .lineTo(0@150);\
+				\cf3 JPen\cf0 .lineTo(-100@100);\
+				\cf3 JPen\cf0 .lineTo(-50@100);\
+				\cf3 JPen\cf0 .lineTo(0@0);\
+	\
+				\cf3 JPen\cf0 .fill;\
+				\cf3 JPen\cf0 .rotate(0.2pi);\
+				\
+				c = c + 0.1;\
+			\});\
+			\
+			c = c - 0.95; \cf4 // for subsequent animation\cf0 \
+			\
+		\};\
+		w.refresh;\
+		)
+\f0\b\fs24 \
+
+\f2\b0\fs18 \
+		(\
+			\cf3 var\cf0  run = \cf3 true\cf0 ;\
+			w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // closing window stops animation\cf0 \
+			\{ while \{ run \} \{ w.refresh; 0.05.wait; \}\}.fork( AppClock );\
+		)\
+\
+
+\f0\b\fs24 	*matrix_ (array)\
+
+\f1\b0 		transforms 
+\f3\i (re-sets)
+\f1\i0  coordinate system, using the coefficients of an affine-transform matrix.\
+		\
+		array = [a, b, c, d, x, y]\
+			a	zoomX (1.0 = no zooming, 0.5 = zoom out, 2.0 = zoom in)\
+			b	shearingY (0.0 = no shearing)\
+			c	shearingX\
+			d	zoomY\
+			x	translateX (0.0 = no translation. positive values = move right, negative values = move left)\
+			y	translateY (0.0 = no translation. positive values = move down, negative values = move up)\
+			\
+		Successive calls of 
+\f2\fs20 \cf3 *matrix
+\f1\fs24 \cf0  concatenate with the previous matrix. Thus, if you\
+		need to undo the transforms, you should make use of the 
+\f2\fs20 \cf3 *use
+\f1\fs24 \cf0  method (see above).\
+			\
+
+\f2\fs18 		(\
+		\cf3 var\cf0  controlWindow, w;\
+		\cf3 var\cf0  r, a, b, c, d, matrix = [1, 0, 0, 1, 10, 10];\
+		\cf3 var\cf0  sliders, spex, name;\
+	\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		\
+		\cf4 // create a controller-window \cf0 \
+		controlWindow = \cf3 JSCWindow\cf0 (\cf6 "matrix controls"\cf0 , \cf3 Rect\cf0 (400,200,350,160));\
+		controlWindow.front;\
+	\
+		\cf4 // determine the rectangle to be drawn\cf0 \
+		r = \cf3 Rect\cf0 .fromPoints(a = 0 @ 0, c = 180 @ 180);\
+		b = r.leftBottom;\
+		d = r.rightTop;\
+	\
+		\cf4 // the drawHook\cf0 \
+		w.drawHook = \{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //			Color.red.set;\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .red;\
+		    	\cf3 JPen\cf0 .matrix = matrix;	\cf4 // 
+\fs44 !
+\fs18 \cf0 \
+		    	\cf3 JPen\cf0 .width = 5;\
+		    	\cf3 JPen\cf0 .strokeRect(r);\
+		    	\cf3 JPen\cf0 .strokeOval(r);\
+\cf4 //			Color.blue.set;\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .blue;\
+		    	\cf3 JPen\cf0 .width = 0.1;\
+		    	\cf3 JPen\cf0 .line(a, c);\
+		    	\cf3 JPen\cf0 .line(b, d);\
+		    	\cf3 JPen\cf0 .stroke;\
+		    \
+\cf4 //		    	"A".drawAtPoint(a - 6, Font("Helvetica-Bold", 12));\cf0 \
+\cf4 //		    	"B".drawAtPoint(b - 6, Font("Helvetica-Bold", 12));\cf0 \
+\cf4 //		    	"C".drawAtPoint(c - (0@6), Font("Helvetica-Bold", 12));\cf0 \
+\cf4 //		    	"D".drawAtPoint(d - (0@6), Font("Helvetica-Bold", 12));\cf0 \
+\cf4 //		    \cf0 \
+\cf4 //		    	"a matrix test".drawInRect(r.moveBy(50,50), Font("Helvetica", 10));\cf0 \
+\
+			\cf3 JPen\cf0 .font = \cf3 JFont\cf0 ( \cf6 "Helvetica-Bold"\cf0 , 12 );\
+			\cf3 JPen\cf0 .fillColor = \cf3 Color\cf0 .black;\
+		    	\cf3 JPen\cf0 .stringAtPoint( \cf6 "A"\cf0 , a - 6 );\
+		    	\cf3 JPen\cf0 .stringAtPoint( \cf6 "B"\cf0 , b - 6 );\
+		    	\cf3 JPen\cf0 .stringAtPoint( \cf6 "C"\cf0 , c - (0 @ 6) );\
+		    	\cf3 JPen\cf0 .stringAtPoint( \cf6 "D"\cf0 , d - (0 @ 6) );\
+		    \
+			\cf3 JPen\cf0 .font = \cf3 JFont\cf0 ( \cf6 "Helvetica-Bold"\cf0 , 10 );\
+		   	\cf3 JPen\cf0 .stringInRect( \cf6 "a matrix test"\cf0 , r.moveBy( 50, 50 ));\
+		\};\
+	\
+		controlWindow.view.decorator = sliders = \cf3 FlowLayout\cf0 (controlWindow.view.bounds);\
+		spex = [\
+			[0, 2.0].asSpec,\
+			[0, 2.0].asSpec,\
+			[0, 2.0].asSpec,\
+			[0, 2.0].asSpec,\
+			[0, 200.0].asSpec,\
+			[0, 200.0].asSpec\
+		];\
+		name = #[zoomX, shearingY, shearingX, zoomY, translateX, translateY];\
+		6.do \{ \cf3 |i|\cf0 \
+		    \cf3 JEZSlider\cf0 (controlWindow, 300 @ 22, name[i], spex[i], \{ \cf3 |ez|\cf0  \cf3 var\cf0  val;\
+		            val = ez.value;\
+		            [i, val.round(10e-4)].postln;\
+		            matrix.put(i, val);\
+		            w.refresh; \cf4 // reevaluate drawHook function\cf0 \
+		  	\}, matrix[i]);\
+		  	sliders.nextLine;\
+		\};\
+		w.refresh;\
+	)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 \
+\
+
+\f0\b 	*width_(width=1)\
+
+\f1\b0 		sets the width of the Pen for the whole stroke\
+
+\f2\fs18 		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf4 // set the Color\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //			Color.blue(0.5, 0.5).set;\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .blue( 0.5, 0.5 );\
+			\cf3 JPen\cf0 .translate(200,100);\
+			\cf3 JPen\cf0 .width = 10;\
+			\cf4 // you have to set a starting point...\cf0 \
+			\cf3 JPen\cf0 .moveTo(0@0);\
+\
+			\cf3 JPen\cf0 .lineTo(50@100);\
+			\cf3 JPen\cf0 .lineTo(100@100);\
+			\cf3 JPen\cf0 .lineTo(0@150);\
+			\cf3 JPen\cf0 .lineTo(-100@100);\
+			\cf3 JPen\cf0 .lineTo(-50@100);\
+			\cf3 JPen\cf0 .lineTo(0@0);\
+\
+			\cf3 JPen\cf0 .stroke\
+		\};\
+		w.refresh;\
+		)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 	*use (function)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1120\fi-1120\ql\qnatural
+
+\f1\b0 \cf0 		Draw 
+\f0\b function
+\f1\b0 , and then revert to the previous graphics state. This allows you to make complex transformations of the graphics state without having to explicitly revert to get back to 'normal'.\
+		\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 		(\
+		\cf4 // modified by an example of Stefan Wittwer\cf0 \
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf4 //paint origin\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .gray( 0, 0.5 );\
+			\cf3 JPen\cf0 .addArc(0@0, 20, 0, 2pi);\
+			\cf3 JPen\cf0 .fill;\
+			\cf3 JPen\cf0 .width = 10;\
+\
+			\cf3 JPen\cf0 .use \{ \cf4 // draw something complex...\cf0 \
+				\cf3 JPen\cf0 .width = 0.5;\
+				\cf3 JPen\cf0 .translate(100,100);\
+				\cf3 JPen\cf0 .color = \cf3 Color\cf0 .blue;\
+				\cf3 JPen\cf0 .addArc(0@0, 10, 0, 2pi);\
+				\cf3 JPen\cf0 .fill;\
+				20.do\{\
+					\cf3 JPen\cf0 .moveTo(0@0);\
+					\cf3 JPen\cf0 .lineTo(100@0);\
+					\cf3 JPen\cf0 .color = \cf3 Color\cf0 .red( 0.8, rrand( 0.7, 1 ));\
+					\cf3 JPen\cf0 .stroke;\
+					\cf3 JPen\cf0 .skew(0, 0.1);\
+				\};\
+			\};\
+			\
+			\cf4 // now go on with all params as before\cf0 \
+			\cf4 // translation, skewing, width, and color modifications do not apply\cf0 \
+			\cf3 JPen\cf0 .line(10@120, 300@120);\
+			\cf3 JPen\cf0 .stroke;\
+		\};\
+		w.refresh\
+		)\
+\
+
+\f0\b\fs24 	*path(function)\
+
+\f1\b0 		make a path, consisting of the drawing made in 
+\f0\b function.\
+
+\f1\b0 		
+\f0\b Unfortunately not working for now... \
+
+\f1\b0 		(there's no Meta_Pen-endPath which currently is used in this method)\
+
+\f0\b 		
+\f1\b0 \
+
+\f0\b 	*beginPath\
+		
+\f1\b0 Discard any previous path.
+\f0\b \
+		\
+		
+\f2\b0\fs18 \cf4 // incomplete arrow\cf0 \
+		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			\cf4 // set the Color\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .blue;\
+			\cf3 JPen\cf0 .translate(200,100);\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf7 			JPen.moveTo(0@0);\
+			JPen.lineTo(50@100);\
+			JPen.lineTo(100@100);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 			\cf4 // forget what we just drew (the pink lines)\cf0 \
+			\cf3 JPen\cf0 .beginPath;\
+\
+			\cf3 JPen\cf0 .moveTo(100@100);\
+			\cf3 JPen\cf0 .lineTo(0@150);\
+			\cf3 JPen\cf0 .lineTo(-100@100);\
+			\cf3 JPen\cf0 .lineTo(-50@100);\
+			\cf3 JPen\cf0 .lineTo(0@0);\
+\
+			\cf3 JPen\cf0 .stroke\
+		\};\
+		w.refresh;\
+		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 	*clip\
+		
+\f1\b0 Use the previously defined path as a clipping path. Successive calls of 
+\f2\fs20 \cf3 *clip
+\f1\fs24 \cf0  intersect  with the\
+		previous clipping. Thus, if you need to undo clippings, you must make use of the 
+\f2\fs20 \cf3 *use
+\f1\fs24 \cf0  method (see above).\
+		\
+
+\f2\fs18 		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+	       	\cf4 // outline the clipping path\cf0 \
+	       	\cf3 JPen\cf0 .addRect( \cf3 Rect\cf0 ( 110, 110, 180, 30 ));\
+	       	\cf3 JPen\cf0 .addRect( \cf3 Rect\cf0 ( 110, 145, 180, 30 ));\
+	       	\cf3 JPen\cf0 .addRect( \cf3 Rect\cf0 ( 110, 180, 180, 30 ));\
+	       	\cf3 JPen\cf0 .addRect( \cf3 Rect\cf0 ( 110, 215, 180, 30 ));\
+			\cf4 // now clip\cf0 \
+			\cf3 JPen\cf0 .clip;\
+			\
+			\cf4 // everything else we draw is now clipped\cf0 \
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .yellow;\
+			\cf3 JPen\cf0 .fillRect(\cf3 Rect\cf0 (0,0,400,400));\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .red;\
+			\cf3 JPen\cf0 .moveTo(200@100);\
+			\
+			\cf3 JPen\cf0 .lineTo(250@200);\
+			\cf3 JPen\cf0 .lineTo(300@200);\
+			\cf3 JPen\cf0 .lineTo(200@250);\
+			\cf3 JPen\cf0 .lineTo(100@200);\
+			\cf3 JPen\cf0 .lineTo(150@200);\
+			\
+			\cf3 JPen\cf0 .fill;\
+		\};\
+		w.refresh;\
+		)
+\f1\fs24 \
+
+\f0\b \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 	*setSmoothing\
+		
+\f1\b0 Turn on/off anti-aliasing.\
+		
+\f0\b WARNING:
+\f1\b0  non-antialiased string drawing currently looks\
+		very different in cocoa and swing (much thicker in swing).\
+		\
+
+\f2\fs18 		(\
+		w = \cf3 JSCWindow\cf0 .new.front;\
+		w.view.background_(\cf3 Color\cf0 .white);\
+		w.drawHook = \{\
+			JPen.width = 2;\
+			2.do(\{ arg i;\
+				JPen.setSmoothing( i == 1 );\
+				JPen.strokeOval( Rect( 100, 100, 50, 50 ));\
+				JPen.moveTo( 100 @ 200 );\
+				JPen.quadCurveTo( 200 @ 300, 100 @ 300 );\
+				JPen.stroke;\
+				JPen.translate( 100, 0 );\
+			\});\
+		\};\
+		w.refresh;\
+		)
+\f1\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs28 \cf0 \
+Examples\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 (\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // simple rotating and scaling\cf0 \
+	w = \cf3 JSCWindow\cf0 (\cf6 "Pen Rotation and Scaling"\cf0 , \cf3 Rect\cf0 (128, 64, 360, 360));\
+	w.drawHook = \{\
+		\cf3 var\cf0  h, v;\
+		v = h = 300.0;\
+		\cf3 JPen\cf0 .use \{\
+			\cf4 // use the same rect for everything, just scale and rotate\cf0 \
+			\cf3 var\cf0  r = \cf3 Rect\cf0 (0,0,200,80);\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .black;\
+			\cf4 // offset all subsequent co-ordinates\cf0 \
+			\cf3 JPen\cf0 .translate(80,20);\
+			\cf3 JPen\cf0 .fillRect(r);\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .red;\
+			\cf4 // scale all subsequent co-ordinates\cf0 \
+			\cf3 JPen\cf0 .scale(0.8, 0.8);\
+			\cf3 JPen\cf0 .translate(8,10);\
+			\cf4 // rotate all subsequent co-ordinates\cf0 \
+			\cf3 JPen\cf0 .rotate(0.1pi);\
+			\cf3 JPen\cf0 .fillRect(r);\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .blue;\
+			\cf4 // lather, rinse, repeat\cf0 \
+			\cf3 JPen\cf0 .scale(0.8, 0.8);\
+			\cf3 JPen\cf0 .rotate(0.1pi);\
+			\cf3 JPen\cf0 .width = 3;\
+			\cf3 JPen\cf0 .strokeRect(r);\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .yellow( 1, 0.5 );\
+			\cf3 JPen\cf0 .scale(0.8, 0.8);\
+			\cf3 JPen\cf0 .rotate(0.1pi);\
+			\cf3 JPen\cf0 .translate(20,-20);\
+			\cf3 JPen\cf0 .fillOval(r);\
+		\}\
+	\};\
+\
+	w.refresh;\
+	w.front;\
+)\
+\
+\cf4 // redraw at random interval\cf0 \
+\cf4 // different every time\cf0 \
+(\
+\cf3 var\cf0  w, run = \cf3 true\cf0 ;\
+w = \cf3 JSCWindow\cf0 (\cf6 "my name is... panel"\cf0 , \cf3 Rect\cf0 (128, 64, 800, 800));\
+w.view.background = \cf3 Color\cf0 .white;\
+w.onClose = \{ run = \cf3 false\cf0 ; \};\
+w.front;\
+w.drawHook = \{\
+	\cf3 JPen\cf0 .use \{\
+		\cf3 JPen\cf0 .width = 0.2;\
+		400.do \{\
+			\cf3 JPen\cf0 .beginPath;\
+			\cf3 JPen\cf0 .moveTo(\cf3 Point\cf0 (10.rand * 80 + 40, 10.rand * 80 + 40));\
+			\cf3 JPen\cf0 .lineTo(\cf3 Point\cf0 (10.rand * 80 + 40, 10.rand * 80 + 40));\
+			\cf3 JPen\cf0 .stroke;\
+		\};\
+	\};\
+\};\
+\
+\{ while \{ run \} \{ w.refresh; 1.0.rand.wait \} \}.fork(\cf3 AppClock\cf0 )\
+\
+)\
+\
+(\
+\cf3 var\cf0  w, run = \cf3 true\cf0 ;\
+w = \cf3 JSCWindow\cf0 (\cf6 "my name is... panel"\cf0 , \cf3 Rect\cf0 (128, 64, 800, 500));\
+w.view.background = \cf3 Color\cf0 .white;\
+w.onClose = \{ run = \cf3 false\cf0 ; \};\
+w.front;\
+w.drawHook = \{\
+	\cf3 JPen\cf0 .use \{\
+		\cf3 JPen\cf0 .width = 2;\
+		80.do \{\
+			\cf3 JPen\cf0 .width = rrand(0,4) + 0.5;\
+			\cf3 JPen\cf0 .beginPath;\
+			\cf3 JPen\cf0 .moveTo(\cf3 Point\cf0 (800.rand, 500.rand));\
+			\cf3 JPen\cf0 .lineTo(\cf3 Point\cf0 (800.rand, 500.rand));\
+			\cf3 JPen\cf0 .stroke;\
+		\};\
+	\};\
+\};\
+\
+\{ while \{ run \} \{ w.refresh; 1.0.rand.wait \} \}.fork(\cf3 AppClock\cf0 )\
+\
+)\
+\
+\cf4 // Animation\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // Uses random seed to 'store' data\cf0 \
+\cf4 // By reseting the seed each time the same random values and shapes are generated for each 'frame'\cf0 \
+\cf4 // These can then be subjected to cumulative rotation, etc., by simply incrementing the phase var.\cf0 \
+(\
+\cf4 // By James McCartney (slightly modified)\cf0 \
+\cf3 var\cf0  w, h = 700, v = 700, seed, run = \cf3 true\cf0 , phase = 0, bg;\
+w = \cf3 JSCWindow\cf0 (\cf6 "wedge"\cf0 , \cf3 Rect\cf0 (40, 40, h, v), \cf3 false\cf0 );\
+bg = \cf3 Color\cf0 .rand(0,0.3);\
+w.onClose = \{ run = \cf3 false\cf0  \}; \cf4 // stop the thread on close\cf0 \
+w.front;\
+\cf4 // store an initial seed value for the random generator\cf0 \
+seed = \cf3 Date\cf0 .seed;\
+w.drawHook = \{\
+	\cf3 JPen\cf0 .width = 2;\
+	\cf3 JPen\cf0 .use \{\
+		\cf4 // reset this thread's seed for a moment\cf0 \
+		\cf3 thisThread\cf0 .randSeed = \cf3 Date\cf0 .seed;\
+		\cf4 // now a slight chance of a new seed or background color\cf0 \
+		if (0.006.coin) \{ seed = \cf3 Date\cf0 .seed; \};\
+		if (0.02.coin) \{ bg = \cf3 Color\cf0 .rand(0,0.3); \};\
+		JPen.fillColor = bg;\
+		\cf3 JPen\cf0 .fillRect( \cf3 Rect\cf0 ( 0, 0, h, v ));  \cf4 // preferably do this rather than switching w.view.background\cf0 \
+		\cf4 // either revert to the stored seed or set the new one\cf0 \
+		\cf3 thisThread\cf0 .randSeed = seed;\
+		\cf4 // the random values below will be the same each time if the seed has not changed\cf0 \
+		\cf4 // only the phase value has advanced\cf0 \
+		\cf3 JPen\cf0 .translate(h/2, v/2);\
+		\cf4 // rotate the whole image\cf0 \
+		\cf4 // negative random values rotate one direction, positive the other\cf0 \
+		\cf3 JPen\cf0 .rotate(phase * 1.0.rand2);\
+		\cf4 // scale the rotated y axis in a sine pattern\cf0 \
+		\cf3 JPen\cf0 .scale(1, 0.3 * sin(phase * 1.0.rand2 + 2pi.rand) + 0.5 );\
+		\cf4 // create a random number of annular wedges\cf0 \
+		rrand(6,24).do \{\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .rand( 0.0, 1.0 ).alpha_( rrand( 0.1, 0.7 ));\
+			\cf3 JPen\cf0 .beginPath;\
+			\cf3 JPen\cf0 .addAnnularWedge(\cf3 Point\cf0 (0,0), a = rrand(60,300), a + 50.rand2, 2pi.rand \
+				+ (phase * 2.0.rand2), 2pi.rand);\
+			if (0.5.coin) \{\cf3 JPen\cf0 .stroke\}\{\cf3 JPen\cf0 .fill\};\
+		\};\
+	\};\
+\};\
+\
+\cf4 // fork a thread to update 20 times a second, and advance the phase each time\cf0 \
+\{ while \{ run \} \{ w.refresh; 0.05.wait; phase = phase + 0.01pi;\} \}.fork(\cf3 AppClock\cf0 )\
+\
+)\
+\
+(\
+\cf3 var\cf0  w, phase = 0, seed = \cf3 Date\cf0 .seed, run = \cf3 true\cf0 ;\
+w = \cf3 JSCWindow\cf0 (\cf6 "my name is... panel"\cf0 , \cf3 Rect\cf0 (128, 64, 800, 800));\
+w.view.background = \cf3 Color\cf0 .blue(0.4);\
+w.onClose = \{ run = \cf3 false\cf0 ; \};\
+w.front;\
+w.drawHook = \{\
+	\cf3 JPen\cf0 .use \{\
+		if (0.02.coin) \{ seed = \cf3 Date\cf0 .seed; \};\
+		\cf3 thisThread\cf0 .randSeed = seed;\
+\cf4 //		Color.white.set;\cf0 \
+		\cf3 JPen\cf0 .color = \cf3 Color\cf0 .white;\
+		200.do \{\
+			\cf3 var\cf0  a = 4.rand;\
+			\cf3 var\cf0  b = 24.rand;\
+			\cf3 var\cf0  r1 = 230 + (50 * a);\
+			\cf3 var\cf0  a1 = 2pi / 24 * b + phase;\
+			\cf3 var\cf0  r2 = 230 + (50 * (a + 1.rand2).fold(0,3));\
+			\cf3 var\cf0  a2 = 2pi / 24 * (b + (3.rand2)).wrap(0,23) + phase;\
+			\cf3 JPen\cf0 .width = 0.2 + 1.0.linrand;\
+			\cf3 JPen\cf0 .beginPath;\
+			\cf3 JPen\cf0 .moveTo(\cf3 Polar\cf0 (r1, a1).asPoint + \cf3 Point\cf0 (400,400));\
+			\cf3 JPen\cf0 .lineTo(\cf3 Polar\cf0 (r2, a2).asPoint + \cf3 Point\cf0 (400,400));\
+			\cf3 JPen\cf0 .stroke;\
+		\};\
+		\cf3 thisThread\cf0 .randSeed = \cf3 Date\cf0 .seed;\
+		40.do \{\
+			\cf3 var\cf0  a = 4.rand;\
+			\cf3 var\cf0  b = 24.rand;\
+			\cf3 var\cf0  r1 = 230 + (50 * a);\
+			\cf3 var\cf0  a1 = 2pi / 24 * b + phase;\
+			\cf3 var\cf0  r2 = 230 + (50 * (a + 1.rand2).fold(0,3));\
+			\cf3 var\cf0  a2 = 2pi / 24 * (b + (3.rand2)).wrap(0,23) + phase;\
+			\cf3 JPen\cf0 .width = 0.2 + 1.5.linrand;\
+			\cf3 JPen\cf0 .beginPath;\
+			\cf3 JPen\cf0 .moveTo(\cf3 Polar\cf0 (r1, a1).asPoint + \cf3 Point\cf0 (400,400));\
+			\cf3 JPen\cf0 .lineTo(\cf3 Polar\cf0 (r2, a2).asPoint + \cf3 Point\cf0 (400,400));\
+			\cf3 JPen\cf0 .stroke;\
+		\};\
+	\};\
+\};\
+\
+\{ while \{ run \} \{ w.refresh; 0.1.wait; phase = phase + (2pi/(20*24)) \} \}.fork(\cf3 AppClock\cf0 )\
+\
+)\
+\
+\
+\cf4 // note: on a fast machine try\cf0 \
+\cf4 // ... and replace the loop by 600.do\cf0 \
+\cf4 // hmmmmm!\cf0 \
+(\
+\cf3 var\cf0  w, h = 800, v = 600, seed = \cf3 Date\cf0 .seed, phase = 0, zoom = 0.7, zoomf = 1, run = \cf3 true\cf0 ;\
+w = \cf3 JSCWindow\cf0 (\cf6 "affines"\cf0 , \cf3 Rect\cf0 (40, 40, h, v), resizable: \cf3 false\cf0  );\
+w.view.background = \cf3 Color\cf0 .blue(0.4);\
+w.onClose = \{ run = \cf3 false\cf0  \};\
+w.front;\
+w.drawHook = \{\
+	\cf3 thisThread\cf0 .randSeed = \cf3 Date\cf0 .seed;\
+	if (0.0125.coin) \{ seed = \cf3 Date\cf0 .seed; phase = 0; zoom = 0.7; zoomf = exprand(1/1.01, 1.01); \}\
+	\{ phase = phase + (2pi/80); zoom = zoom * zoomf; \};\
+	\cf3 thisThread\cf0 .randSeed = seed;\
+	\cf3 JPen\cf0 .use \{\
+		\cf3 var\cf0  p1 = \cf3 Point\cf0 (20.rand2 + (h/2), 20.rand2 + (v/2));\
+		\cf3 var\cf0  p2 = \cf3 Point\cf0 (20.rand2 + (h/2), 20.rand2 + (v/2));\
+		\cf3 var\cf0  xscales = \{ exprand(2** -0.1, 2**0.1) \} ! 2;\
+		\cf3 var\cf0  yscales = \{ exprand(2** -0.1, 2**0.1) \} ! 2;\
+		\cf3 var\cf0  xlates = \{ 8.rand2 \} ! 2;\
+		\cf3 var\cf0  ylates = \{ 8.rand2 \} ! 2;\
+		\cf3 var\cf0  rots = \{ 2pi.rand + phase \} ! 2;\
+		\cf3 var\cf0  xform;\
+		xscales = (xscales ++ (1/xscales)) * 1;\
+		yscales = (yscales ++ (1/yscales)) * 1;\
+		xlates = xlates ++ xlates.neg;\
+		ylates = ylates ++ xlates.neg;\
+		rots = rots ++ rots.neg;\
+		xform = \{\cf3 |i|\cf0  [xlates[i], ylates[i], rots[i], xscales[i], yscales[i]] \} ! 4;\
+\cf4 //		Color.grey(1,0.5).set;\cf0 \
+		\cf3 JPen\cf0 .color = \cf3 Color\cf0 .grey( 1, 0.5 );\
+		\cf3 JPen\cf0 .width = 8.linrand + 1;\
+		\cf3 JPen\cf0 .translate(400, 400);\
+		\cf3 JPen\cf0 .scale(zoom, zoom);\
+		\cf3 JPen\cf0 .translate(-400, -400);\
+\cf4 // JJJ OK this is too heavy\cf0 \
+\cf4 //		1200.do\cf0 \
+		200.do \{\
+			\cf3 var\cf0  p, rot, xlate, ylate, xscale, yscale;\
+			\cf3 JPen\cf0 .width = 8.linrand + 1;\
+			\cf3 JPen\cf0 .beginPath;\
+			#rot, xlate, ylate, xscale, yscale = xform.choose;\
+			\cf3 JPen\cf0 .translate(xlate, ylate);\
+			\cf3 JPen\cf0 .rotate(rot, h/2, v/2);\
+			\cf3 JPen\cf0 .scale(xscale, yscale);\
+				\cf3 JPen\cf0 .moveTo(p1);\
+				\cf3 JPen\cf0 .lineTo(p2);\
+			\cf3 JPen\cf0 .stroke;\
+		\};\
+	\};\
+\};\
+\
+\{ while \{ run \} \{ w.refresh; 0.05.wait; \} \}.fork(\cf3 AppClock\cf0 )\
+\
+)
+\f1\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs28 \cf0 More Examples
+\fs26 \cf4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf4 \
+// gimmick by nick collins (from some sc-users list posting):\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 (\
+	\cf3 var\cf0  linetext, drawletter;\
+	\cf3 var\cf0  w, h = 800, v = 60, seed = \cf3 Date\cf0 .seed, run = \cf3 true\cf0 ;\
+	\cf3 var\cf0  time, name, sourcestring;\
+	\cf3 var\cf0  yellowness, penwidth;\
+\
+	\cf4 //name=[\\s,\\u,\\p,\\e,\\r,\\c,\\o,\\l,\\l,\\i,\\d,\\e,\\r];\cf0 \
+	\cf4 //sourcestring= "any lower case text";\cf0 \
+\
+	sourcestring= \cf6 "welcome to supercollider"\cf0 ;\
+\
+	name=\cf3 Array\cf0 .fill(sourcestring.size,\{\cf3 arg\cf0  i; sourcestring[i].asSymbol\});\
+\
+	time=0;\
+\
+	linetext=(\cf5 'a'\cf0 :[[[0,1],[0.5,0]],[[0.5,0],[1,1]],[[0.25,0.5],[0.75,0.5]]],\cf5 'b'\cf0 :[[[0,1],[0,0]],[[0,1],[1,1]],[[0,0],[1,0]],[[0,0.5],[0.75,0.5]],[[0.75,0.5],[1,0.75]],[[0.75,0.5],[1,0.25]],[[1,0.75],[1,1]],[[1,0.25],[1,0]]],\cf5 'c'\cf0 :[[[0,1],[0,0]],[[0,0],[1,0]],[[0,1],[1,1]]],\cf5 'd'\cf0 :[[[0,1],[0,0]],[[0,0],[0.75,0]],[[0,1],[0.75,1]],[[0.75,1],[1,0.75]],[[0.75,0],[1,0.25]],[[1,0.25],[1,0.75]]],\cf5 'e'\cf0 :[[[0,0],[0,1]],[[0,0],[1,0]],[[0,1],[1,1]],[[0,0.5],[1,0.5]]],\cf5 'f'\cf0 :[[[0,0],[0,1]],[[0,0],[1,0]],[[0,0.5],[1,0.5]]],\cf5 'g'\cf0 :[[[0,1],[0,0]],[[0,0],[1,0]],[[0,1],[1,1]],[[1,1],[1,0.5]],[[0.5,0.5],[1,0.5]]],\cf5 'h'\cf0 :[[[0,1],[0,0]],[[0,0.5],[1,0.5]],[[1,1],[1,0]]],\cf5 'i'\cf0 :[[[0,0],[1,0]],[[0.5,0],[0.5,1]],[[0,1],[1,1]]],\cf5 'j'\cf0 :[[[0,0],[1,0]],[[0.5,0],[0.5,1]],[[0,1],[0.5,1]]],\cf5 'k'\cf0 :[[[0,1],[0,0]],[[0,0.5],[1,1]],[[0,0.5],[1,0]]],\cf5 'l'\cf0 :[[[0,1],[0,0]],[[0,1],[1,1]]],\cf5 'm'\cf0 :[[[0,1],[0,0]],[[0,0],[0.5,0.5]],[[0.5,0.5],[1,0]],[[1,0],[1,1]]],\cf5 'n'\cf0 :[[[0,1],[0,0]],[[0,0],[1,1]],[[1,1],[1,0]]],\cf5 'o'\cf0 :[[[0,1],[0,0]],[[0,0],[1,0]],[[0,1],[1,1]],[[1,0],[1,1]]],\cf5 'p'\cf0 :[[[0,0],[0,1]],[[0,0],[1,0]],[[0,0.5],[1,0.5]],[[1,0],[1,0.5]]],\cf5 'q'\cf0 :[[[0,0],[0,0.75]],[[0,0],[0.75,0]],[[0,0.75],[0.75,0.75]],[[0.75,0],[0.75,0.75]],[[0.5,0.5],[1,1]]],\cf5 'r'\cf0 :[[[0,0],[0,1]],[[0,0],[1,0]],[[0,0.5],[1,0.5]],[[1,0],[1,0.5]],[[0,0.5],[1,1]]],\cf5 's'\cf0 :[[[0,0],[0,0.5]],[[0,0],[1,0]],[[0,1],[1,1]],[[0,0.5],[1,0.5]],[[1,0.5],[1,1]]],\cf5 't'\cf0 :[[[0,0],[1,0]],[[0.5,0],[0.5,1]]],\cf5 'u'\cf0 :[[[0,1],[0,0]],[[0,1],[1,1]],[[1,0],[1,1]]],\cf5 'v'\cf0 :[[[0,0],[0.5,1]],[[0.5,1],[1,0]]],\cf5 'w'\cf0 :[[[0,0],[0.25,1]],[[0.25,1],[0.5,0.5]],[[0.5,0.5],[0.75,1]],[[0.75,1],[1,0]]],\cf5 'x'\cf0 :[[[0,0],[1,1]],[[0,1],[1,0]]],\cf5 'y'\cf0 :[[[0,0],[0.5,0.5]],[[0.5,0.5],[1,0]],[[0.5,0.5],[0.5,1]]],\cf5 'z'\cf0 :[[[0,1],[1,0]],[[0,0],[1,0]],[[0,1],[1,1]]],(\cf6 " "\cf0 .asSymbol):[[[0,1],[1,1]],[[0,0.8],[0,1]],[[1,0.8],[1,1]]]);\
+\
+	w = \cf3 JSCWindow\cf0 (\cf6 "welcome"\cf0 , \cf3 Rect\cf0 (40, 500, h, v), resizable: \cf3 false\cf0  );\
+	w.view.background = \cf3 Color\cf0 .blue(0.5);\
+	w.onClose = \{ run = \cf3 false\cf0  \};\
+	w.front;\
+\
+	drawletter= \{ \cf3 arg\cf0  which, startx, starty, xscale=100, yscale,prop=1.0;\
+		\cf3 var\cf0  data;\
+		\
+		yscale= yscale ? xscale;\
+		data= linetext[which];\
+		prop=(round((data.size)*prop).asInteger).max(1);\
+		prop.do(\{ \cf3 arg\cf0  i;\
+			\cf3 var\cf0  val=data[i];\
+			\cf3 JPen\cf0 .beginPath;\
+			\cf3 JPen\cf0 .line( \cf3 Point\cf0 ( startx + ( xscale * val[ 0 ][ 0 ]), starty + (yscale * val[ 0 ][ 1 ])),\
+					  \cf3 Point\cf0 ( startx + (xscale * val[ 1 ][ 0 ]), starty + (yscale * val[ 1 ][ 1 ])));\
+			\cf3 JPen\cf0 .stroke;\
+		\});\
+	\};\
+\
+	yellowness=rrand(0.7,0.9);\
+	penwidth=rrand(2,3);\
+\
+	w.drawHook = \{\
+		\cf3 JPen\cf0 .use \{\
+			\cf3 var\cf0  xoscil, xsizoscil,yoscil, todraw, usedtime;\
+\
+			\cf3 JPen\cf0 .width= penwidth;\
+			\cf3 JPen\cf0 .color = \cf3 Color\cf0 .yellow( yellowness );\
+			usedtime=time.min(1.0); \
+			todraw=(round((name.size)*usedtime).asInteger).max(1); \
+			todraw.do(\{ \cf3 arg\cf0  j; \
+				xoscil= sin(2*pi*time+(j*pi*0.13))*140/(1+(10*time)); \
+				yoscil= sin(2*pi*time+(j*pi*0.03))*200/(1+(200*time)); \
+				xsizoscil= time*5+5; \
+				drawletter.value( name[ j ], 50 + (25 * j) + xoscil, 10 + yoscil, xsizoscil, xsizoscil, usedtime); \
+			\});\
+		\};\
+	\};\
+\
+	\{\
+		while \{ time<2.0 \} \{\
+			w.refresh;\
+			time=(time+0.025); \cf4 //%2.0;\cf0 \
+			0.05.wait;\
+		\}\
+	 \}.fork; \cf4 // (AppClock);\cf0 \
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf4 \
+// funcadelics from Swiki 
+\f2\b0\fs18 (uses addField method from PenExtensions)\
+// not very smooth on slower computers ;-(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 (\
+	\cf3 var\cf0  a, w, i=0, run=\cf3 true\cf0 , cfunc, lfunc;\
+	a = \cf3 Array\cf0 .fill2D(10, 20, \{ \cf3 arg\cf0  i, j; (i & j + i) % j  / 10 \});\
+	\
+	w = \cf3 JSCWindow\cf0 (\cf6 "si"\cf0 , \cf3 Rect\cf0 (128, 164, 460, 460), resizable: \cf3 false\cf0  );\
+	w.view.background = \cf3 Color\cf0 .black;\
+	cfunc = \{ \cf3 |val|\cf0  \cf3 Color\cf0 (\
+				0.2*i.fold(0, 0.4), \
+				val*i.fold(0, val.wrap(0, 0.4)), \
+				val*i.fold(0, 1.1), \
+				0.5\
+				) \
+	\};\
+	lfunc = \{\cf3 |val|\cf0   1/ val ** i.fold(0, 1.1) * i.fold(val,2) * 0.5 \};\
+	w.drawHook = \{ \
+				i = i + 0.01;\
+				\cf3 JPen\cf0 .rotate(i, 240, 240);\
+				\cf3 JPen\cf0 .translate(100,100);\
+				\cf3 JPen\cf0 .addField(a, \cf3 Rect\cf0 (0, 0, 200, 200), \cf5 \\fillOval\cf0 , cfunc, lfunc) \
+	\};\
+	w.front;\
+	w.onClose = \{ run = \cf3 false\cf0  \};\
+	\{ while \{ run \} \{ w.refresh; 0.05.wait; \} \}.fork; \cf4 // (AppClock);\cf0 \
+)\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf4 // redFrik drawings\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 	\ul http://swiki.hfbk-hamburg.de:8888/MusicTechnology/833\ulnone \
+	\
+	you'll have to replace 
+\f2\fs20 \cf3 dup( 20000 )
+\f1\fs24 \cf0  with 
+\f2\fs20 \cf3 dup( 2000 )
+\f1\fs24 \cf0 , after all there's way too much\
+	OSC traffic and probably Java2D being slower than native cocoa painting ...
+\f2\fs18 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 -------------------------------------------------------------------------------------------------------\cf4 \
+\cf0 NodeBox	vs.	SC3 
+\f1\b0 (modified from a mailinglist-post of James McCartney)
+\f0\b \
+-------------------------------------------------------------------------------------------------------\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f4\b0 \cf0 rect()		\cf3 JPen\cf0 .strokeRect, \cf3 JPen\cf0 .fillRect\
+oval()		\cf3 JPen\cf0 .strokeOval, \cf3 JPen\cf0 .fillOval\
+line()		\cf3 JPen\cf0 .line -- or use \cf3 JPen\cf0 .moveTo, \cf3 JPen\cf0 .lineTo\
+arrow()\
+star()\
+\
+beginpath()	\cf3 JPen\cf0 .beginPath\
+moveto()		\cf3 JPen\cf0 .moveTo\
+lineto()		\cf3 JPen\cf0 .lineTo\
+curveto()		not now\
+endpath()		\cf3 JPen\cf0 .stroke, \cf3 JPen\cf0 .fill \
+			\cf4 // (paths don't need to be stored as data because you can compose them functionally).\cf0 \
+drawpath()	\cf3 JPen\cf0 .stroke, \cf3 JPen\cf0 .fill\
+beginclip()\
+endclip()\
+\
+transform()	\cf4 // -- not needed since rotate lets you specify the center point.\cf0 \
+translate()	\cf3 JPen\cf0 .translate\
+rotate()		\cf3 JPen\cf0 .rotate\
+scale()		\cf3 JPen\cf0 .scale\
+skew()		\cf3 JPen\cf0 .skew\
+push()		\cf3 JPen\cf0 .push		\cf4 // private method ; see JPen.use instead\cf0 \
+pop()		\cf3 JPen\cf0 .pop			\cf4 // private method ; see JPen.use instead\cf0 \
+reset()		\cf3 JPen\cf0 .matrix = [ 1, 0, 0, 1, 0, 0 ]\
+\
+colormode()	not necessary use hsv or rgb as needed. missing \cf3 CMYK\cf0  though. easy to add.\
+color()		\cf3 Color\cf0 .hsv(h,s,v) or \cf3 Color\cf0 (r,g,b)\
+\cf4 //fill()		color.setFill\cf0 \
+fill()			\cf3 JPen\cf0 .fillColor_\
+nofill()		use \cf3 JPen\cf0 .stroke or \cf3 JPen\cf0 .fill as needed.\
+\cf4 //stroke()		color.setStroke\cf0 \
+stroke()		\cf3 JPen\cf0 .strokeColor_\
+nostroke()		use \cf3 JPen\cf0 .stroke or \cf3 JPen\cf0 .fill as needed.\
+strokewidth()	\cf3 JPen\cf0 .width_\
+\
+font()		\cf3 JPen\cf0 .font = \cf3 JFont\cf0 (name, size)\
+fontsize()		\cf3 JPen\cf0 .font =\cf3  JFon\cf0 t(name, size)\
+\cf4 //text()		string.drawAtPoint\cf0 \
+text()		\cf3 JPen\cf0 .stringAtPoint\
+textpath()	\
+textwidth()	string.bounds -- currently commented out but should work once reenabled.\
+textheight()	string.bounds	\cf4 // XXX NOT WORKING FOR SWINGOSC\cf0 \
+textmetrics()\
+lineheight()\
+\cf4 //align()		use string.drawCenteredIn, string.drawLeftJustIn, string.drawRightJustIn\cf0 \
+align()		use \cf3 JPen\cf0 .stringCenteredIn, \cf3 JPen\cf0 .stringLeftJustIn, \cf3 JPen\cf0 .stringRightJustIn\
+\
+image()		not yet\
+imagesize()	not yet\
+\
+\cf4 //-- all of these are covered by other mechanisms in SC:\
+\cf0 size()\
+\cf3 var\cf0 ()\
+random()\
+choice()\
+grid()\
+open()\
+files()\
+autotext()\
+}

@@ -1,0 +1,218 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red191\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of SCTextView. last mod: 09-feb-07 sciss\
+Also refer to [\ul \ulc2 JSCView\ulnone ] for different behaviour affecting all widgets\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	
+\f0\b \
+different behaviour\
+		\
+extended functionality\
+
+\f1\b0 	caretColor_			colour of the cursor (useful for dark backgrounds)\
+	openURL				loads a text file\
+	action_				action function is called whenever text is entered, removed or caret moved\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 \
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	textBounds				not yet implemented\
+	usesTabToFocusNextView	not yet implemented\
+	enterInterpretsSelection	not yet implemented\
+	hyperlinks				should add some action function to react to clicks on hyperlinks\
+	mouseDownAction		called with the regular arguments, not special cocoa clickPos\
+	string_				doesn't clear previously used style, there should be a way to clear it\
+	text transmission			some ascii characters are sucked on Linux when sending back from the server\
+						(have seen this with HTML files). you'll get "Yukk" messages, indicating that\
+						the text representation on the client (SuperCollider) might be wrong\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+JSCTextView			
+\fs30 a text editor
+\f2\b0\fs18 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b\fs24 \cf0 Note: please use the abstraction layer GUI.textView if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs24 \cf0 	\
+	superclass: JSCView\
+	see also: [\ul Document\ulnone ]\
+	\
+	*new(window, bounds);\
+	
+\f1\b0 	\
+	
+\f0\b string_
+\f1\b0 			set the text
+\f0\b \
+
+\f1\b0 	
+\f0\b string
+\f1\b0 			get the text\
+	
+\f0\b setString(string, rangestart, rangesize)
+\f1\b0 			\
+					set text into a range 	
+\f0\b \
+
+\f1\b0 \
+	
+\f0\b selectedString
+\f1\b0 		get the selected text only
+\f0\b \
+
+\f1\b0 	
+\f0\b selectionStart
+\f1\b0 		get the current position in the text
+\f0\b \
+
+\f1\b0 	
+\f0\b selectionSize
+\f1\b0 		get the current size of selection in the text\
+	
+\f0\b stringColor_
+\f1\b0 		set the color of the whole text \
+	
+\f0\b setStringColor(color, start, size)
+\f1\b0 \
+					set the color of a selection of text \
+\
+	
+\f0\b autoHideScrollers_
+\f1\b0 		\
+	
+\f0\b hasVerticalScroller_
+\f1\b0 		\
+	
+\f0\b hasHorizontalScroller_
+\f2\b0\fs18 \
+	
+\f0\b\fs24 textBounds_
+\f1\b0 		
+\f0\b \cf2 NOT YET WORKING\
+					
+\f1\b0 \cf0 don't know what this is for ...\
+					\
+	
+\f0\b font_			
+\f1\b0 set the font of the whole text 
+\f0\b \
+
+\f1\b0 	
+\f0\b setFont( font, start, size )\
+					
+\f1\b0 set the font of a selection of text
+\f0\b \
+\
+	usesTabToFocusNextView_\
+					\cf2 NOT YET WORKING\
+					
+\f2\b0\fs18 \cf0 \
+	
+\f0\b\fs24 enterInterpretsSelection_
+\f1\b0 \
+
+\f0\b 					
+\f1\b0 whether pressing enter should interprete the\
+					selected text. default is 'on'. note that on SwingOSC,\
+					since we cannot detect a difference between return and enter,\
+					you will have to press Ctrl+Return!
+\f0\b \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf3 //examples
+\f1\fs26 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs20 \cf0 (\
+\cf4 var\cf0  win;\
+\
+win = \cf4 JSCWindow\cf0 .new;\
+t = \cf4 JSCTextView\cf0 ( win, win.view.bounds.insetBy( 4, 4 ))\
+	.resize_( 5 )\
+	.hasVerticalScroller_( \cf4 true\cf0  )\
+	.autohidesScrollers_( \cf4 true\cf0  )\
+	.focus( \cf4 true\cf0  );\
+win.front;
+\f1\fs26 \
+
+\f2\fs20 )\
+\
+t.editable = \cf4 false\cf0 ;	\cf3 // make it read-only\cf0 \
+t.editable = \cf4 true\cf0 ;		\cf3 // allow editing\cf0 \
+\
+t.autohidesScrollers = \cf4 false\cf0 ;	\cf3 // always show the scrollbars\cf0 \
+\
+t.string = \cf5 "Schoko"\cf0 ;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 // copy this help document into the view (style elements are not copied)\cf0 \
+t.string = \cf4 Document\cf0 .current.string;\
+\
+\cf3 // well, we can style it afterwards...\cf0 \
+t.setFont( \cf4 JFont\cf0 ( \cf5 "Times"\cf0 , 24, 1 ), 0, 8 );\
+t.setStringColor( \cf4 Color\cf0 .blue, 0, 8 );\
+t.setStringColor( \cf4 Color\cf0 ( 0.5, 0.0, 0.7 ), 8, 68 );\
+\
+\cf3 // apply style to the whole document\cf0 \
+t.font = \cf4 JFont\cf0 ( \cf5 "Times"\cf0 , 14 );\
+t.stringColor = \cf4 Color\cf0 .green( 0.4 );\
+\
+t.background = \cf4 Color\cf0 .black;\
+t.caretColor = \cf4 Color\cf0 .white;	\cf3 // cursor colour (SwingOSC only)\cf0 \
+\
+\
+\cf3 // loading a text file (SwingOSC only). plain text, html and rtf should work\cf0 \
+t.openURL( \cf5 "file://"\cf0  ++ \cf5 "~/*/*.html"\cf0 .standardizePath.pathMatch.choose.absolutePath );
+\fs18 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 t.openURL( \cf5 "http://swiki.hfbk-hamburg.de:8888/MusicTechnology/6"\cf0  );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 t.openURL( \cf5 "file://"\cf0  ++ \cf4 Document\cf0 .current.path ); \cf3 // RTF is not properly loaded - why?\cf0 \
+	\cf3 // TODO : clicking on links has no effect!\
+\
+// listen for document changes\
+//	possible states and parameters:\
+//		\\insert, <(Integer) pos>, <(Integer) length>, <(String) insertedText>\
+//		\\remove, <(Integer) pos>, <(Integer) length>\
+//		\\caret, <(Integer) pos1>, <(Integer) pos2>\
+// ; caret means the cursor was moved or the selection changed. with no text\
+// selected (cursor displayed) pos1 equals pos2, otherwise pos1 and pos2\
+// correspond to the selected range (pos1 may be both greater or less than pos2)!\
+\cf0 t.action = \{ \cf4 arg\cf0  view, state ... params; ([ state ] ++ params).postcs \};\
+\
+\cf3 // let's see what's been typed in\cf0 \
+t.string;\
+t.selectedString;	\cf3 // just the part that's currently selected\cf0 \
+t.selectionStart;	\cf3 // position of selection begins. starts at 0\cf0 \
+t.selectionSize;	\cf3 // 0 means no text selected\cf0 \
+}

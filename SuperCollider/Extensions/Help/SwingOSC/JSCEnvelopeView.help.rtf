@@ -1,0 +1,315 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf420
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset77 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red86\green77\blue133;\red0\green0\blue191;\red191\green0\blue0;
+\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs26 \cf2 SwingOSC \'d0 Java-based cross-platform replacements for Cocoa GUI classes\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs22 \cf2 This class is meant as an emulation of SCEnvelopeView. last mod: 08-feb-07 sciss\
+Also refer to [\cf2 \ul \ulc2 JSCView\ulnone ] for different behaviour affecting all widgets\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 no-op / not working\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	
+\f0\b \
+different behaviour\
+
+\f1\b0 	size_, editable, readOnly_, elasticMode_, allConnections, items were removed\
+		because they have no defined behaviour or are broken in cocoa GUI\
+		\
+	superclass			superclass is JSCAbstractMultiSliderView, not JSCMultiSliderView\
+	mouse control		slightly different. special cocoa "shift+click mode" not implemented, instead multiple selections\
+	index				should not be confused with current selection. call 'selection' to see which knots are selected\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 		\
+extended functionality\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	font_				sets the text-label font\
+	clipThumbs_		alternative coordinate mode\
+	strings			returns the text labels (or nil if none had been set)\
+	connections		returns all the custom connections (or nil if none had been made)\
+	selection			returns an array of booleans specifying which knots are selected\
+	deselectIndex		complements selectIndex\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b \cf2 \
+known issues / todo\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0 \cf2 	focus border		not adjusted when resizing the component programmatically (why?)\
+	drag+drop			NOT YET IMPLEMENTED\
+	background		todo: custom colours should not be darkened?\
+	metaAction			does not get evaluated on ctrl+mouseclick/drag\
+	cursor keys		movements should apply to all selected knots\
+	rubberband		not visible on Linux / Sun Java SE 1.6 (probably composite bug)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b\fs36 \cf0 \
+\
+JSCEnvelopeView\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\b0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f0\b\fs24 \cf0 Note: please use the abstraction layer GUI.envelopeView if possible! (see [\ul GUI\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs36 \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\b0\fs24 \cf0 An envelope view is a collections of two dimensional (x, y) points, possibly connected through lines. A common application is the presentation of a breakpoint-function or envelope (hence the name), where the x-axis corresponds to time and the y-axis to some parameter that is controlled by the envelope (e.g. amplitude, frequency, etc.). It is similar to [\ul JSCMultiSliderView\ulnone ] but instead of vertical "sliders" associated with integer indices, we instead have knobs that can be also moved horizontally.
+\f0\b \
+\
+\
+
+\f1\b0 value_([times,values])\
+	sets all the knots, where times and values are all 0..1\
+\
+value\
+	[times,values]\
+	reads all the knots, where times and values are all 0..1\
+\
+action_\
+	registers a function that is called when the user selects or moves the knots. the function is passed the view\
+\
+index\
+	the current or last moved node. initially -1\
+\
+drawRect_(boolean)\
+	sets whether to show the knots' knob-boxes or not\
+\
+drawLines_(boolean)\
+	sets whether to draw lines between the knots\
+\
+setThumbSize(index, size)\
+	sets the size of a point for the specified index, if the index is -1 set the size for all points\
+\
+thumbSize_(size)\
+	sets the size of all knots' knob-boxes (width and height)\
+\
+setThumbWidth(index, width)	\
+	sets the width of a knob-box for the knot specified by the index, if the index is -1 set the width for all knots\
+	\
+thumbWidth_( width)	\
+	sets the width of all knots' knob-boxes\
+\
+setThumbHeight(index, height)	\
+	sets the height of a point for the specified index, if the index is -1 set the height for all points\
+\
+thumbHeight_(height)\
+	sets the height of all knots' knob-boxes\
+\
+setEditable(index, boolean)\
+	makes a specified knot unmoveable (if boolean is false) or moveable (if boolean is true)\
+		\
+editable_(boolean)\
+	makes all knots unmoveable (if boolean is false) or moveable (if boolean is true)\
+\
+selectionColor_(color)	\
+	sets the color of knob-boxes which are selected\
+\
+setFillColor(index, color)\
+	sets the color of a knots' knob-box\
+		\
+fillColor_(color)	\
+	sets the color for all knots\
+	\
+setString(index, string)\
+	assigns a text label to a knot\
+	\
+connect_(index, arrayofpoints)\
+	connects a knot to others. the first time you call this, the standard connection scheme is switched off\
+\
+\
+\
+	
+\f2\fs18 \cf4 \
+// to select + move several points, press the mouse\cf0 \
+\cf4 // somewhere on the panel and drag a rubberband.\
+// to extend the rubberband-selection, keep shift pressed.\
+//\cf0 \
+\cf4 // alternatively, shift+click on successive knots.\
+//\
+// to deselect all, click somewhere on the panel.\
+// to deselect a single knot, shift+click on it.\cf0 \
+(\
+a = \cf3 JSCWindow\cf0 ( \cf5 "envelope"\cf0 , \cf3 Rect\cf0 ( 200, 450, 250, 100 ));\
+b = \cf3 JSCEnvelopeView\cf0 ( a, \cf3 Rect\cf0 ( 4, 4, 230, 80 ))\
+	.drawLines_( \cf3 true\cf0  )\
+	.selectionColor_( \cf3 Color\cf0 .red )\
+	.resize_( 5 )\
+	.action_(\{ \cf3 arg\cf0  b; [ b.index, b.value ].postln \})  \cf4 // print last clicked index along with all knot values\cf0 \
+	.thumbSize_( 5 )\
+	.value_([[ 0.0, 0.1, 0.5, 1.0 ], [ 0.1, 1.0, 0.8, 0.0 ]]);  \cf4 // set the initial knot values (x and y)\cf0 \
+\
+a.front;\
+)\
+(\
+\cf4 // make the first knot unmoveable\
+// (you can still move it using x_ though!)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 b.setEditable( 0, \cf3 false \cf0 );\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // snap movements to a grid (0 = no snapping)\cf0 \
+b.step = 0.125;\
+b.step = 0.0;\
+\
+\cf4 // check out the current selection (SwingOSC only)\cf0 \
+b.selection;  \cf4 // an array of booleans, one for each knot, true if that knot is selected\cf0 \
+\
+\cf4 // add a knot to the selection\cf0 \
+b.selectIndex( 0 );\
+b.selectIndex( 2 );\
+\
+\cf4 // remove a knot from the selection (SwingOSC only)\cf0 \
+b.deselectIndex( 2 );\
+\
+\
+\cf4 // programmatically move a knot\cf0 \
+b.select( 1 );	\cf4 // note: no visible effect\cf0 \
+b.x = (b.x + 0.1.bilinrand).clip( 0, 1 );\
+b.y = 1.0.rand;\
+\
+\
+(\
+a = \cf3 JSCWindow\cf0 (\cf5 "test"\cf0 , \cf3 Rect\cf0 (200 , 450, 370, 120));\
+a.view.decorator =  \cf3 FlowLayout\cf0 (a.view.bounds);\
+\
+b = \cf3 JSCEnvelopeView\cf0 (a, \cf3 Rect\cf0 (10, 10, 350, 100))\
+	.thumbSize_(5)\
+	.resize_( 5 )\
+	.drawLines_(\cf3 true\cf0 )\
+	.fillColor_(\cf3 Color\cf0 .green)\
+	.selectionColor_(\cf3 Color\cf0 .red)\
+	.drawRects_(\cf3 true\cf0 )\
+	.value_([(0.0, 0.1 .. 1.0), (0.0, 0.1 .. 1.0)])\
+	.setEditable(0,\cf3 false\cf0 );\
+\
+a.front;\
+)\
+(\
+r = \cf3 Routine\cf0 (\{\
+	\cf3 var\cf0  j = 0;\
+	20.do(\{ \cf3 arg\cf0  i;\
+	b.select((b.size -1).rand.abs);\
+\
+	0.1.wait;\
+	b.x_(1.0.rand.abs);\
+	b.y_(1.0.rand.abs);\
+	\});\
+	b.select(-1);\
+\
+	\});\
+	\cf3 AppClock\cf0 .play(r);\
+)	\
+\
+c = b.value[0];	\cf4 // the x-values\cf0 \
+c = b.value[1];	\cf4 // the y-values\cf0 \
+b.selection;		\cf4 // see which knots are selected! (SwingOSC only)\cf0 \
+\
+\
+\
+\
+\cf4 // show boxes with a label in it\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 (\
+a = \cf3 JSCWindow\cf0 ( \cf5 "text-boxes"\cf0 , \cf3 Rect\cf0 ( 200, 450, 450, 450 ));\
+b = \cf3 JSCEnvelopeView\cf0 ( a, \cf3 Rect\cf0 ( 4, 4, 440, 440 ))\
+	.resize_( 5 )\
+	.thumbWidth_( 60.0 )\
+	.thumbHeight_( 15.0 )\
+	.drawLines_( \cf3 true \cf0 )\
+	.selectionColor_( \cf3 Color\cf0 .red )\
+	.value_([[ 0.1, 0.4, 0.5, 0.3 ], [ 0.1, 0.2, 0.9, 0.7 ]]);\
+4.do(\{ \cf3 arg\cf0  i;\
+	b.setString( i, [ \cf5 "this"\cf0 , \cf5 "is"\cf0 , \cf5 "so much"\cf0 , \cf5 "fun" \cf0 ].at( i ));\
+	b.setFillColor( i, [ \cf3 Color\cf0 .yellow, \cf3 Color\cf0 .white, \cf3 Color\cf0 .green ].choose ); \cf4 // random colour\cf0 \
+\});\
+a.front;\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // switch the label font (SwingOSC only!)\cf0 \
+b.font = \cf3 JFont\cf0 ( \cf5 "SansSerif"\cf0 , 16 );\
+b.thumbHeight = 22;	\cf4 // no automatic thumb size adjustment, so we do it manually\cf0 \
+b.thumbWidth = 80;\
+\
+\cf4 // let's see what the labels are\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 b.strings;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 \
+\cf4 // control the way the view is displayed\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 b.drawLines = \cf3 false\cf0 ;\
+b.drawRects = \cf3 false\cf0 ;\
+b.drawLines = \cf3 true;\cf0 \
+b.drawRects = \cf3 true;\
+\cf0 b.strokeColor = \cf3 Color\cf0 .blue; \cf4 // colour for outlines, labels, and connections\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // the knots can be connected.\
+// once you call connect, the standard neighbouring connections disappear!\
+// note that each connect overwrites all previous connections of the particular knot.\cf0 \
+(\
+b.connect( 3, [ 0, 1, 2 ]); \cf4 // connect knot 3 to knots 0, 1, and 2\cf0 \
+b.connect( 0, [ 1, 2, 3 ]); \cf4 // connect knot 0 to knots 1, 2, and 3\cf0 \
+b.drawLines_( \cf3 true\cf0  );		\cf4 // (in case it was switched off)\cf0 \
+)\
+\
+\cf4 // check out what the connections are\cf0 \
+b.connections;	\cf4 // nil if no connections had been made, otherwise an array of arrays (one for each source knot)\cf0 \
+\
+
+\f1\fs24 At the moment, the graph is considered "undirected", therefore as you can see, setting a connection from for example knot 0 to knot 1, implies that a connection is added from knot 1 to 0. in a future version, there might be an option to use a directed graph instead. note, that the returned connection arrays are not garantueed to be sorted in any way.
+\f2\fs18 \
+				\
+\
+\
+
+\f0\b\fs24 Alternative Coordinates Mode
+\f2\b0\fs18 \
+\
+
+\f1\fs24 normally, as in the cocoa GUI, the coordinates of each knot are "tweaked" to make its knob-box fit entirely into the view. That is, if you have say, the first knot located at x = 0, y = 1, and thumbWidth is 80 pixels, thumbHeight is 40 pixels ...\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f2\fs18 \cf0 b.select( 0 ); b.x = 0; b.y = 1; b.thumbWidth = 80; b.thumbHeight = 40; b.setFillColor( 0, Color.clear ); b.setString( 0, nil );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 \
+
+\f1\fs24 \cf0 ... you will notice that the connection to the other knots does not begin in the top left corner of the view. that is because the knob-box is always centered around the connection location, and the knob-box was moved a little to fit completely onto the view. This can be confusing when you wish to see the precise coordinates of your envelope. Therefore, in SwingOSC you can switch to an alternative coordinates mode, where all the value coordinates appear as expect and hence the knob-boxes are allowed to be clipped at the view's boundaries:
+\f2\fs18 \cf4 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 b.clipThumbs = \cf3 true\cf0 ;\
+b.clipThumbs = \cf3 false\cf0 ;\
+b.clipThumbs = \cf3 true\cf0 ;\
+\
+\pard\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf4 \
+\
+// default keyboard mappings\cf0 \
+csr left/right	decrease/increase x\
+csr down/up	decrease/increase y\
+alt + csr left/left	select previous/next knot\
+}
