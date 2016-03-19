@@ -81,7 +81,7 @@ extends NumberSpace
 	/**
 	 *	Special attributes
 	 */
-	public static final int BARSBEATS		=	0x10000;		// display as bars |Â beats
+	public static final int BARSBEATS		=	0x10000;		// display as bars | beats
 	public static final int HHMMSS			=	0x20000;		// display as HH:MM:SS.xxx
 	public static final int MIDINOTE		=	0x30000;		// display as C#4 etc.
 
@@ -209,7 +209,7 @@ extends NumberSpace
 											for( int special = 0; special < SPECIAL_NAMES.length; special++ ) {
 												if( SPECIAL_NAMES[ special ].equals( s )) {
 													result |= special << SPECIAL_SHIFT;
-													return result;	// c'est a
+													return result;
 												}
 											}
 										}
